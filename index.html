@@ -157,7 +157,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/01/30/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+          <a href="/2025/01/30/hello-world/" class="post-title-link" itemprop="url">个人博客搭建 Github + Hexo</a>
         </h2>
 
         <div class="post-meta-container">
@@ -167,8 +167,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2025-01-30 14:37:45" itemprop="dateCreated datePublished" datetime="2025-01-30T14:37:45+08:00">2025-01-30</time>
+      <time title="创建时间：2025-01-30 14:37:45 / 修改时间：17:19:27" itemprop="dateCreated datePublished" datetime="2025-01-30T14:37:45+08:00">2025-01-30</time>
     </span>
 
   
@@ -181,19 +182,51 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+          <p>GitHub 是有名的代码托管网站，而它提供了一项服务 GitHub Pages，这个 GitHub Pages 可以将我们托管在 GitHub 上的一个仓库中的 代码渲染成静态页面。本篇记录了创建本博客的必要步骤。</p>
+<p>借鉴来源：</p>
+<p><a target="_blank" rel="noopener" href="https://mumaxu.github.io/2018/12/09/GitHub-Hexo-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">GitHub + Hexo 从零开始搭建个人博客 | MuMaXu’s Blog</a></p>
+<h2 id="一、配置github仓库与连接"><a href="#一、配置github仓库与连接" class="headerlink" title="一、配置github仓库与连接"></a>一、配置github仓库与连接</h2><h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>登陆GitHub，新建一个名为**<code>你的用户名.github.io</code>**的仓库（必须严格匹配此格式，注意大小写）。</p>
+<p>每一个 GitHub 账户最多只能创建一个这样可以直接使用域名访问的仓库。</p>
+<h4 id="配置SSH连接"><a href="#配置SSH连接" class="headerlink" title="配置SSH连接"></a>配置SSH连接</h4><p>在git bash 中输入命令生成密钥<code>ssh-keygen -t rsa -C &quot;user.email&quot; # user.email为GitHub上注册的邮箱</code></p>
+<p>在文件中找到密钥并复制 <code>C:\Users\&lt;你的用户名&gt;\.ssh\id_rsa.pub</code> ，其中 <code>id_rsa</code> 是私钥不能泄露，<code>id_rsa.pub</code> 是公钥。</p>
+<p>在GitHub设置中创建新的SSH key 并将复制的内容进行粘贴。</p>
+<h4 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h2 id="二、使用Hexo框架"><a href="#二、使用Hexo框架" class="headerlink" title="二、使用Hexo框架"></a>二、使用Hexo框架</h2><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>安装脚手架  <code>npm install -g hexo-cli </code></p>
+<p>新建一个文件夹，存放博客代码，进入文件目录并在bash中输入命令 <code>hexo init</code> </p>
+<h4 id="本地预览"><a href="#本地预览" class="headerlink" title="本地预览"></a>本地预览</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g # 生成静态文件</span><br><span class="line">$ hexo s # 开启本地预览</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>打开浏览器访问 <code>http://localhost:4000</code> 即可看到内容，<code>Ctrl+C</code> 停止本地预览。</p>
+<h4 id="配置站点文件"><a href="#配置站点文件" class="headerlink" title="配置站点文件"></a>配置站点文件</h4><p>在根目录下的全局 _config.yml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">CodeShine&#x27;s</span> <span class="string">Blog</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;To be a man what you want&#x27;</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">CodeShine</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">······</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">&#x27;https://github.com/XXX/XXXX.github.io.git&#x27;</span>  <span class="comment">#仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">&#x27;main&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="部署到Github"><a href="#部署到Github" class="headerlink" title="部署到Github"></a>部署到Github</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save # 安装部署插件</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+
+<p>部署成功后，打开你的网址 <strong><code>https://你的用户名.github.io/</code></strong> 出现下图，表示部署成功</p>
+<h2 id="三、主题配置"><a href="#三、主题配置" class="headerlink" title="三、主题配置"></a>三、主题配置</h2><p>clone 主题到themes 文件夹下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/next-theme/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
+<p>根目录配置文件 <code>_config.yml</code>配置文件,将主题改为next</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: &#x27;next&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>打开主题的 <code>_config.yml</code> 配置文件，选择Next中的 Gemini样式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scheme: Gemini</span><br></pre></td></tr></table></figure>
+
+<p>使用如下命令清楚缓存（生成public文件），重新生成并预览</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、常用命令"><a href="#四、常用命令" class="headerlink" title="四、常用命令"></a>四、常用命令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &#x27;blog_name&#x27; # blog_name填入文章名字</span><br></pre></td></tr></table></figure>
+
+<p>hexo会帮我们在 <code>..\hexo\source\_posts</code> 下生成相关 <code>md</code> 文件，每一篇博客对应一个 <code>md</code> 文件。直接使用编辑器打开 <code>md</code> 文件可以直接编辑。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hexo new “postName” # 新建文章</span><br><span class="line">hexo clean # 清除缓存</span><br><span class="line">hexo generate # 生成静态页面至 public 目录</span><br><span class="line">hexo server # 开启预览访问端口（默认端口 4000，’ctrl + c’关闭 server）</span><br><span class="line">hexo deploy # 部署到 GitHub</span><br><span class="line">hexo help # 查看帮助</span><br><span class="line">hexo version # 查看 Hexo 的版本</span><br></pre></td></tr></table></figure>
+
+<p>组合命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo s -g # 生成并本地预览</span><br><span class="line">hexo d -g # 生成并上传</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
