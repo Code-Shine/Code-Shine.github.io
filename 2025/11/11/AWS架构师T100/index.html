@@ -19,22 +19,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="CodeShine&#39;s Blog">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="AWS架构师T1001 收集气候数据 数据量：每个站点每天 500 GB。站点分布：多个大洲。要求：尽快聚合到一个 S3 存储桶，并最大限度降低运营复杂性。站点条件：高速互联网连接   使用S3 传输加速，分片上传到目标S3存储桶   2 公司想要分析日志，数据已经在 Amazon S3 中，JSON 格式。要求查询是简单的、按需运行。对现有架构改动最小。最少的运营开销。 Amazon Athen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS架构师T100">
+<meta property="og:url" content="http://example.com/2025/11/11/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T100/index.html">
 <meta property="og:site_name" content="CodeShine&#39;s Blog">
+<meta property="og:description" content="AWS架构师T1001 收集气候数据 数据量：每个站点每天 500 GB。站点分布：多个大洲。要求：尽快聚合到一个 S3 存储桶，并最大限度降低运营复杂性。站点条件：高速互联网连接   使用S3 传输加速，分片上传到目标S3存储桶   2 公司想要分析日志，数据已经在 Amazon S3 中，JSON 格式。要求查询是简单的、按需运行。对现有架构改动最小。最少的运营开销。 Amazon Athen">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-11T03:34:22.573Z">
+<meta property="article:modified_time" content="2025-12-28T15:01:53.922Z">
 <meta property="article:author" content="CodeShine">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2025/11/11/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T100/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/11/11/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T100/","path":"2025/11/11/AWS架构师T100/","title":"AWS架构师T100"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>CodeShine's Blog</title>
+<title>AWS架构师T100 | CodeShine's Blog</title>
   
 
 
@@ -64,7 +68,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">CodeShine's Blog</h1>
+      <p class="site-title">CodeShine's Blog</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">To be a man what you want</p>
@@ -87,7 +91,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -100,6 +104,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AWS%E6%9E%B6%E6%9E%84%E5%B8%88T100"><span class="nav-number">1.</span> <span class="nav-text">AWS架构师T100</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EC2%E8%AE%A1%E8%B4%B9%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90"><span class="nav-number">1.0.1.</span> <span class="nav-text">EC2计费模式分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EC2%E8%AE%A1%E8%B4%B9%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90-1"><span class="nav-number">1.0.2.</span> <span class="nav-text">EC2计费模式分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AWS-S3-%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E6%88%90%E6%9C%AC%E5%88%86%E6%9E%90"><span class="nav-number">1.0.3.</span> <span class="nav-text">AWS S3 数据传输成本分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#S3%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%E5%AF%B9%E6%AF%94"><span class="nav-number">1.0.4.</span> <span class="nav-text">S3数据保护机制对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AWS-%E6%9C%8D%E5%8A%A1%E4%B8%8E%E5%8A%9F%E8%83%BD%E8%A7%A3%E6%9E%90"><span class="nav-number">1.0.5.</span> <span class="nav-text">AWS 服务与功能解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AWS%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1%E8%83%BD%E5%8A%9B%E5%AF%B9%E6%AF%94"><span class="nav-number">1.0.6.</span> <span class="nav-text">AWS数据库服务能力对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AWS-%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1%E5%AF%B9%E6%AF%94"><span class="nav-number">1.0.7.</span> <span class="nav-text">AWS 存储服务对比</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -129,16 +134,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/11/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T100/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -152,13 +158,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CodeShine's Blog">
+      <meta itemprop="name" content="AWS架构师T100 | CodeShine's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/11/11/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T100/" class="post-title-link" itemprop="url">AWS架构师T100</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          AWS架构师T100
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -187,8 +193,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="AWS架构师T100"><a href="#AWS架构师T100" class="headerlink" title="AWS架构师T100"></a>AWS架构师T100</h1><p><br>1 收集气候数据 <strong>数据量</strong>：每个站点每天 500 GB。<strong>站点分布</strong>：多个大洲。<strong>要求</strong>：尽快聚合到一个 S3 存储桶，并最大限度降低运营复杂性。<strong>站点条件</strong>：高速互联网连接  </p>
+    <div class="post-body" itemprop="articleBody"><h1 id="AWS架构师T100"><a href="#AWS架构师T100" class="headerlink" title="AWS架构师T100"></a>AWS架构师T100</h1><p><br>1 收集气候数据 <strong>数据量</strong>：每个站点每天 500 GB。<strong>站点分布</strong>：多个大洲。<strong>要求</strong>：尽快聚合到一个 S3 存储桶，并最大限度降低运营复杂性。<strong>站点条件</strong>：高速互联网连接  </p>
 <p>使用S3 传输加速，分片上传到目标S3存储桶  </p>
 <p><br>2 公司想要分析日志，数据已经在 <strong>Amazon S3</strong> 中，JSON 格式。要求查询是<strong>简单</strong>的、<strong>按需</strong>运行。对现有架构改动<strong>最小</strong>。<strong>最少的运营开销</strong>。</p>
 <p><strong>Amazon Athena</strong> 直接对 S3 中的 JSON 文件运行 SQL，无需数据加载  </p>
@@ -847,7 +852,6 @@
 </li>
 </ul>
 
-      
     </div>
 
     
@@ -855,467 +859,22 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/04/08/Jmeter/" rel="prev" title="Jmeter">
+                  <i class="fa fa-angle-left"></i> Jmeter
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/04/08/Jmeter/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CodeShine">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CodeShine's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CodeShine's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/04/08/Jmeter/" class="post-title-link" itemprop="url">Jmeter</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-04-08 22:29:32 / 修改时间：22:29:57" itemprop="dateCreated datePublished" datetime="2025-04-08T22:29:32+08:00">2025-04-08</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Jmeter-压测"><a href="#Jmeter-压测" class="headerlink" title="Jmeter 压测"></a>Jmeter 压测</h1><p>官网： <a target="_blank" rel="noopener" href="https://jmeter.apache.org/">Apache JMeter - Apache JMeter™</a></p>
-<p>Jmeter是使用java 编写的，必须安装Java环境</p>
-<p>修改编码集：在jmeter.properties 中将 sampleresult.default.encoding &#x3D; UTF-8</p>
-<p>启动运行</p>
-<p><strong>ApacheJMeter.jar</strong> 图形化启动入口</p>
-<p><strong>jmeter.bat</strong>  windows下命令行启动</p>
-<p><strong>jmeter.sh</strong> Linux下命令行启动</p>
-<h2 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h2><p>简单测试接口</p>
-<p>右键添加<strong>线程组</strong></p>
-<p>线程组上右键添加 <strong>取样器</strong> - <strong>Http 请求</strong></p>
-<p>填写协议 服务器名称 端口号 方法 路径等信息</p>
-<p>然后 测试计划上右键 添加 <strong>监听器</strong>  - <strong>查看结果树</strong></p>
-<p>默认并发执行，多个线程组也是，也可以在测试计划下勾选  独立运行每个线程组，这样会以线程组的顺序来执行，但线程组内依旧是按并发顺序执行</p>
-<p>Ramp-Up 打开时间</p>
-<p>假设有一个线程组，目标是模拟 100 个并发用户发送请求到服务器。同时，设置 Ramp-up Period 为 10 秒。 当 Ramp-up Period 设置为 10 秒时，JMeter 将使用 10 秒的时间逐步增加并启动 100 个线程。每秒启动约 10 个线程左右，直到达到目标数量</p>
-<p>查看结果树可以监听整个测试计划的结果，也可以拖进线程组内只监听组内的结果</p>
-<p><strong>特殊的线程组：</strong></p>
-<p>setup 线程组：最优先执行的线程组</p>
-<p>tearDown线程组：最后执行的线程组</p>
-<p><strong>常用的设置属性：</strong></p>
-<p>线程组中： 线程树、循环次数、调度器（只有循环次数选择了永远，调度器才可以使用，包括持续时间和启动延迟）</p>
-<p><strong>请求默认值</strong></p>
-<p>测试计划右键 - 配置元件 - http请求默认值</p>
-<p>假设你在线程组中有多个请求，且这些请求的协议，服务器名称等信息大致一样，就可以将Http请求默认值使用起来，然后在每个请求中就无需多次重复设置</p>
-<p><strong>信息头管理器</strong></p>
-<p>测试计划右键 - 配置元件 - http信息头管理器（即请求头）</p>
-<p>会将Content-Type添加到请求头中，告诉接收方（如浏览器或服务器）如何解析和处理发送的数据。</p>
-<p><strong>参数化</strong></p>
-<p>动态的获取、设置或生成数据</p>
-<p><strong>1 用户定义的变量</strong>： 测试计划 - 添加 - 配置元件 - 用户定义的变量，使用 ${} 进行调用</p>
-<p><strong>2 csv 批量添加数据</strong>：测试计划 - 添加 - 配置元件 - CSV 数据文件设置， 可以用来批量准备不同的body, 用 ‘,’ 进行分隔，使用${} 进行调用 ， 注意，循环次数要设置为用 永远</p>
-<p><strong>3 用户参数</strong> ：http请求右键 - 添加 - 前置处理器 - 用户参数  （添加变量多一行，添加用户多一列）</p>
-<p>每一个用户则是一组测试数据， 注意，多少个用户则是设置多少线程数，然后http 请求中将消息体数据进行替换</p>
-<p><strong>4 函数</strong>：</p>
-<p> _counter 计数器函数，${__counter(TRUE,)}  true为所有线程组共用一个计数器，false 为各自启用一个计数器</p>
-<p>_Random 随机数${__Random(1,3,)}</p>
-<p>_time 时间 ${__time(yyyy-mm-dd hh:mm:ss,)} 获取当前时间的函数</p>
-<p><strong>直连数据库</strong></p>
-<p>需要在测试计划中引入sqlite-jdbc 的jar 包</p>
-<p>测试计划 - 右键 - 添加 - 配置元件 - JDBC Connection configuration 这里填写数据库的连接信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Database URL: jdbc:sqlite:E:System\db.sqlite3 （你的数据库存放的地址）</span><br><span class="line">JDBC Driver class: org.sqlite.JDBC</span><br></pre></td></tr></table></figure>
-
-<p>线程组 - 右键 -添加 - 取样器  JDBC request，填写 数据库配置的名称，然后书写查询语句</p>
-<p>调试取样器 - 对于JDBC request中 设置 Variable names, 其输出结果会传如你所设置的变量中</p>
-<p>然后将其作为http 请求的参数</p>
-<p><strong>响应断言</strong></p>
-<p>用程序判断响应结果是否符合预期</p>
-<p>Http请求 - 添加 - 断言 - 响应断言</p>
-<p>其中测试字段下的响应文本和响应代码比较常用，可以对返回结果进行 包括，匹配，相等等规则进行操作</p>
-<p><strong>大小断言</strong></p>
-<p>可以对响应头 body 的大小等进行判断看是否符合要求，按字节大小来判断  </p>
-<p><strong>断言持续时间</strong></p>
-<p>判断请求发起到返回结果的时间是否符合要求，即多少时间内需要返回结果</p>
-<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><p><strong>逻辑控制器</strong></p>
-<p>线程组右键 - 添加 - 逻辑控制器 - if控制器</p>
-<p>将要请求的放置到if 控制器下面</p>
-<p>在条件框下输入判断条件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;$&#123;val&#125;&quot;==&quot;itcast&quot;</span><br><span class="line"></span><br><span class="line">val这个变量可以放在用户变量中</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>forEach 控制器</strong></p>
-<p>定义用户变量</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>name_1</td>
-<td>java</td>
-</tr>
-<tr>
-<td>name_2</td>
-<td>python</td>
-</tr>
-<tr>
-<td>name_3</td>
-<td>测试</td>
-</tr>
-</tbody></table>
-<p>线程组右键 - 添加 - 逻辑控制器 - foreach 控制器</p>
-<p>输入变量前缀：name</p>
-<p>开始循环字段（不包含）: 0</p>
-<p>结束循环字段（含）： 3</p>
-<p>输出变量名称：val</p>
-<p>注意： 此时forEach 已经是循环三次了，不需要在线程组中在次进行循环</p>
-<p><strong>循环控制器</strong></p>
-<p>在线程组中的循环则在其中的所有请求都只能按线程组中指定的顺序进行循环</p>
-<p>若是线程组中有多个请求，且每个请求想要的循环次数不一样则无法实现</p>
-<p>此时需要循环控制器</p>
-<p>线程组右键 - 添加 - 逻辑控制器 - 循环控制器，将需要的http请求放在其下面即可</p>
-<p><strong>关联</strong></p>
-<p>上一个请求的响应结果和下一个请求的数据有关系</p>
-<p>可以使用后置处理器获取前一个请求的结果， eg: XPath 处理器，处理返回的Xpath结果</p>
-<p>然后在下一个请求中使用这个参数</p>
-<p>对于返回的JSON的格式 使用 <strong>正则表达式提取器</strong></p>
-<p>http 请求 - 添加 - 后置请求处理器 - 正则表达式提取器</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;dep_id&quot;: &quot;T100&quot;,</span><br><span class="line">  &quot;dep_name&quot;: &quot;传智学院&quot;,</span><br><span class="line">  &quot;slogan&quot;: &quot;hello&quot;,</span><br><span class="line">  &quot;master_name&quot;: &quot;老张&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>引入名称：val</p>
-<p>正则表达式：”dep_name”: ”（.*？）“  表示在JSON中查找 dep_name 匹配任意字符</p>
-<p>模板：$1$</p>
-<p>匹配数字：1 表示获取第几个结果</p>
-<p>以上获取的变量一般只是在当前线程组中使用，而无法跨线程组进行使用</p>
-<p>当想要线程组使用到另外一个线程组提取的变量的时候，则需要使用</p>
-<p>_setProperty 这个函数，点击生成代码</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$__setProperty(out,$&#123;val&#125;,); </span><br></pre></td></tr></table></figure>
-
-<p>然后新建一个BeanShell 取样器，将以上代码复制到脚本中, 此时全局变量就设置好了</p>
-<p>线程组右键- 新建- 取样器 - Beanshell 取样器</p>
-<p>在另外一个线程组中使用，使用_property 这个函数，生成进行使用</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$__Property(out,,); </span><br></pre></td></tr></table></figure>
-
-<p>注意： 要将线程组设置为顺序执行</p>
-<h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><p><strong>高并发</strong> - 使用同步计时器</p>
-<p>添加定时器 synchronizing timer(集合点组件)</p>
-<p>http请求右键 - 添加 - 定时器 - 同步定时器</p>
-<p>模拟用户组的数量：100</p>
-<p>超时时间以毫秒为单位：10， 防止一个线程组不足100个用户时，死等</p>
-<p><strong>同步计时器</strong>：</p>
-<ul>
-<li>同步计时器用于控制线程的执行，确保在某个特定点上，所有线程（或指定数量的线程）同时执行。</li>
-<li>同步计时器中的“模拟用户组数目”参数指定了需要同时释放的线程数。</li>
-</ul>
-<p>示例</p>
-<ul>
-<li>假设线程组有10个线程，同步计时器的模拟用户组数目设置为5。<ul>
-<li>当10个线程执行到同步计时器时，会分成两组，每组5个线程，先后释放继续执行。</li>
-</ul>
-</li>
-<li>如果线程组有5个线程，同步计时器的模拟用户组数目设置为10。<ul>
-<li>由于线程数不足，所有5个线程会在同步计时器处同时释放，但不会达到设定的10个线程同时释放的效果。</li>
-</ul>
-</li>
-</ul>
-<p><strong>查看聚合报告：</strong></p>
-<p>测试计划 - 添加 - 监听器 - 聚合报告</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-<th>单位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Label</td>
-<td>Sampler的名称</td>
-<td>无</td>
-</tr>
-<tr>
-<td># Samples</td>
-<td>执行该Sampler的总次数</td>
-<td>次</td>
-</tr>
-<tr>
-<td>Average</td>
-<td>平均响应时间</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>Median</td>
-<td>中位数响应时间</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>90% Line</td>
-<td>90%的请求的响应时间小于或等于这个值</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>95% Line</td>
-<td>95%的请求的响应时间小于或等于这个值</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>99% Line</td>
-<td>99%的请求的响应时间小于或等于这个值</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>Min</td>
-<td>最小响应时间</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>Max</td>
-<td>最大响应时间</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>Error %</td>
-<td>错误率</td>
-<td>百分比 (%)</td>
-</tr>
-<tr>
-<td>Throughput</td>
-<td>每秒处理的请求数（吞吐量）</td>
-<td>请求&#x2F;秒</td>
-</tr>
-<tr>
-<td>KB&#x2F;Sec</td>
-<td>每秒传输的数据量</td>
-<td>千字节&#x2F;秒</td>
-</tr>
-<tr>
-<td>Std. Dev.</td>
-<td>响应时间的标准差</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>Total</td>
-<td>总响应时间</td>
-<td>毫秒 (ms)</td>
-</tr>
-<tr>
-<td>Received KB</td>
-<td>接收到的总数据量</td>
-<td>千字节 (KB)</td>
-</tr>
-<tr>
-<td>Sent KB</td>
-<td>发送的总数据量</td>
-<td>千字节 (KB)</td>
-</tr>
-</tbody></table>
-<p><strong>高频率</strong></p>
-<p>20QPS  就是20次每秒 的频率来访问我们的服务器，统计服务器的平均响应时间</p>
-<p><strong>常数吞吐量定时器</strong></p>
-<p>目标吞吐量（每分钟的样本量）：1200</p>
-<p>此时线程组设置的线程为1 ，循环次数设置为 总次数，假设20QPS 持续15秒 ，就是300次循环次数</p>
-<p><strong>分布式</strong> - - 可以实现多台机器一起测试，要修改IP地址，同时其他电脑也需要打开Jmeter</p>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ty4y1q72g?spm_id_from=333.788.player.switch&vd_source=6e5442905bb1d539fdf2a76106e8b1d8&p=40">11分布式_哔哩哔哩_bilibili</a></p>
-<p> <strong>弱压力测试</strong></p>
-<p>场景：模拟半小时之内1000个用户访问服务器资源，要求平均响应时间在3000ms内，且错误率为0</p>
-<p>线程数：1000</p>
-<p>Ramp-Up时间（秒）：1800</p>
-<p>循环次数：1</p>
-<p><strong>高并发测试</strong></p>
-<p>场景：模拟100个用户同时访问服务器资源，要求平均响应时间在3000ms,且错误率0</p>
-<p>线程数：100</p>
-<p>Ramp-Up时间（秒）：1</p>
-<p>循环次数：1</p>
-<p>同步计时器 模拟用户组的数量：100  超时时间以毫秒为单位：10</p>
-<p><strong>高频率测试</strong></p>
-<p>场景：模拟2个用户以20QPS的频率访问服务器资源持续10秒，要求平均响应时间在3000ms,且错误率0</p>
-<p>线程数：2</p>
-<p>Ramp-Up时间（秒）：1</p>
-<p>循环次数：200</p>
-<p>常数吞吐量定时器 目标吞吐量（每分钟）：1200</p>
-<p>生成图形化测试报告</p>
-<p>在bin文件里面： </p>
-<p>jmeter -n -t 脚本文件 -l 日志文件 -e -o 目录</p>
-<p>-n 无图形化运行</p>
-<p>-t 被运行的脚本</p>
-<p>-l 将运行信息写入日志文件</p>
-<p>-e 生成测试报告</p>
-<p>-o 指定报告输出目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmeter -n -t ../../线程组.jmx -l ../../Jlog.txt -e -o ../../report</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/30/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CodeShine">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CodeShine's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CodeShine's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/01/30/hello-world/" class="post-title-link" itemprop="url">个人博客搭建 Github + Hexo</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-01-30 14:37:45" itemprop="dateCreated datePublished" datetime="2025-01-30T14:37:45+08:00">2025-01-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-04-08 22:31:48" itemprop="dateModified" datetime="2025-04-08T22:31:48+08:00">2025-04-08</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>GitHub 是有名的代码托管网站，而它提供了一项服务 GitHub Pages，这个 GitHub Pages 可以将我们托管在 GitHub 上的一个仓库中的 代码渲染成静态页面。本篇记录了创建本博客的必要步骤。</p>
-<p>借鉴来源：</p>
-<p><a target="_blank" rel="noopener" href="https://mumaxu.github.io/2018/12/09/GitHub-Hexo-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">GitHub + Hexo 从零开始搭建个人博客 | MuMaXu’s Blog</a></p>
-<h2 id="一、配置github仓库与连接"><a href="#一、配置github仓库与连接" class="headerlink" title="一、配置github仓库与连接"></a>一、配置github仓库与连接</h2><h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>登陆GitHub，新建一个名为<code>你的用户名.github.io</code>的仓库（必须严格匹配此格式，注意大小写）。</p>
-<p>每一个 GitHub 账户最多只能创建一个这样可以直接使用域名访问的仓库。</p>
-<h4 id="配置SSH连接"><a href="#配置SSH连接" class="headerlink" title="配置SSH连接"></a>配置SSH连接</h4><p>在git bash 中输入命令生成密钥<code>ssh-keygen -t rsa -C &quot;user.email&quot; # user.email为GitHub上注册的邮箱</code></p>
-<p>在文件中找到密钥并复制 <code>C:\Users\&lt;你的用户名&gt;\.ssh\id_rsa.pub</code> ，其中 <code>id_rsa</code> 是私钥不能泄露，<code>id_rsa.pub</code> 是公钥。</p>
-<p>在GitHub设置中创建新的SSH key 并将复制的内容进行粘贴。</p>
-<h4 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、使用Hexo框架"><a href="#二、使用Hexo框架" class="headerlink" title="二、使用Hexo框架"></a>二、使用Hexo框架</h2><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>安装脚手架  <code>npm install -g hexo-cli </code></p>
-<p>新建一个文件夹，存放博客代码，进入文件目录并在bash中输入命令 <code>hexo init</code> </p>
-<h4 id="本地预览"><a href="#本地预览" class="headerlink" title="本地预览"></a>本地预览</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g # 生成静态文件</span><br><span class="line">$ hexo s # 开启本地预览</span><br></pre></td></tr></table></figure>
-
-<p>打开浏览器访问 <code>http://localhost:4000</code> 即可看到内容，<code>Ctrl+C</code> 停止本地预览。</p>
-<h4 id="配置站点文件"><a href="#配置站点文件" class="headerlink" title="配置站点文件"></a>配置站点文件</h4><p>在根目录下的全局 _config.yml</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">CodeShine&#x27;s</span> <span class="string">Blog</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;To be a man what you want&#x27;</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">CodeShine</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">······</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">&#x27;https://github.com/XXX/XXXX.github.io.git&#x27;</span>  <span class="comment">#仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">&#x27;main&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="部署到Github"><a href="#部署到Github" class="headerlink" title="部署到Github"></a>部署到Github</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save # 安装部署插件</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
-
-<p>部署成功后，打开你的网址 <strong><code>https://你的用户名.github.io/</code></strong> 出现下图，表示部署成功</p>
-<h2 id="三、主题配置"><a href="#三、主题配置" class="headerlink" title="三、主题配置"></a>三、主题配置</h2><p>clone 主题到themes 文件夹下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/next-theme/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-
-<p>根目录配置文件 <code>_config.yml</code>配置文件,将主题改为next</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: &#x27;next&#x27;</span><br></pre></td></tr></table></figure>
-
-<p>打开主题的 <code>_config.yml</code> 配置文件，选择Next中的 Gemini样式</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scheme: Gemini</span><br></pre></td></tr></table></figure>
-
-<p>使用如下命令清楚缓存（生成public文件），重新生成并预览</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="四、常用命令"><a href="#四、常用命令" class="headerlink" title="四、常用命令"></a>四、常用命令</h2><p>在你的Blog文件夹下cmd后输入以下指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &#x27;blog_name&#x27; # blog_name填入文章名字</span><br></pre></td></tr></table></figure>
-
-<p>hexo会帮我们在 <code>..\hexo\source\_posts</code> 下生成相关 <code>md</code> 文件，每一篇博客对应一个 <code>md</code> 文件。直接使用编辑器打开 <code>md</code> 文件可以直接编辑。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hexo new “postName” # 新建文章</span><br><span class="line">hexo clean # 清除缓存</span><br><span class="line">hexo generate # 生成静态页面至 public 目录</span><br><span class="line">hexo server # 开启预览访问端口（默认端口 4000，’ctrl + c’关闭 server）</span><br><span class="line">hexo deploy # 部署到 GitHub</span><br><span class="line">hexo help # 查看帮助</span><br><span class="line">hexo version # 查看 Hexo 的版本</span><br></pre></td></tr></table></figure>
-
-<p>组合命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo s -g # 生成并本地预览</span><br><span class="line">hexo d -g # 生成并上传</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="next-设置"><a href="#next-设置" class="headerlink" title="next 设置"></a>next 设置</h2><p><a target="_blank" rel="noopener" href="http://theme-next.iissnan.com/getting-started.html">开始使用 - NexT 使用文档</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 
