@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="AWS架构师T400301 一所大学需要将 30TB 的本地 Windows 文件服务器数据迁移到 Amazon FSx for Windows File Server，网络带宽为共享的 1Gbps，要求在 5 天内完成迁移，并且能控制迁移过程占用的带宽，以减少对其他部门的影响。问哪个 AWS 解决方案最适合。 A. AWS Snowcone（亚马逊智能）B. 亚马逊 FSx 文件网关C. AWS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS架构师T400">
+<meta property="og:url" content="http://example.com/2025/12/29/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T400/index.html">
+<meta property="og:site_name" content="CodeShine&#39;s Blog">
+<meta property="og:description" content="AWS架构师T400301 一所大学需要将 30TB 的本地 Windows 文件服务器数据迁移到 Amazon FSx for Windows File Server，网络带宽为共享的 1Gbps，要求在 5 天内完成迁移，并且能控制迁移过程占用的带宽，以减少对其他部门的影响。问哪个 AWS 解决方案最适合。 A. AWS Snowcone（亚马逊智能）B. 亚马逊 FSx 文件网关C. AWS">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-29T02:13:29.085Z">
+<meta property="article:modified_time" content="2025-12-29T02:20:33.880Z">
+<meta property="article:author" content="CodeShine">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2025/12/29/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T400/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/12/29/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T400/","path":"2025/12/29/AWS架构师T400/","title":"AWS架构师T400"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AWS架构师T400 | CodeShine's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CodeShine's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be a man what you want</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AWS%E6%9E%B6%E6%9E%84%E5%B8%88T400"><span class="nav-number">1.</span> <span class="nav-text">AWS架构师T400</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%89%E5%85%A8%E7%BB%84-vs-%E7%BD%91%E7%BB%9C-ACL"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 安全组 vs 网络 ACL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%B5%81%E9%87%8F%E8%B7%AF%E5%BE%84%E4%B8%8E%E6%9C%80%E5%B0%8F%E6%9D%83%E9%99%90"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. 流量路径与最小权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%BB%98%E8%AE%A4%E7%8A%B6%E6%80%81%E7%9A%84%E5%90%AB%E4%B9%89"><span class="nav-number">1.0.3.</span> <span class="nav-text">1. 默认状态的含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%97%AE%E9%A2%98%E6%8E%A8%E6%96%AD"><span class="nav-number">1.0.4.</span> <span class="nav-text">2. 问题推断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="nav-number">1.0.5.</span> <span class="nav-text">需求分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%A4%87%E4%BB%BD%E9%9C%80%E6%B1%82"><span class="nav-number">1.0.6.</span> <span class="nav-text">1.备份需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E4%B8%8E%E8%B5%84%E6%BA%90%E5%88%A9%E7%94%A8%E7%8E%87%E4%BC%98%E5%8C%96"><span class="nav-number">1.0.7.</span> <span class="nav-text">2. 可扩展性与资源利用率优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%97%AE%E9%A2%98%E8%AF%8A%E6%96%AD"><span class="nav-number">1.0.8.</span> <span class="nav-text">1. 问题诊断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9C%8D%E5%8A%A1%E4%BF%9D%E6%8A%A4%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.0.9.</span> <span class="nav-text">1. 服务保护对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90"><span class="nav-number">1.0.10.</span> <span class="nav-text">2. 架构分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%9C%80%E6%B1%82%E6%A0%B8%E5%BF%83"><span class="nav-number">1.0.11.</span> <span class="nav-text">1. 需求核心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="nav-number">1.0.12.</span> <span class="nav-text">2. 技术方案对比</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CodeShine</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/29/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T400/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CodeShine">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CodeShine's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AWS架构师T400 | CodeShine's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AWS架构师T400
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-29 10:13:29 / 修改时间：10:20:33" itemprop="dateCreated datePublished" datetime="2025-12-29T10:13:29+08:00">2025-12-29</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="AWS架构师T400"><a href="#AWS架构师T400" class="headerlink" title="AWS架构师T400"></a>AWS架构师T400</h1><p><br>301 一所大学需要将 30TB 的本地 Windows 文件服务器数据迁移到 Amazon FSx for Windows File Server，网络带宽为共享的 1Gbps，要求在 5 天内完成迁移，并且能控制迁移过程占用的带宽，以减少对其他部门的影响。问哪个 AWS 解决方案最适合。</p>
+<p>A. AWS Snowcone（亚马逊智能）<br>B. 亚马逊 FSx 文件网关<br><u>C. AWS DataSync</u><br>D. AWS Transfer Family（AWS 代言者）</p>
+<p> <strong>AWS Snowcone</strong></p>
+<ul>
+<li>这是物理设备（边缘存储设备），适合离线迁移或极差网络环境</li>
+</ul>
+<p><strong>Amazon FSx 文件网关</strong></p>
+<ul>
+<li>AWS Storage Gateway 中的“文件网关”可为本地提供 SMB&#x2F;NFS 接口，缓存到 AWS，但通常用于混合云持续访问，不是一次性迁移工具</li>
+</ul>
+<p> <strong>AWS DataSync</strong></p>
+<ul>
+<li>专门用于在本地存储与 AWS 存储服务（包括 FSx for Windows）之间自动、快速、安全地迁移大量数据</li>
+</ul>
+<p><strong>WS Transfer Family</strong></p>
+<ul>
+<li>用于通过 SFTP、FTPS、FTP 协议上传文件到 AWS（如 Amazon S3、EFS），并不直接支持迁移到 FSx for Windows File Server 并保持 Windows 权限元数据</li>
+</ul>
+<p><br>302 一家公司开发了一个移动应用，用户拍摄慢动作视频并上传到 Amazon S3，然后从 S3 直接获取播放。由于原始视频文件太大，导致移动设备播放时出现缓冲和卡顿。公司希望以最小运营开销提高应用的性能和扩展性。需要选择两种解决方案组合</p>
+<p>A. <u>部署 Amazon CloudFront 用于内容分发和缓存。</u><br>B. 使用 AWS DataSync 在其他 S3 存储桶中跨 AWS 区域复制视频文件。<br>C. <u>使用 Amazon Elastic Transcoder 将视频文件转换为更合适的格式</u>。<br>D. 在本地区域部署一组自动密封的 Amazon EC2 实例，用于内容分发和缓存。<br>E. 部署一个 Amazon EC2 实例的自动扩展组，将视频文件转换为更合适的格式。</p>
+<ul>
+<li><strong>Elastic Transcoder</strong> 将视频转换为更适合流媒体的格式，减小文件大小，从根本上减少缓冲。</li>
+<li><strong>CloudFront</strong> 通过 CDN 缓存转码后的视频，加快全球分发速度，降低延迟和源站负载。</li>
+</ul>
+<p><br>303 一家公司正在 Amazon ECS Fargate 上部署新应用，并监控 CPU&#x2F;内存使用率。他们预计会有大量流量，但希望在利用率低时降低成本。问解决方案架构师应推荐什么方案。</p>
+<p>A. 使用 Amazon EC2 自动扩展，根据以往的流量模式在特定时段进行扩展。<br>B. 使用 AWS Lambda 函数，基于触发 Amazon CloudWatch 警报的指标违规情况来扩展 Amazon ECS。<br>C. 当 ECS 指标突破触发 Amazon CloudWatch 警报时，使用带有简单扩展策略的 Amazon EC2 Auto Scaling 进行扩展。<br>D. <u>使用 <strong>AWS 应用程序自动扩展</strong>及其<strong>目标跟踪策略</strong>，在 ECS 指标突破触发 Amazon CloudWatch 警报时进行扩展。</u></p>
+<p>错误地引用 EC2 Auto Scaling 用于 Fargate</p>
+<p>简单扩展策略（一次调整固定数量）可能响应不及时，并且依赖警报触发有延迟，不如目标跟踪策略平稳</p>
+<ul>
+<li>WS Application Auto Scaling 是专为 ECS、DynamoDB、Lambda 等设计的自动扩缩容服务。</li>
+<li>支持目标跟踪策略（例如将平均 CPU 利用率保持在 70%），可根据实时指标自动增加或减少任务数量，无需手动干预或创建复杂警报。</li>
+</ul>
+<p><br>304 一家公司已在另一个 AWS 区域建立了灾难恢复站点，需要定期在两个区域的 NFS 文件系统之间双向传输大量数据，并要求<strong>运营开销最少</strong></p>
+<p>A. <u>使用 AWS DataSync</u>。<br>B. 使用 AWS Snowball 设备。<br>C. 在 Amazon EC2 上设置 SFTP 服务器。<br>D. 使用 AWS 数据库迁移服务（AWS DMS）。</p>
+<p>AWS DataSync 是专门用于在本地存储、AWS 存储服务（如 Amazon EFS、Amazon FSx 或 S3）之间<strong>自动、高效、安全地同步数据</strong>的服务</p>
+<p><br>305 一家公司要为托管在 AWS 上的游戏应用程序设计共享存储解决方案，要求：</p>
+<ol>
+<li>客户端能通过 <strong>SMB 协议</strong> 访问数据。</li>
+<li>解决方案必须是 <strong>完全托管</strong> 的。</li>
+</ol>
+<p>A. 创建一个 AWS DataSync 任务，将数据作为可挂载文件系统共享。将该文件系统挂载到应用服务器上。<br>B. 创建一个 Amazon EC2 Windows 实例。在该实例上安装并配置 Windows 文件共享角色。将应用服务器连接到文件共享。<br><u><strong>C. 创建一个适用于 Windows 文件服务器的 Amazon FSx 文件系统。将该文件系统附加到源服务器。连接应用服务器到文件系统</strong></u>。<br>D. 创建一个 Amazon S3 存储桶。为应用程序分配一个 IAM 角色以授予对该 S3 存储桶的访问权限。将 S3 存储桶挂载到应用程序服务器。</p>
+<ol>
+<li><strong>SMB 客户端访问</strong> → 需要支持 SMB（Server Message Block）协议的共享文件系统，通常用于 Windows 环境或跨平台文件共享。</li>
+<li><strong>完全托管</strong> → AWS 负责底层维护、修补、备份、扩展等，无需用户管理服务器。</li>
+</ol>
+<p>Amazon FSx for Windows File Server 是<strong>完全托管的原生 Windows 文件系统</strong>，原生支持 SMB 协议，可被 Windows 或支持 SMB 的客户端直接访问</p>
+<p><br>306 公司需要在 Amazon EC2 上运行一个<strong>延迟敏感、高交易量（超 10 万笔&#x2F;秒）、高网络吞吐量</strong>的内存数据库应用，并要求经济高效的网络设计以<strong>最小化数据传输费用</strong></p>
+<p>A. <u>在同一 AWS 区域内的同一可用区中启动所有 EC2 实例。指定一个放置组，其中包含启动 EC2 实例时采用集群策略</u>。<br>B. 在同一 AWS 区域内的不同可用区中启动所有 EC2 实例。启动 EC2 实例时，指定一个采用分区策略的放置组。<br>C. 部署一个自动扩展组，基于网络利用率目标在不同的可用区中启动 EC2 实例。<br>D. 部署一个具有步进式扩展策略的自动扩展组，以便在不同的可用区中启动 EC2 实例。</p>
+<ol>
+<li><strong>延迟敏感 + 高网络吞吐量</strong> → 需要尽可能低的网络延迟和高带宽。</li>
+<li><strong>经济高效，最小化数据传输费用</strong> → AWS 对同一可用区内 EC2 实例间的数据传输<strong>免费</strong>，跨可用区（AZ）则按流量收费</li>
+</ol>
+<p><br>307 一家公司主要将应用服务器运行在本地，计划迁移到 AWS，希望<strong>尽量减少在本地扩展 iSCSI 存储的需求</strong>，并只将<strong>最近访问的数据保留在本地存储</strong>。问应使用哪种 AWS 解决方案。</p>
+<p>A. 亚马逊 S3 文件网关<br>B. AWS 存储网关磁带网关<br>C. AWS 存储网关卷网关存储卷<br>D. <u>AWS 存储网关卷网关缓存卷</u></p>
+<ol>
+<li><strong>本地应用服务器使用 iSCSI 存储</strong> → 需要 iSCSI 块存储接口。</li>
+<li><strong>尽量减少本地存储扩展</strong> → 希望将较少访问的数据移到云端，减少本地容量投入。</li>
+<li><strong>只将最近访问的数据保留在本地存储</strong> → 需要<strong>缓存</strong>机制，将热数据（频繁访问）保留在本地，冷数据迁移到云端。</li>
+</ol>
+<p><strong>亚马逊 S3 文件网关</strong> - 提供<strong>文件级</strong>访问（NFS&#x2F;SMB），不是<strong>块级</strong>（iSCSI）存储</p>
+<p>卷网关有两种模式：<strong>存储卷模式</strong>和<strong>缓存卷模式</strong>。</p>
+<ul>
+<li><p><strong>存储卷模式</strong>：数据<strong>主要存储在 AWS</strong>（Amazon EBS），本地网关仅存储元数据，应用通过 iSCSI 访问。</p>
+</li>
+<li><p><strong>缓存卷模式</strong>：数据<strong>主要存储在 AWS（S3）</strong>，本地网关设备<strong>缓存频繁访问的数据</strong>（最近访问的数据保留在本地），较少访问的数据在云端</p>
+</li>
+</ul>
+<p><br>308 一家公司有多个 AWS 账户（已设置合并计费），运行着高性能的 Amazon RDS for Oracle 按需实例（90 天）。财务团队可以访问合并计费账户和所有其他账户的 Trusted Advisor，他们需要通过适当的账户查看 Trusted Advisor 检查，以找到降低 RDS 成本的方法。需要选择两种步骤组合来满足要求。</p>
+<p>A. 使用运行 RDS 实例的账户中的 Trusted Advisor 建议。<br><u>B. 使用合并账单账户中的 Trusted Advisor 建议，同时查看所有 RDS 实例检查。</u><br>C. 查看 Amazon RDS 预留实例优化的 Trusted Advisor 检查。<br><u>D. 查看 Amazon RDS 空闲数据库实例的 Trusted Advisor 检查。</u><br>E. 查看 Amazon Redshift 预留节点优化的 Trusted Advisor 检查。</p>
+<ul>
+<li><p><strong>Trusted Advisor</strong> 提供成本优化检查，其中有关 RDS 的成本建议主要包括：</p>
+<ol>
+<li><strong>RDS 预留实例优化</strong>：建议将长期运行的按需实例转为预留实例以节省费用。</li>
+<li><strong>RDS 空闲数据库实例检测</strong>：建议关闭或缩减低利用率的实例。</li>
+</ol>
+</li>
+<li><p><strong>合并计费</strong>的“管理账户”可以看到所有关联账户的 Trusted Advisor 检查（如果启用了“业务级”或“企业级”支持计划），从而统一查看跨账户的 RDS 使用情况，做出更全面的成本优化建议。</p>
+</li>
+<li><p>题目提到 RDS 实例已运行 90 天，且是按需实例，正是预留实例优化的典型场景（长期稳定运行）。</p>
+</li>
+<li><p>空闲数据库检查可以识别低利用率实例，建议停止或删除，节省成本。</p>
+</li>
+</ul>
+<p><br>309 解决方案架构师需要找出所有<strong>不再被访问或很少被访问的 Amazon S3 存储桶</strong>，以优化存储成本，并要求<strong>运营开销最少</strong>。</p>
+<p>A. <u>使用 S3 Storage Lens 仪表板分析存储桶访问模式，以获取高级活动指标</u>。<br>B. 使用 AWS 管理控制台中的 S3 仪表板分析存储桶访问模式。<br>C. 为存储桶开启 Amazon CloudWatch 的 BucketSizeBytes 指标，使用 Amazon Athena 分析访问模式。<br>D. 开启 AWS CloudTrail 进行 S3 对象监控，使用 CloudTrail 日志与 CloudWatch Logs 集成来分析访问模式。</p>
+<ul>
+<li><p><strong>S3 Storage Lens</strong> 是 AWS 提供的<strong>免费&#x2F;付费</strong>的存储分析工具，提供组织级、跨账户、跨区域的 S3 存储使用情况和活动指标。</p>
+</li>
+<li><p>S3 控制台提供基本的存储桶指标（如存储大小、对象数量），但<strong>不提供详细的访问频率或活动指标</strong>，无法直接识别“很少访问”的存储桶</p>
+</li>
+<li><p>BucketSizeBytes 是存储容量指标，不是<strong>访问活动指标</strong>，无法反映访问频率。</p>
+</li>
+<li><p>CloudTrail 可以记录 S3 API 调用（如 GetObject、PutObject），但需要手动开启、解析大量日志，再结合 CloudWatch Logs 分析，配置复杂且成本较高</p>
+</li>
+</ul>
+<p><br>310 一家公司在美国东部1区的S3中存储大型AI&#x2F;ML数据集，通过Web应用（EC2 + ALB）销售访问权限。客户购买后获得S3预签名URL来下载文件。客户分布在北美和欧洲。公司希望<strong>降低数据传输成本</strong>并<strong>保持或提高性能</strong>。</p>
+<p>A. 在现有S3存储桶上配置S3传输加速，将请求定向到传输加速端点，继续使用S3预签名URL。<br>B. <u>部署Amazon CloudFront分发，以S3存储桶为源，将请求定向到CloudFront URL，切换到CloudFront签名URL进行访问控制</u>。<br>C. 在eu-central-1区域设置第二个S3存储桶并配置跨区域复制，将客户定向到最近的区域，继续使用S3预签名URL。<br>D. 修改Web应用，直接从S3流式传输数据给用户，并在应用中实现访问控制。</p>
+<p><br>311 公司要设计一个处理保险报价的Web应用，用户提交报价请求，要求：</p>
+<ol>
+<li><strong>按报价类型分类</strong>处理。</li>
+<li><strong>24小时内必须回复，且消息不能丢失</strong>（可靠性与时效性）。</li>
+<li><strong>最大化运营效率，维护工作最少</strong>（即尽量使用托管服务、简化架构）。</li>
+</ol>
+<p>A. 为每种报价类型创建多个 Amazon Kinesis 数据流，让 Web 应用发消息到对应流，后端应用服务器组使用 KCL 从各自流汇聚消息。<br>B. 为每种报价类型创建 Lambda + SNS 主题，让 Lambda 订阅 SNS，Web 应用发布请求到对应 SNS 主题。<br>C. <u>创建一个 SNS 主题，将多个 SQS 队列订阅到该主题，用 SNS 消息过滤将消息路由到正确的 SQS 队列（按报价类型），每个后端应用服务器组使用各自的 SQS 队列。</u><br>D. 创建多个 Kinesis Data Firehose 传输流，将数据流式传输到 OpenSearch Service，后端从 OpenSearch 搜索并处理消息。</p>
+<p>SQS 提供<strong>至少一次传递、持久存储、可配置保留期（最长14天）</strong>，能保证消息不丢失并在24小时内处理</p>
+<p><br>312 公司有一个在多个EC2实例上运行的应用程序，每个实例有多个EBS数据卷。要求：</p>
+<ol>
+<li><strong>每晚备份</strong>EC2实例的配置和数据（即EBS卷）。</li>
+<li>能够<strong>在另一个AWS区域恢复</strong>（需跨区域备份）。</li>
+<li>以<strong>最高的运营效率</strong>满足要求（即自动化、托管服务、最少维护）</li>
+</ol>
+<p>A. 编写 Lambda 函数，安排EBS卷的夜间快照，并复制快照到另一个区域。<br>B. <u>使用 AWS Backup 创建备份计划执行夜间备份，将备份复制到另一区域，添加应用程序的 EC2 实例作为资源。</u><br>C. 使用 AWS Backup 创建备份计划执行夜间备份，将备份复制到另一区域，将应用程序的 EBS 卷添加为资源。<br>D. 编写 Lambda 函数，安排EBS卷的夜间快照，并复制快照到不同可用区。</p>
+<ul>
+<li>AWS Backup是<strong>全托管备份服务</strong>，支持<strong>EC2实例级备份</strong>（包括所有连接的EBS卷、实例配置元数据）。</li>
+</ul>
+<p><br>313 一家公司正在 AWS 上构建移动应用，计划扩展到<strong>数百万用户</strong>。需要建立一个平台，让授权用户能在移动设备上观看公司内容。问解决方案架构师应推荐什么方案</p>
+<p>A. 将内容发布到公共 Amazon S3 存储桶，使用 AWS KMS 密钥传输内容。<br>B. 在移动应用和 AWS 环境之间设置 IPsec VPN 以流式传输内容。<br>C. <u>使用 Amazon CloudFront，提供签名 URL 来流式传输内容</u>。<br>D. 在移动应用和 AWS 环境之间设置 AWS 客户端 VPN 以流式传输内容。</p>
+<p><br>314 公司有一个本地MySQL数据库，供全球销售团队使用，访问模式<strong>不频繁</strong>。销售团队要求<strong>停机时间尽可能短</strong>。数据库管理员希望迁移到AWS，并且由于未来用户可能增加，<strong>不希望选择特定的实例类型</strong>（即希望自动扩展，无需预先选择实例规格）。</p>
+<p>问解决方案架构师应推荐哪种服务。</p>
+<p>A. 亚马逊 Aurora MySQL<br>B<u>. 适用于 MySQL 的 Amazon Aurora 无服务器版</u><br>C. 亚马逊 Redshift Spectrum<br>D. 适用于 MySQL 的亚马逊关系型数据库（Amazon RDS for MySQL）</p>
+<ol>
+<li><strong>访问模式不频繁</strong> → 数据库可能长时间闲置，要求成本优化（不为闲置资源持续付费）。</li>
+<li><strong>停机时间尽可能短</strong> → 迁移和运行中都需要高可用性，尽量减小业务中断。</li>
+<li><strong>不希望选择特定实例类型</strong> → 希望自动扩展计算能力，无需预选实例规格，以适应未来用户增长的不确定性。</li>
+</ol>
+<ul>
+<li><p>Aurora 是高性能、高可用的 MySQL 兼容数据库，但需要选择<strong>实例类型和大小</strong>（预配置容量）。</p>
+</li>
+<li><p>Aurora Serverless 可根据应用程序需求<strong>自动扩展和收缩数据库容量</strong>，在无连接时甚至可以缩容到零，按每秒实际使用量计费。</p>
+</li>
+<li><p>RDS for MySQL 是托管 MySQL 服务，但仍需选择实例类型和大小，无法自动伸缩计算资源（除非手动修改实例类型）。</p>
+</li>
+</ul>
+<p><br>315 公司因本地自定义应用程序漏洞导致数据泄露，现正迁移应用程序到 Amazon EC2 实例。<br>要求：</p>
+<ol>
+<li><strong>主动扫描 EC2 实例上的漏洞</strong>。</li>
+<li>发送<strong>详细说明发现结果的报告</strong>。</li>
+</ol>
+<p>问哪种解决方案能满足这些要求</p>
+<p>A. 部署 AWS Shield 扫描 EC2 实例漏洞，用 Lambda 将发现记录到 CloudTrail。<br>B. 部署 Amazon Macie 和 Lambda 扫描 EC2 实例漏洞，将发现记录到 CloudTrail。<br>C. 开启 Amazon GuardDuty，将 GuardDuty 代理部署到 EC2 实例，配置 Lambda 生成和分发报告。<br>D. <u>开启 Amazon Inspector，将 Amazon Inspector 代理部署到 EC2 实例，配置 Lambda 生成和分发报告</u></p>
+<ul>
+<li><p>AWS Shield 是<strong>DDoS 防护服务</strong>，不提供漏洞扫描功能</p>
+</li>
+<li><p>Amazon Macie 是用于<strong>发现和保护敏感数据</strong>（如 PII）的服务，通过机器学习识别 S3 等存储中的数据分类，<strong>不扫描 EC2 实例的漏洞</strong>。</p>
+</li>
+<li><p>GuardDuty 是<strong>威胁检测服务</strong>，通过分析 VPC 流日志、CloudTrail 事件等来识别恶意活动或异常行为，但它<strong>不是主动漏洞扫描工具</strong>，而是持续监控安全事件</p>
+</li>
+</ul>
+<p>Amazon Inspector 是<strong>自动化的漏洞管理服务</strong>，专门用于<strong>评估 EC2 实例和容器镜像的漏洞与安全合规性</strong>。</p>
+<p><br>316 公司使用 Amazon EC2 实例运行脚本，轮询并处理 Amazon SQS 队列中的消息。希望在保持处理不断增加的消息能力的同时，降低运营成本。问解决方案架构师应推荐什么。</p>
+<p>A. 增大 EC2 实例的规模以更快地处理消息。<br>B. 使用 Amazon EventBridge 在 EC2 实例利用率不足时关闭实例。<br>C. <u>将 EC2 实例上的脚本迁移到具有适当运行时的 AWS Lambda 函数。</u><br>D. 使用 AWS Systems Manager Run Command 按需运行脚本。</p>
+<p>因为 Lambda + SQS 集成提供了无服务器、按需扩展的消息处理能力，按实际使用付费，在保持甚至提高处理能力的同时，大幅降低了运营成本。</p>
+<p><br>317 公司有遗留应用程序生成 CSV 文件并存到 S3，新的商用现成（COTS）应用程序可以分析 Amazon Redshift 和 S3 中的数据，但<strong>无法处理 CSV 格式</strong>。公司无法修改遗留应用程序，需要一种解决方案让 COTS 应用能使用这些数据，且要求<strong>运营开销最小</strong>。</p>
+<p><u>A. 创建按计划运行的 AWS Glue ETL 作业，处理 CSV 文件并将处理后数据存储在 Amazon Redshift 中。</u><br>B. 开发 Python 脚本运行在 EC2 上，通过 cron 将 CSV 转换为 SQL 文件，输出到 S3。<br>C. 创建 Lambda 函数和 DynamoDB 表，用 S3 事件触发 Lambda 做 ETL，将处理后数据存入 DynamoDB。<br>D. 使用 EventBridge 按周计划启动 Amazon EMR 集群，执行 ETL 作业，将处理后数据存入 Amazon Redshift。</p>
+<ul>
+<li>Lambda 可处理 CSV 转换，但存入 <strong>DynamoDB（NoSQL 键值存储）</strong> 不适合复杂 SQL 查询，COTS 应用可能不支持 DynamoDB 作为数据源（题目说仅支持 Redshift 和 S3）。</li>
+</ul>
+<p><br>318 公司将其 IT 环境迁移到 AWS 后，发现用户在配置过大的 Amazon EC2 实例和修改安全组规则时没有遵循变更控制流程。解决方案架构师需要制定策略来<strong>跟踪和审计这些资源清单及配置变更</strong>。需要选择两项措施。</p>
+<p><u>A. 启用 AWS CloudTrail 并将其用于审计。</u><br>B. 对 Amazon EC2 实例使用数据生命周期策略。<br>C. 启用 AWS Trusted Advisor 并参考安全仪表板。<br>D. <u>启用 AWS Config 并创建用于审计和合规目的的规则。</u><br>E. 使用 AWS CloudFormation 模板恢复以前的资源配置。</p>
+<ol>
+<li><strong>跟踪和审计资源清单</strong> → 需要记录资源（如 EC2 实例规格、安全组规则）的当前状态和配置。</li>
+<li><strong>跟踪和审计配置变更</strong> → 需要记录谁、何时、对资源做了哪些变更。</li>
+</ol>
+<p>CloudTrail 记录<strong>API 调用和账户活动</strong>，包括谁、何时、在哪个资源上执行了什么操作（如启动 EC2 实例、修改安全组规则）</p>
+<p>AWS Config 记录<strong>资源配置历史</strong>和变更详情，提供资源清单（当前和历史状态），并可通过自定义规则检测不合规配置（如 EC2 实例类型是否超出允许范围、安全组规则是否违规）。</p>
+<p><br>319 公司有数百个基于 Linux 的 Amazon EC2 实例，系统管理员使用共享 SSH 密钥进行管理。安全审计要求移除所有共享密钥，需要提供一种安全的 EC2 实例访问解决方案，同时使管理开销最小。</p>
+<p>A. <u>使用 AWS Systems Manager Session Manager 连接到 EC2 实例</u>。<br>B. 使用 AWS STS 按需生成一次性 SSH 密钥。<br>C. 允许对一组堡垒机实例进行共享 SSH 访问，其他实例仅允许来自堡垒机的 SSH 访问。<br>D. 使用 Amazon Cognito 自定义授权方对用户进行身份验证，调用 Lambda 函数生成临时 SSH 密钥。</p>
+<ul>
+<li>Session Manager 是 AWS Systems Manager 的功能，允许通过浏览器或 AWS CLI 直接连接 EC2 实例，<strong>无需 SSH 密钥或堡垒机</strong>。</li>
+<li>访问基于 IAM 权限控制，会话活动自动记录到 CloudTrail 和 S3，满足安全审计要求。</li>
+<li>完全托管，无需管理密钥或额外基础设施，只需为实例安装 SSM Agent（许多 AMI 已预装），配置 IAM 角色即可。</li>
+</ul>
+<p><br>320 公司使用一批 Amazon EC2 实例从本地数据源摄取 JSON 格式数据，速率最高 1 MB&#x2F;s。现有问题：EC2 重启时传输中的数据会丢失。数据科学团队需要<strong>近实时查询</strong>已摄取的数据。<br>要求解决方案：提供近实时查询、可扩展性、将数据丢失降至最低。</p>
+<p>A. <u>将数据发布到 Amazon Kinesis Data Streams，使用 Kinesis Data Analytics 查询数据。</u><br>B. 将数据发布到 Amazon Kinesis Data Firehose，以 Amazon Redshift 为目标，用 Redshift 查询数据。<br>C. 将数据存储在 EC2 实例存储，然后发布到 Kinesis Data Firehose 以 S3 为目标，用 Amazon Athena 查询数据。<br>D. 将数据存储在 Amazon EBS 卷，发布到 Amazon ElastiCache for Redis，订阅 Redis 频道查询数据。</p>
+<ul>
+<li><p><strong>Kinesis Data Streams</strong> 提供实时数据流摄取，数据持久化保留（默认 24 小时，可延长），EC2 实例将数据直接发送到 KDS，即使 EC2 重启，数据也不会丢失（因为已发送到 KDS）。</p>
+</li>
+<li><p><strong>Kinesis Data Analytics</strong> 支持对数据流进行近实时 SQL 查询，结果可输出到其他服务或直接查询。</p>
+</li>
+<li><p>Kinesis Data Firehose 是用于将数据流式传输到存储或分析服务的<strong>摄取和批量加载服务</strong>，并非为<strong>近实时查询</strong>设计（Redshift 是数据仓库，导入和查询通常有分钟级延迟，非秒级近实时）。</p>
+</li>
+<li><p>Firehose 有缓冲时间（如 60 秒或更大）才写入 Redshift，且 Redshift 不适合高频即时查询流式数据。</p>
+</li>
+</ul>
+<p><br>321 解决方案架构师需要确保上传到 Amazon S3 存储桶的所有对象都经过加密，问应采取什么措施。</p>
+<p>A. 更新存储桶策略，若 PutObject 未设置 s3:x-amz-acl 头部，则拒绝该操作。<br>B. 更新存储桶策略，若 PutObject 未将 s3:x-amz-acl 头部设置为 private，则拒绝该操作。<br>C. 更新存储桶策略，若 PutObject 未将 aws:SecureTransport 标头设置为 true，则拒绝该操作。<br>D. <u>更新存储桶策略，若 PutObject 未设置 x-amz-server-side-encryption 头部，则拒绝该操作。</u></p>
+<p>因为它利用 S3 存储桶策略的条件键，强制客户端在上传时指定加密方式，确保所有对象静态加密。这是 AWS 推荐的最佳实践</p>
+<p><br>322 一个多层应用程序的用户从移动设备上传图像。应用程序需要为每个图像生成缩略图（可能需要长达60秒），但公司希望<strong>更快地响应通知用户原始图像已收到</strong>，而不是等待缩略图生成完成。解决方案架构师需要设计应用以<strong>异步方式将请求分发到不同应用层</strong>。</p>
+<p>A. 编写自定义 AWS Lambda 函数生成缩略图并提醒用户，使用图像上传过程作为事件源调用 Lambda。<br>B. 创建 AWS Step Functions 工作流，处理应用各层间编排，并在缩略图生成完成后提醒用户。<br>C. <u>创建一个 Amazon SQS 消息队列，上传图像后在 SQS 中放置一条生成缩略图的消息，并立即通知用户图像已收到。</u><br>D. 创建 Amazon SNS 通知主题和订阅，上传完成后使用一个订阅触发缩略图生成，生成完成后使用第二个订阅推送通知给用户。</p>
+<ul>
+<li><strong>SQS 解耦效果好</strong>：上传完成后，Web 层可立即返回确认给用户，同时将图像元信息放入 SQS 队列。</li>
+<li>后台工作进程（如 EC2 或 Lambda）从 SQS 拉取消息异步生成缩略图，生成时间不影响用户响应。</li>
+</ul>
+<p>323公司大楼每个入口有徽章读取器（传感器），扫描徽章后通过 HTTPS 发送一条消息（包含谁、哪个入口）。需要设计系统处理这些传感器消息，要求：</p>
+<ol>
+<li><strong>高可用性</strong>。</li>
+<li>结果可供安全团队分析。</li>
+</ol>
+<p>A. 启动一个 Amazon EC2 实例作为 HTTPS 端点并处理消息，将结果保存到 Amazon S3。<br>B. <u>在 Amazon API Gateway 中创建 HTTPS 端点，调用 AWS Lambda 函数处理消息，将结果保存到 Amazon DynamoDB。</u><br>C. 使用 Amazon Route 53 将传入的传感器消息定向到 AWS Lambda 函数，配置 Lambda 将结果保存到 DynamoDB。<br>D. 为 Amazon S3 创建网关 VPC 端点，通过站点到站点 VPN 将传感器数据直接写入 S3 存储桶。</p>
+<ul>
+<li><strong>API Gateway</strong> 提供托管、可扩展的 HTTPS 端点，自动处理 SSL、高可用、负载均衡。</li>
+<li><strong>Lambda</strong> 无服务器计算，自动扩展，按需执行，适合处理不规则的传感器消息流。</li>
+<li><strong>DynamoDB</strong> 是 NoSQL 数据库，可持久化存储结构化消息（如人员 ID、入口 ID、时间戳），并支持快速查询和后续分析（可通过 Athena 或导出到其他分析工具）</li>
+</ul>
+<p><br>324 公司希望为本地 iSCSI 存储卷（数百TB）实施灾难恢复计划，要求：</p>
+<ol>
+<li><strong>终端用户能够立即访问本地系统中的所有文件类型，且不会遇到延迟问题</strong> → 保持本地低延迟访问。</li>
+<li><strong>对公司现有基础设施改动最小</strong> → 尽量不改变现有应用程序访问方式（现有使用 iSCSI 块存储）。</li>
+</ol>
+<p>A. 预置一个 Amazon S3 文件网关（VM 形式在本地），本地缓存 10 TB，修改应用通过 NFS 访问，恢复时用 EC2 挂载 S3 桶。<br>B. 配置 AWS 存储网关磁带网关，将数据备份到虚拟磁带库，恢复时从磁带恢复数据到 EC2 的 EBS 卷。<br>C. 配置 AWS 存储网关卷网关缓存卷，本地缓存 10 TB，通过 iSCSI 挂载到现有文件服务器并复制文件，定时快照，恢复时还原快照到 EC2 的 EBS 卷。<br>D. <u>配置 AWS 存储网关卷网关存储卷，磁盘空间与现有相同，通过 iSCSI 挂载复制文件，定时快照，恢复时还原到 EC2 的 EBS 卷。</u></p>
+<ul>
+<li><p><strong>缓存卷模式</strong>：数据主要存储在 S3，本地仅缓存频繁访问的数据（本地缓存大小可设置，如 10 TB），通过 iSCSI 挂载给本地服务器。</p>
+</li>
+<li><p>本地用户访问缓存命中时无延迟，未命中数据从云端获取（有延迟），但“所有文件类型”都可能被访问，若缓存不足可能有延迟问题。</p>
+</li>
+<li><p>对数百TB数据来说，10 TB 缓存可能无法保证所有文件访问无延迟，但可以通过智能缓存算法优化。</p>
+</li>
+<li><p><strong>存储卷模式</strong>：数据主要存储在本地，异步备份到 AWS，本地磁盘空间需与原始数据相同（数百TB），不符合“降低成本”且本地仍需大量存储。</p>
+</li>
+<li><p>虽然本地访问无延迟（因为数据全在本地），但并未利用云存储优势，且本地存储成本仍高。</p>
+</li>
+</ul>
+<p><br>325 公司通过 Amazon S3 托管一个 Web 应用程序，使用 <strong>Amazon Cognito 作为身份提供商</strong>对用户进行身份验证，并返回 <strong>JWT 令牌</strong>，该令牌用于访问另一个 S3 存储桶中的受保护资源。<br>部署后用户报告错误，无法访问受保护内容。解决方案架构师需要提供适当的权限来解决此问题。</p>
+<p><u>A. 更新 Amazon Cognito 身份池以承担适当的 IAM 角色，从而访问受保护内容。</u><br>B. 更新 S3 ACL 以允许应用程序访问受保护的内容。<br>C. 将应用程序重新部署到 Amazon S3，以防止 S3 最终一致性读取影响用户访问。<br>D. 更新 Amazon Cognito 用户池，在身份池中使用自定义属性映射，并向用户授予访问受保护内容的适当权限。</p>
+<ul>
+<li>Amazon Cognito 提供 <strong>用户池（User Pools）</strong> 和 <strong>身份池（Identity Pools）</strong>：<ul>
+<li><strong>用户池</strong>：管理用户身份验证（返回 JWT ID Token）。</li>
+<li><strong>身份池</strong>：将身份转换为 AWS 临时凭证（IAM Role），以访问 AWS 资源（如 S3、DynamoDB）。</li>
+</ul>
+</li>
+<li>当前架构：用户登录 → Cognito 用户池验证 → 返回 JWT → 该 JWT 用于访问 S3 受保护内容。<br>但<strong>仅凭 JWT 本身不能直接访问 S3</strong>，需要获取 AWS 临时凭证来调用 AWS API。这通常通过 <strong>Cognito 身份池</strong> 实现：用户用 JWT 向身份池换取临时凭证。</li>
+</ul>
+<p><br>326 图片托管公司上传大型资产到 <strong>Amazon S3 标准存储桶</strong>，使用分片上传并可能覆盖相同对象。</p>
+<ul>
+<li>上传后 <strong>30 天内</strong>频繁访问。</li>
+<li>30 天后访问频率降低，但<strong>访问模式不一致</strong>（即有些对象偶尔被访问，有些可能不再被访问）。<br>要求：保持高可用性和弹性，同时优化 S3 存储成本。<br>需选择两项操作组合。</li>
+</ul>
+<p>A. <u>30 天后将资产移至 S3 智能分层存储。</u><br>B. <u>配置 S3 生命周期策略以清理不完整的分片上传</u>。<br>C. 配置 S3 生命周期策略以清理过期的对象删除标记。<br>D. 30 天后将资产移至 S3 标准 - 不常访问（S3 Standard-IA）。<br>E. 30 天后将资产移至 S3 单区域 - 不常访问存储（S3 One Zone-IA）。</p>
+<p>智能分层存储自动将对象在<strong>频繁访问层</strong>和<strong>不频繁访问层</strong>之间移动，无需人工干预</p>
+<ul>
+<li>S3 Standard-IA 适用于不常访问但需要高可用性和低延迟检索的数据（存储在多个 AZ）。</li>
+<li>但它的特点是<strong>按访问次数收取检索费用</strong>，如果对象访问模式不一致且偶尔被访问，可能会产生较高的检索费用。</li>
+</ul>
+<p><br>327 一个 VPC 中的 EC2 实例位于私有子网，包含高度敏感数据。根据公司政策：</p>
+<ul>
+<li>EC2 实例只能访问互联网上<strong>经过批准的第三方软件仓库 URL</strong>，以获取软件更新。</li>
+<li><strong>其他所有互联网流量必须阻断</strong>。</li>
+</ul>
+<p>问哪种解决方案符合要求</p>
+<p>A. <u>更新私有子网的路由表，将出站流量路由到 AWS 网络防火墙，配置域名列表规则组</u>。<br>B. 设置 AWS WAF Web ACL，创建自定义规则基于源 IP 和目标 IP 过滤流量。<br>C. 实施严格的入站安全组规则，配置出站规则通过指定 URL 仅允许流向授权软件仓库的流量。<br>D. 在 EC2 实例前配置 ALB，将所有出站流量导向 ALB，在 ALB 的目标组中使用基于 URL 的规则监听器实现出站访问。</p>
+<ul>
+<li><p>AWS Network Firewall 是托管的网络防火墙服务，可部署在 VPC 中，通过<strong>规则组</strong>控制流量。</p>
+</li>
+<li><p>支持 <strong>域名列表规则组</strong>（Domain Lists），可基于域名（如 <code>approved-software-repo.com</code>）允许或拒绝流量。</p>
+</li>
+<li><p>将私有子网出站流量路由到 Network Firewall 端点（网关），防火墙根据域名规则放行或阻止。</p>
+</li>
+<li><p>WAF不直接控制私有子网 EC2 的出站互联网访问，WAF 主要防御入站 Web 攻击。</p>
+</li>
+<li><p>安全组是实例级别的防火墙，可控制入站和出站流量，但只能基于 <strong>IP 地址、端口和协议</strong>，<strong>不能基于域名&#x2F;URL</strong>。</p>
+</li>
+<li><p>ALB 是第 7 层负载均衡器，通常用于<strong>入站</strong>流量分发，而不是控制出站流量</p>
+</li>
+</ul>
+<p><br>328 公司有一个三层电子商务应用：</p>
+<ul>
+<li>网站托管在 <strong>Amazon S3</strong>。</li>
+<li>API 托管在 <strong>ALB 后的三个 EC2 实例</strong>上，包含静态内容、动态内容，以及处理销售请求的<strong>后端工作程序</strong>。</li>
+<li>预计在新产品发布期间，销售请求数量会有<strong>显著且突然的增长</strong>。<br>目标：确保所有请求都能成功处理。</li>
+</ul>
+<p>A. 为动态内容添加 Amazon CloudFront 分发，增加 EC2 实例数量以应对流量增长。<br>B. 为静态内容添加 Amazon CloudFront 分发，将 EC2 实例放入自动扩展组以便根据网络流量启动新实例。<br>C. 为动态内容添加 Amazon CloudFront 分发，在 ALB 前添加 Amazon ElastiCache 实例以减少 API 需要处理的流量。<br>D. <u>为静态内容添加 Amazon CloudFront 分发，添加 Amazon SQS 队列接收来自网站的请求，使 EC2 实例稍后处理。</u></p>
+<p><br>329 安全审计发现 Amazon EC2 实例未定期打补丁。<br>要求解决方案：</p>
+<ol>
+<li><strong>定期安全扫描</strong>大量 EC2 实例。</li>
+<li><strong>按固定计划为 EC2 实例打补丁</strong>。</li>
+<li><strong>提供每个实例的补丁状态报告</strong>。</li>
+</ol>
+<p>A. 设置 Amazon Macie 扫描 EC2 实例漏洞，在每个实例上设置定时任务按计划打补丁。<br>B. 开启 Amazon GuardDuty 扫描 EC2 漏洞，配置 Systems Manager Session Manager 按计划打补丁。<br>C. 设置 Amazon Detective 扫描 EC2 漏洞，设置 EventBridge 计划规则按计划打补丁。<br><u>D. 开启 Amazon Inspector 扫描 EC2 漏洞，设置 AWS Systems Manager 补丁管理器按计划打补丁。</u></p>
+<ul>
+<li><strong>Amazon Inspector</strong> 是<strong>自动化的漏洞管理服务</strong>，可定期扫描 EC2 实例的软件漏洞（包括缺失的补丁），并生成详细报告。</li>
+<li><strong>AWS Systems Manager Patch Manager</strong> 是专门的补丁管理服务，可<strong>按计划为大量 EC2 实例自动打补丁</strong>，并提供每个实例的补丁合规性状态报告</li>
+</ul>
+<p><br>330 公司计划将数据存储在 Amazon RDS 数据库实例上，要求<strong>对静态数据进行加密</strong>。问解决方案架构师应采取什么措施来满足这一要求。</p>
+<p>A. <u>在 AWS KMS 中创建一个密钥，为数据库实例启用加密。</u><br>B. 创建一个加密密钥，将该密钥存储在 AWS Secrets Manager 中，使用该密钥对数据库实例进行加密。<br>C. 在 AWS Certificate Manager（ACM）中生成证书，使用该证书在数据库实例上启用 SSL&#x2F;TLS。<br>D. 在 IAM 中生成证书，使用该证书在数据库实例上启用 SSL&#x2F;TLS</p>
+<ul>
+<li><p>Secrets Manager 用于存储和管理敏感信息（如数据库凭证、API 密钥），但<strong>不用于加密 RDS 底层存储</strong>。</p>
+</li>
+<li><p>ACM 提供 SSL&#x2F;TLS 证书，用于<strong>传输中加密</strong>（如 RDS 连接加密），不用于<strong>静态数据加密</strong>。</p>
+</li>
+<li><p>IAM 可以上传证书，但同样用于<strong>传输加密</strong>，而不是静态加密</p>
+</li>
+</ul>
+<p>331公司需在 <strong>30 天内</strong> 将 <strong>20 TB</strong> 数据从数据中心迁移到 AWS 云，网络带宽限制为 <strong>15 Mbps</strong>，且利用率不能超过 <strong>70%</strong>（即实际可用带宽约 <strong>10.5 Mbps</strong>）。问解决方案架构师应采取什么措施。</p>
+<p>A. <u>使用 AWS Snowball。</u><br>B. 使用 AWS DataSync。<br>C. 使用安全的 VPN 连接。<br>D. 使用 Amazon S3 传输加速</p>
+<ul>
+<li>Snowball 是物理设备，用于离线大规模数据传输，可绕过网络带宽限制。</li>
+</ul>
+<p><br>332 公司需要为员工提供对机密敏感文件的安全访问权限，要求：</p>
+<ol>
+<li><strong>只能由授权用户访问</strong>（需身份验证与授权）。</li>
+<li><strong>文件安全下载到员工设备</strong>（传输安全）。</li>
+<li>文件目前存储在<strong>本地 Windows 文件服务器</strong>，但容量即将耗尽（需扩展存储容量）。</li>
+</ol>
+<p>问哪种解决方案能满足要求。</p>
+<p>A. 将文件服务器迁移到公共子网中的 Amazon EC2 实例，配置安全组仅允许员工的 IP 地址入站。<br>B. <u>将文件迁移到 Amazon FSx for Windows File Server，与本地 AD 集成，配置 AWS 客户端 VPN。</u><br>C. 将文件迁移到 Amazon S3，创建私有 VPC 终端节点，创建签名 URL 允许下载。<br>D. 将文件迁移到 Amazon S3，创建公共 VPC 端点，员工使用 IAM Identity Center 登录。</p>
+<ul>
+<li><strong>Amazon FSx for Windows</strong> 是完全托管的 Windows 文件服务器，支持 SMB 协议，可无缝集成本地 Active Directory，实现基于域用户的身份验证和文件权限控制。</li>
+<li><strong>AWS Client VPN</strong> 提供安全的远程访问，员工可通过 VPN 连接访问 FSx 文件系统，如同在本地网络一样</li>
+</ul>
+<p><br>333 公司应用程序运行在 ALB 后的 EC2 实例上，实例位于跨多 AZ 的自动扩展组中。<br><strong>每月第一天的午夜</strong>，月末财务批处理运行，导致 CPU 利用率立即达到 100%，应用变慢甚至可能停机。<br>要求：确保应用程序能处理工作负载并避免停机</p>
+<p>A. 在 ALB 前配置 Amazon CloudFront 分发。<br>B. 基于 CPU 利用率配置 EC2 自动扩展简单扩展策略。<br>C. <u>根据月度计划配置 EC2 Auto Scaling 定时扩展策略</u>。<br>D. 配置 Amazon ElastiCache 以减轻部分 EC2 实例的工作负载。</p>
+<ul>
+<li>ElastiCache 是内存缓存，可用于减少数据库查询负载，但题目未说明 CPU 高是由于数据库查询引起；可能是批处理任务本身需要大量计算，缓存无法缓解。</li>
+</ul>
+<p><br>334 公司希望<strong>客户</strong>能够使用<strong>本地 Microsoft Active Directory</strong> 凭据，通过 <strong>SFTP 客户端</strong> 下载存储在 Amazon S3 中的文件。<br>要求：</p>
+<ol>
+<li>最少的运营开销。</li>
+<li>无需更改客户应用程序。</li>
+</ol>
+<p>A. <u>使用 SFTP 为 Amazon S3 设置 AWS Transfer Family，配置集成的 Active Directory 身份验证。</u><br>B. 设置 AWS DMS 同步本地客户端与 Amazon S3，配置集成的 Active Directory 身份验证。<br>C. 使用 AWS IAM Identity Center 设置 AWS DataSync，在本地位置和 S3 位置之间同步。<br>D. 设置一个带有 SFTP 的 Windows EC2 实例，集成 IAM。</p>
+<ul>
+<li><p><strong>AWS Transfer Family</strong> 是<strong>全托管</strong>的 SFTP、FTPS、FTP 服务，可直接使用 S3 作为后端存储。</p>
+</li>
+<li><p>支持与本地 Active Directory 集成作为身份提供商（通过 AWS Directory Service 或直接连接本地 AD）。</p>
+</li>
+<li><p>客户继续使用现有 SFTP 客户端，无需更改应用。</p>
+</li>
+<li><p><strong>DataSync</strong> 用于数据同步（如本地到 S3），不是提供 SFTP 访问的服务。</p>
+</li>
+</ul>
+<p><br>335  公司面临需求突然增长，需要从 AMI 配置大型 EC2 实例，实例在自动扩展组中运行。<br>要求：提供<strong>最小的初始化延迟</strong>以满足需求（即实例启动速度要快）。</p>
+<p>A. 使用 <code>aws ec2 register-image</code> 命令从快照创建 AMI，使用 AWS Step Functions 替换自动扩展组中的 AMI。<br>B. <u>启用 EBS 快照的快速快照恢复功能，使用该快照创建 AMI</u>。<br>C. 在 Amazon DLM 中启用 AMI 创建并定义生命周期规则，创建 Lambda 函数修改自动扩展组中的 AMI。<br>D. 使用 EventBridge 调用 AWS Backup 生命周期策略配置 AMI，在 EventBridge 中将自动扩展组容量限制配置为事件源。</p>
+<ol>
+<li><strong>从 AMI 启动大型 EC2 实例</strong> → AMI 包含根卷快照，实例启动时需要从快照恢复数据到新 EBS 卷。</li>
+<li><strong>最小化初始化延迟</strong> → 需要加快 AMI 根卷的加载速度，避免从快照恢复数据的延迟（尤其是大型卷）。</li>
+</ol>
+<p><br>336 公司有多层 Web 应用，使用 Amazon Aurora MySQL 数据库，应用层在 EC2 实例上。<br>IT 安全准则要求：</p>
+<ol>
+<li><strong>数据库凭据必须加密</strong>。</li>
+<li><strong>每 14 天轮换一次</strong>。<br>要求：以<strong>最少的运维工作</strong>满足要求</li>
+</ol>
+<p>A. <u>创建新的 KMS 加密密钥，使用 AWS Secrets Manager 创建密钥（含凭证）与 Aurora 集群关联，配置 14 天自定义轮换周期。</u><br>B. 在 AWS Systems Manager 参数存储中创建用户名（字符串）和密码（SecureString）参数，用 KMS 加密，应用层加载参数，用 Lambda 每 14 天轮换密码。<br>C. 将凭证文件存储在 KMS 加密的 EFS 文件系统上，挂载到 EC2 实例，用 Lambda 每 14 天轮换 Aurora 凭证并写入文件。<br>D. 将凭证文件存储在 KMS 加密的 S3 存储桶中，应用定期下载，用 Lambda 每 14 天轮换 Aurora 凭证并上传到 S3 文件。</p>
+<p><br>337 公司 Web 应用的后端使用 Amazon RDS for MySQL，配置了一个<strong>主实例</strong>和<strong>五个读取副本</strong>用于扩展读取。<br>要求：</p>
+<ul>
+<li>副本与主实例的<strong>复制延迟不得超过 1 秒</strong>。</li>
+<li>数据库定期运行预定的<strong>存储过程</strong>。</li>
+</ul>
+<p>问题：随着流量增加，副本在峰值负载期间出现额外延迟。<br>目标：<strong>尽可能减少复制延迟</strong>，同时<strong>最小化应用程序代码更改</strong>和<strong>最小化持续运营开销</strong>。</p>
+<p>A. <u>将数据库迁移到 Amazon Aurora MySQL，用 Aurora 副本替换只读副本，并配置 Aurora 自动扩展。将存储过程替换为 Aurora MySQL 原生函数</u>。<br>B. 在数据库前部署 Amazon ElastiCache for Redis 集群，修改应用先在缓存中检查，用 Lambda 函数替换存储过程。<br>C. 将数据库迁移到 Amazon EC2 实例上运行的 MySQL 数据库，为所有副本选择大型计算优化型 EC2 实例，在 EC2 实例上维护存储过程。<br>D. 将数据库迁移到 Amazon DynamoDB，配置大量读取容量单位，配置检索容量扩展，用 DynamoDB 流替换存储过程。</p>
+<ul>
+<li><p><strong>Amazon Aurora</strong> 提供<strong>高性能、低延迟的复制</strong>，其存储层与计算层分离，副本通过共享存储实现，<strong>复制延迟通常远低于 1 秒</strong>（毫秒级），非常适合高读取扩展和低延迟复制需求。</p>
+</li>
+<li><p>DynamoDB 是 NoSQL 键值&#x2F;文档数据库，不原生支持 SQL 查询和存储过程，需要完全重写数据模型和应用逻辑，<strong>代码改动巨大</strong>。</p>
+</li>
+</ul>
+<p><br>338 解决方案架构师需要为高容量 SaaS 平台制定灾难恢复计划，数据全部存储在 Amazon Aurora MySQL 数据库集群中。<br>要求：</p>
+<ul>
+<li><strong>将数据复制到备用的 AWS 区域</strong>（跨区域 DR）。</li>
+<li><strong>以最具成本效益的方式</strong>满足要求。</li>
+</ul>
+<p>A. 使用 MySQL 二进制日志复制到备用区域的 Aurora 集群，在备用区域为 Aurora 集群配置一个数据库实例。<br>B. 为数据库集群设置 Aurora 全局数据库，设置完成后从次要区域移除数据库实例。<br>C. 使用 AWS DMS 将数据持续复制到次要区域的 Aurora 集群，从次要区域移除数据库实例。<br>D. <u>为数据库集群设置 <strong>Aurora 全局数据库</strong>，在次要区域中指定至少一个数据库实例。</u></p>
+<p>因为 Aurora Global Database 是专为跨区域灾难恢复设计的原生功能，设置简单，运维成本低，且次要区域保留实例可随时故障转移，符合成本效益和 DR 要求。</p>
+<p><br>339 公司有一个自定义应用程序，其中<strong>嵌入了凭据</strong>（硬编码或配置文件）用于连接 Amazon RDS MySQL 数据库实例。<br>管理层要求：</p>
+<ol>
+<li><strong>提高应用程序安全性</strong>。</li>
+<li><strong>尽可能减少编程工作</strong>。</li>
+</ol>
+<p>A. 使用 AWS KMS 创建密钥，配置应用程序从 KMS 加载数据库凭证，启用自动密钥轮换。<br>B. 在 RDS MySQL 上为应用创建凭证，存储在 AWS Secrets Manager 中，配置应用从 Secrets Manager 加载凭证，创建一个 Lambda 函数来轮换 Secrets Manager 中的凭证。<br>C. <u>在 RDS MySQL 上为应用创建凭证，存储在 Secrets Manager 中，配置应用从 Secrets Manager 加载凭证，设置凭证轮换计划</u>。<br>D. 在 RDS MySQL 上为应用创建凭证，存储在 AWS Systems Manager Parameter Store 中，配置应用从 Parameter Store 加载凭证，使用 Parameter Store 为 RDS MySQL 中的用户设置凭证轮换计划。</p>
+<ul>
+<li>KMS 用于加密数据，<strong>不用于存储数据库凭据</strong>。</li>
+</ul>
+<p><br>340 媒体公司在 AWS 上托管网站，架构包括 ALB 后的 EC2 实例和 Aurora 数据库。<br>网络安全团队报告应用程序易受 <strong>SQL 注入攻击</strong>。问公司应如何解决。</p>
+<p>A. <u>在 ALB 前使用 AWS WAF，将适当的 Web ACL 与 AWS WAF 关联。</u><br>B. 创建一个 ALB 监听器规则，以固定响应应对 SQL 注入。<br>C. 订阅 AWS Shield Advanced 以自动阻止所有 SQL 注入尝试。<br>D. 设置 Amazon Inspector 以自动阻止所有 SQL 注入尝试。</p>
+<ul>
+<li><p><strong>AWS WAF（Web 应用程序防火墙）</strong> 专门用于防护 Web 应用层攻击，包括 SQL 注入、XSS 等。</p>
+</li>
+<li><p><strong>AWS Shield Advanced</strong> 提供针对 DDoS 攻击的增强防护，<strong>不防御 SQL 注入</strong>（这是应用层攻击，不是 DDoS）。</p>
+</li>
+<li><p><strong>Amazon Inspector</strong> 是漏洞评估服务，用于扫描 EC2 实例、容器镜像的漏洞，并提供报告，但<strong>不会主动阻止攻击</strong></p>
+</li>
+</ul>
+<p><br>341 公司有一个由 <strong>AWS Lake Formation</strong> 管理的 S3 数据湖。<br>他们希望将数据湖中的数据与 <strong>Amazon Aurora MySQL</strong> 中的运营数据结合，在 <strong>Amazon QuickSight</strong> 中创建可视化。<br>要求：</p>
+<ul>
+<li>实施<strong>列级授权</strong>，让营销团队只能访问数据库中的部分列。</li>
+<li>以<strong>最少的运营开销</strong>满足要求。</li>
+</ul>
+<p>A. 使用 Amazon EMR 将数据从数据库直接提取到 QuickSight SPICE 引擎，仅包含所需列。<br>B. 使用 AWS Glue Studio 将数据从数据库接入 S3 数据湖，为 QuickSight 用户附加 IAM 策略以实施列级访问控制，在 QuickSight 中使用 S3 作为数据源。<br>C. 使用 AWS Glue Elastic Views 为 S3 中的数据库创建物化视图，创建 S3 存储桶策略实施列级访问控制，在 Quick Sight 中使用 S3 作为数据源。<br>D. <u>使用 Lake Formation 蓝图将数据从数据库接入 S3 数据湖，使用 Lake Formation 为 QuickSight 用户实施列级访问控制，在 QuickSight 中使用 Amazon Athena 作为数据源。</u></p>
+<ul>
+<li><strong>Lake Formation 蓝图</strong> 可自动化从关系数据库（如 Aurora MySQL）到 S3 数据湖的数据摄取。</li>
+<li><strong>Lake Formation 支持列级和行级精细化访问控制</strong>，可以针对不同用户或组（如营销团队）设置仅能访问特定列。</li>
+<li>Quick Sight 可通过 <strong>Athena</strong> 查询 S3 数据（通过 Lake Formation 管理的权限），Athena 会继承 Lake Formation 的权限设置，从而实现列级过滤。</li>
+</ul>
+<p><br>342 一家交易处理公司每周在 EC2 实例上运行脚本化批处理作业，EC2 实例位于自动扩展组（ASG）中。</p>
+<ul>
+<li>交易数量可能变化，但每次运行时的<strong>基准 CPU 利用率至少为 60%</strong>。</li>
+<li>需要在<strong>作业运行前 30 分钟配置好容量</strong>（即提前扩容）。</li>
+<li>目前工程师手动修改 ASG 参数，公司没有资源分析容量趋势，需要<strong>自动化修改 ASG 期望容量</strong>。</li>
+<li>要求：<strong>最小的运营开销</strong>。</li>
+</ul>
+<p>A. 为 ASG 创建动态扩展策略，基于 CPU 利用率指标扩展，目标值设置为 60%。<br>B. 为 ASG 创建定时扩展策略，设置期望容量、最小&#x2F;最大容量，重复周期为每周，开始时间设为作业运行前 30 分钟。<br>C. <u>为 ASG 创建预测性扩展策略，基于预测扩展，扩展指标为 CPU 利用率，目标值设为 60%，在策略中将实例设置为提前 30 分钟启动</u>。<br>D. 创建一个 EventBridge 事件，当 ASG 的 CPU 利用率达到 60% 时调用 Lambda 函数，将 ASG 的期望容量和最大容量增加 20%。</p>
+<ul>
+<li><strong>预测性扩展（Predictive Scaling）</strong> 使用机器学习分析历史负载模式，<strong>预测未来需求</strong>并提前启动实例。</li>
+<li>可以设置为<strong>提前 30 分钟启动实例</strong>以满足批处理作业需求。</li>
+</ul>
+<p><br>343 公司目前有一个 MySQL 数据库运行在私有子网的 <strong>Amazon EC2 实例</strong>上，并执行<strong>定时备份</strong>。<br>要求设计<strong>灾难恢复架构</strong>，需包含<strong>多个 AWS 区域</strong>，并以<strong>最少的运营开销</strong>满足要求</p>
+<p>A. 将 MySQL 数据库迁移到多个 EC2 实例，在 DR 区域配置备用 EC2 实例，开启复制。<br>B. 将 MySQL 数据库迁移到 Amazon RDS，使用多可用区部署，在不同可用区的主数据库实例开启读取复制。<br>C. <u>将 MySQL 数据库迁移到 Amazon Aurora 全球数据库，在主区域托管主数据库集群，在 DR 区域托管次要数据库集群。</u><br>D. 将 MySQL 数据库的计划备份存储在配置了 S3 跨区域复制（CRR）的 Amazon S3 存储桶中，使用该数据备份在 DR 区域恢复数据库。</p>
+<ul>
+<li><strong>Aurora Global Database</strong> 是专门为跨区域灾难恢复设计的服务。</li>
+<li>它自动在次要区域创建一个<strong>只读集群</strong>，数据异步复制（通常延迟 &lt;1 秒），支持快速故障转移（RTO 分钟级）</li>
+</ul>
+<p><br>344 公司有一个 Java 应用程序使用 Amazon SQS 来解析消息，但该程序无法解析大小超过 <strong>256 KB</strong> 的消息。<br>要求：</p>
+<ul>
+<li>使应用程序能够解析高达 <strong>50 MB</strong> 的消息。</li>
+<li>对<strong>代码的改动最少</strong>。</li>
+</ul>
+<p>A. <u>使用适用于 Java 的 Amazon SQS 扩展客户端库在 Amazon S3 中托管大于 256 KB 的消息。</u><br>B. 使用 Amazon EventBridge 而非 Amazon SQS 来发布来自应用程序的大型消息。<br>C. 更改 Amazon SQS 中的限制，以处理大于 256 KB 的消息。<br>D. 将大于 256 KB 的消息存储在 Amazon EFS 中，配置 Amazon SQS 在消息中引用此位置。</p>
+<ul>
+<li><strong>SQS 扩展客户端库</strong> 是 AWS 官方提供的库，专门用于处理大于 256 KB 的消息。</li>
+</ul>
+<p><br>345 公司希望限制对其主要 Web 应用程序内容的访问，并保护这些内容。要求：</p>
+<ul>
+<li>用户数：<strong>不到 100 名用户</strong>。</li>
+<li><strong>无服务器架构</strong>和身份验证解决方案。</li>
+<li>与主要 Web 应用集成，并在<strong>全球范围</strong>提供 Web 内容。</li>
+<li>能够随用户群<strong>扩展</strong>，并<strong>尽可能降低登录延迟</strong>。</li>
+<li><strong>最具成本效益</strong>。</li>
+</ul>
+<p>A. <u>使用 Amazon Cognito 进行身份验证，Lambda@Edge 进行授权，Amazon CloudFront 在全球提供应用程序。</u><br>B. 使用 AWS Directory Service for Microsoft AD 进行身份验证，AWS Lambda 进行授权，应用程序负载均衡器（ALB）在全球提供 Web 应用。<br>C. 使用 Amazon Cognito 进行身份验证，AWS Lambda 进行授权，Amazon S3 Transfer Acceleration 在全球提供 Web 应用。<br>D. 使用 AWS Directory Service for Microsoft AD 进行身份验证，Lambda@Edge 进行授权，AWS Elastic Beanstalk 在全球提供 Web 应用。</p>
+<ul>
+<li><p><strong>Amazon Cognito</strong> 是无服务器身份验证服务，适合管理少量到大量用户，按活跃用户数计费，成本低。</p>
+</li>
+<li><p><strong>Lambda@Edge</strong> 可运行在 CloudFront 边缘节点，进行<strong>授权检查</strong>（如验证 Cognito 令牌），实现靠近用户的低延迟授权。</p>
+</li>
+<li><p><strong>CloudFront</strong> 是全球 CDN，可缓存并分发 Web 内容，降低全球访问延迟。</p>
+</li>
+<li><p>Directory Service 是托管 Active Directory，适合企业级集成，但成本较高（按目录规模计费），对于 &lt;100 用户不划算。</p>
+</li>
+<li><p>S3 Transfer Acceleration 用于加快上传到 S3 的速度，不是用于全球 Web 内容分发和动态应用服务的解决方案</p>
+</li>
+<li><p>Directory Service 成本高，不适合少量用户场景。</p>
+</li>
+<li><p>Elastic Beanstalk 是平台即服务，但仍需管理 EC2 实例，不是完全无服务器，且全球部署复杂（需多区域部署）。</p>
+</li>
+</ul>
+<p><br>346 公司数据中心有一个老化的 NAS 阵列，提供 <strong>SMB 共享</strong>和** NFS 共享**给客户端工作站。<br>不想购买新 NAS 或更新支持合同。</p>
+<ul>
+<li>部分数据频繁访问，大部分数据不活跃。<br>要求：</li>
+</ul>
+<ol>
+<li>将数据迁移到 <strong>Amazon S3</strong>。</li>
+<li>使用 <strong>S3 生命周期策略</strong>（转移不活跃数据到低频&#x2F;归档层）。</li>
+<li><strong>保持客户端工作站的外观和感觉不变</strong>（即客户端仍通过原有协议访问共享，无需改变访问方式）。</li>
+<li>已确定使用 <strong>AWS Storage Gateway</strong> 作为解决方案的一部分。<br>问：应配置哪种类型的存储网关？</li>
+</ol>
+<p>A. 卷网关<br>B. 磁带网关<br>C. 亚马逊 FSx 文件网关<br>D<u>. 亚马逊 S3 文件网关</u></p>
+<ol>
+<li><strong>保持客户端访问方式不变</strong> → 客户端当前通过 <strong>SMB&#x2F;NFS</strong> 访问 NAS，因此网关必须提供 <strong>SMB&#x2F;NFS 文件共享接口</strong>。</li>
+<li><strong>后端数据存储在 Amazon S3</strong> → 网关需将文件操作映射到 S3。</li>
+<li><strong>使用 S3 生命周期策略</strong> → 数据需直接存储在 S3 中，以便应用生命周期规则。</li>
+<li><strong>频繁访问数据本地缓存，非活跃数据存于云端</strong> → 需要缓存机制。</li>
+</ol>
+<p> <strong>卷网关</strong> 提供 <strong>iSCSI 块存储</strong>接口，不是 <strong>SMB&#x2F;NFS 文件共享</strong></p>
+<p> **磁带网关 **提供 <strong>虚拟磁带库（VTL）</strong> 接口，用于备份归档，不是文件共享。</p>
+<p><br>347 公司有一个在 Amazon EC2 实例上运行的应用程序。解决方案架构师已经根据当前需求，标准化了特定的<strong>实例系列</strong>和<strong>各种实例大小</strong>。<br>要求：</p>
+<ol>
+<li><strong>在未来 3 年内最大限度地节省该应用的成本</strong>。</li>
+<li><strong>能够在未来 6 个月内根据应用的受欢迎程度和使用情况更改实例系列和大小</strong>（即需要灵活性，能调整实例规格）。<br>问哪种解决方案能<strong>最具成本效益</strong>地满足要求。</li>
+</ol>
+<p>A. <u>计算节省计划</u><br>B. EC2 实例节省计划<br>C. 区域性预留实例<br>D. 标准预留实例</p>
+<ul>
+<li><strong>计算节省计划（Compute Savings Plans）</strong> 提供最大的灵活性：可应用于 <strong>EC2、Lambda、Fargate</strong> 的计算使用量。</li>
+<li>在 EC2 上，它允许在<strong>任意实例系列、大小、操作系统、租期、区域</strong>之间变更（例如从 C5.large 切换到 M5.xlarge），只要满足承诺的使用金额即可。</li>
+<li>承诺期可选 <strong>1 年或 3 年</strong>（选择 3 年折扣最大）。</li>
+</ul>
+<p><strong>C2 实例节省计划（EC2 Instance Savings Plans）</strong> 提供更高的折扣率，但灵活性较低：仅允许在<strong>特定区域、特定实例系列</strong>内更改实例大小（如 C5.large 到 C5.xlarge），<strong>不能跨实例系列更改</strong>（如 C5 到 M5）。</p>
+<p><strong>区域性预留实例（Regional RIs）</strong> 可在同一 AWS 区域内的不同可用区之间灵活应用，但<strong>仍然绑定特定的实例系列、大小、操作系统</strong>（如 us-east-1 的 Linux C5.large）</p>
+<ul>
+<li><strong>标准预留实例（Standard RIs）</strong> 绑定到<strong>特定可用区、实例系列、大小、操作系统</strong>，灵活性最差。</li>
+</ul>
+<p><br>348 公司从大量可穿戴设备收集数据，存储在 <strong>Amazon DynamoDB</strong> 表中，并进行分析。</p>
+<ul>
+<li>数据工作负载是<strong>恒定且可预测的</strong>。</li>
+<li>公司希望 DynamoDB 的<strong>支出不超过其预测预算</strong>。<br>问哪种解决方案能以<strong>最具成本效益</strong>的方式满足要求</li>
+</ul>
+<p>A. 使用预置模式 + DynamoDB Standard-IA，为预测的工作负载预留容量。<br>B. <u>使用预置模式，指定读取容量单位（RCU）和写入容量单位（WCU）</u>。<br>C. 使用按需模式，将 RCU&#x2F;WCU 设置到足够高水平以适应负载变化。<br>D. 使用按需模式，通过预留容量指定 RCU&#x2F;WCU。</p>
+<p><strong>预置模式（Provisioned Mode）</strong> 允许提前定义读写容量，并按预留容量付费，与按需模式相比，对于<strong>可预测的恒定负载</strong>更经济</p>
+<p><br>349 公司在 <strong>ap-southeast-3（雅加达）区域</strong> 的 Aurora PostgreSQL 数据库中存储机密数据，数据库使用 <strong>AWS KMS 客户托管密钥（CMK）</strong> 加密。<br>公司被收购，需要与收购公司的 AWS 账户（也在同一区域）<strong>安全共享数据库备份</strong>。问解决方案架构师应如何做。</p>
+<p>A. 创建数据库快照，将该快照复制到新的未加密快照中，与收购公司账户共享新快照。<br>B. <u>创建数据库快照，将收购公司的 AWS 账户添加到 KMS 密钥策略中，与收购公司账户共享该快照。</u><br>C. 创建使用不同 AWS 托管 KMS 密钥的数据库快照，将收购公司账户添加到 KMS 密钥别名中，与收购公司账户共享快照。<br>D. 创建数据库快照，下载快照，将快照上传到 Amazon S3 存储桶，更新 S3 存储桶策略允许收购公司账户访问。</p>
+<ul>
+<li>加密快照必须通过<strong>修改 KMS 密钥策略</strong>，授予目标账户<strong>使用该密钥的权限</strong>（如 kms:Decrypt）。</li>
+<li>然后通过 RDS 快照共享功能（<code>ModifyDBSnapshotAttribute</code>）将快照共享给目标账户。</li>
+</ul>
+<p><br>350 公司在 us-east-1 使用 <strong>100 GB 的 Amazon RDS for Microsoft SQL Server 单可用区</strong> 数据库实例存储客户交易。<br>要求：</p>
+<ol>
+<li>数据库实例需要<strong>高可用性和自动恢复能力</strong>。</li>
+<li>每年运行几次报告，但报告流程会<strong>导致交易入账时间变长</strong>（报表负载影响主实例性能）。</li>
+<li>需要一个<strong>提高报告流程性能</strong>的解决方案。<br>需要选择两个步骤组合以满足要求。</li>
+</ol>
+<p>A. <u>将数据库实例从单可用区修改为多可用区部署</u>。<br>B. 为当前数据库实例创建快照，将该快照还原到另一个可用区中的新 RDS 部署。<br>C. <u>在不同的可用区中创建数据库实例的只读副本，将所有报表请求指向该只读副本。</u><br>D. 将数据库迁移到 RDS Custom。<br>E. 使用 RDS Proxy 将报表请求限制在维护窗口内。</p>
+<ul>
+<li><strong>A（多可用区）</strong> 提供高可用性与自动恢复。</li>
+<li><strong>C（只读副本）</strong> 分担报告负载，提高报告性能且减少对主实例影响。<br>两者结合可同时满足高可用性和报告性能要求。</li>
+</ul>
+<p><br>351 公司将数据管理应用程序迁移到 AWS，希望过渡到<strong>事件驱动型架构</strong>，要求：</p>
+<ul>
+<li>架构更具<strong>分布式特点</strong>。</li>
+<li>在执行工作流的不同环节时采用<strong>无服务器概念</strong>。</li>
+<li>最大限度地减少<strong>运营开销</strong>。</li>
+</ul>
+<p>问哪种解决方案能够满足要求。</p>
+<p>A. 在 AWS Glue 中构建工作流，使用 AWS Glue 调用 Lambda 函数处理工作流步骤。<br>B. 在 AWS Step Functions 中构建工作流，在 Amazon EC2 实例上部署应用程序，使用 Step Functions 在 EC2 实例上调用工作流步骤。<br>C. 在 Amazon EventBridge 中构建工作流，使用 EventBridge 按计划调用 Lambda 函数处理工作流步骤。<br>D. <u>在 AWS Step Functions 中构建工作流，使用 Step Functions 创建状态机，用该状态机调用 Lambda 函数处理工作流步骤。</u></p>
+<ul>
+<li><p><strong>AWS Glue</strong> 主要用于 <strong>ETL（数据提取、转换、加载）</strong>，其工作流适用于数据管道编排，并非通用的事件驱动工作流服务。</p>
+</li>
+<li><p><strong>EventBridge</strong> 是事件总线，主要用于事件路由和基于规则触发目标（如 Lambda、Step Functions 等）。</p>
+</li>
+</ul>
+<p><br>352 公司正在为在线多人游戏设计网络，游戏采用 <strong>UDP 协议</strong>，并部署在 <strong>八个 AWS 区域</strong>。<br>要求：</p>
+<ul>
+<li>网络架构需要<strong>最大限度地减少延迟和数据包丢失</strong>。</li>
+<li>为终端用户提供<strong>高质量游戏体验</strong>。</li>
+</ul>
+<p>问哪种解决方案能满足要求。</p>
+<p>A. 在每个区域设置一个中转网关，在每个中转网关之间创建跨区域对等连接附件。<br>B. <u>设置带有 UDP 监听器的 AWS Global Accelerator，并在每个区域设置终端节点组。</u><br>C. 启用 UDP 设置 Amazon CloudFront，在每个区域配置一个源站。<br>D. 在每个区域之间建立 VPC 对等连接网格，为每个 VPC 开启 UDP。</p>
+<ul>
+<li><strong>CloudFront</strong> 是 CDN，主要用于缓存和加速 <strong>HTTP&#x2F;HTTPS</strong> 内容，虽然现在也支持部分 UDP（如 QUIC），但并非为<strong>实时游戏 UDP 流量</strong>优化设计。</li>
+</ul>
+<p><br>353 公司有一个三层 Web 应用，当前托管在<strong>单个可用区</strong>的 EC2 实例上，自管理的 MySQL 数据库使用 <strong>1 TB 的预配置 IOPS SSD（io2）EBS 卷</strong>。</p>
+<ul>
+<li>预计流量峰值时 <strong>读取和写入 IOPS 均为 1000</strong>。</li>
+<li>要求：<ol>
+<li><strong>最小化干扰、稳定性能、降低成本</strong>。</li>
+<li><strong>保留两倍 IOPS 的容量</strong>（即 2000 IOPS 能力）。</li>
+<li><strong>将数据库层迁移到高可用且容错的全托管解决方案</strong>。</li>
+</ol>
+</li>
+</ul>
+<p>问哪种解决方案能以<strong>最具成本效益</strong>的方式满足要求</p>
+<p>A. 使用带有 io2 Block Express EBS 卷的 Amazon RDS for MySQL 数据库实例的多可用区部署。<br>B. <u>使用配备通用型 SSD（gp2）EBS 卷的 Amazon RDS for MySQL 数据库实例的多可用区部署。</u><br>C. 使用 Amazon S3 智能分层访问层。<br>D. 使用两个大型 EC2 实例以主从模式托管数据库。</p>
+<ol>
+<li><strong>高可用且容错的全托管解决方案</strong> → 需迁移到 <strong>Amazon RDS</strong>（托管数据库服务）并采用<strong>多可用区（Multi-AZ）部署</strong>，以实现自动故障转移和容错。</li>
+<li><strong>性能要求</strong>：峰值读写 IOPS 各 1000，总 2000 IOPS，且要求保留两倍容量（即需支持至少 2000 IOPS 持续性能）。</li>
+<li><strong>成本效益</strong>：在满足性能和可用性前提下选择最经济的存储配置。</li>
+<li>当前使用 <strong>io2 EBS 卷</strong>（预配置 IOPS SSD），可保证 IOPS 与容量成比例（每 GB 提供一定 IOPS，可额外配置）。</li>
+</ol>
+<p><br>354 公司有一个无服务器应用程序，使用 <strong>Amazon API Gateway、AWS Lambda</strong> 和 <strong>Amazon RDS for PostgreSQL</strong> 数据库。</p>
+<ul>
+<li>在流量高峰或不可预测时，由于<strong>数据库连接超时</strong>导致应用程序错误增加。</li>
+<li>需要一种解决方案，以<strong>最少的代码更改</strong>来减少应用程序故障。</li>
+</ul>
+<p>问解决方案架构师应采取什么措施。</p>
+<p>A. 降低 Lambda 并发率。<br>B. <u>在 RDS 数据库实例上启用 RDS Proxy。</u><br>C. 调整 RDS 数据库实例的类别以接受更多连接。<br>D. 将数据库迁移到具有按需扩展功能的 Amazon DynamoDB。</p>
+<ol>
+<li><strong>数据库连接超时问题</strong> → 原因可能是 Lambda 函数并发激增，每个函数打开一个数据库连接，导致 PostgreSQL 数据库连接数达到上限，新连接被拒绝或超时。</li>
+<li><strong>最少的代码更改</strong> → 希望不修改或仅少量修改应用程序代码。</li>
+<li><strong>流量高峰或不可预测</strong> → 需要弹性处理连接激增</li>
+</ol>
+<ul>
+<li><strong>RDS Proxy</strong> 是托管数据库代理服务，专门用于<strong>管理数据库连接池</strong>，可复用连接，避免因大量并发 Lambda 函数导致数据库连接耗尽。</li>
+<li>RDS Proxy 可<strong>自动扩展连接池</strong>，处理突发连接请求，减少连接超时</li>
+</ul>
+<p><br>355 公司正在将旧应用程序迁移到 AWS，该应用程序每小时运行一次<strong>批处理作业</strong>，属于 <strong>CPU 密集型</strong>。</p>
+<ul>
+<li>在本地服务器上，批处理作业平均需要 <strong>15 分钟</strong>完成。</li>
+<li>本地服务器规格：<strong>64 vCPU + 512 GiB 内存</strong>。<br>要求：</li>
+<li>在 AWS 上也能在 <strong>15 分钟内</strong> 运行该批处理作业。</li>
+<li><strong>操作开销最小</strong>。</li>
+</ul>
+<p>A. 使用具有功能扩展的 AWS Lambda。<br>B. 使用带有 AWS Fargate 的 Amazon Elastic Container Service（Amazon ECS）。<br>C. 将 Amazon Lightsail 与 AWS Auto Scaling 配合使用。<br><u>D. 在 Amazon EC2 上使用 AWS Batch。</u></p>
+<ul>
+<li><p>Lambda 有<strong>资源限制</strong>：最大内存 10,240 MB（10 GB），CPU 按内存比例分配，远低于所需的 512 GiB 内存和 64 vCPU。</p>
+</li>
+<li><p>Fargate 是无服务器容器平台，最大支持 <strong>16 vCPU + 120 GB 内存</strong>（当前上限）</p>
+</li>
+<li><p>Lightsail 是简化虚拟专用服务器（VPS）服务，最大实例规格有限（通常较低），且难以达到 64 vCPU + 512 GiB 内存的配置。</p>
+</li>
+<li><p><strong>AWS Batch</strong> 是专门用于运行批处理作业的托管服务，可自动预置和管理计算资源（基于 EC2 或 Fargate）。</p>
+</li>
+</ul>
+<p><br>356 公司将数据对象存储在 <strong>Amazon S3 标准存储</strong> 中。<br>发现 <strong>75% 的数据在 30 天后很少被访问</strong>。<br>要求：</p>
+<ul>
+<li>所有数据保持 <strong>即时可访问性</strong>（检索时间不能长）。</li>
+<li>具备<strong>相同的高可用性和弹性</strong>（即数据持久性不低于 S3 标准）。</li>
+<li><strong>最大限度地降低存储成本</strong>。</li>
+</ul>
+<p>问哪种存储解决方案能满足要求。</p>
+<p>A. 30 天后将数据对象移至 S3 Glacier Deep Archive。<br>B. <u>30 天后将数据对象移至 S3 标准不频繁访问（S3 Standard-IA）。</u><br>C. 30 天后将数据对象移至 S3 单区域 - 不常访问（S3 One Zone-IA）。<br>D. 立即将数据对象移至 S3 单区域 - 不常访问存储（S3 One Zone-IA）。</p>
+<ul>
+<li><strong>S3 Standard-IA</strong> 提供与 S3 标准相同的<strong>高可用性和弹性</strong>（数据存储在多个 AZ）。</li>
+<li>检索延迟低（即时访问），适合不常访问但仍需快速获取的数据。</li>
+<li>价格低于 S3 标准存储（存储单价更低，但按访问次数收取检索费）</li>
+</ul>
+<p><br>357 一家游戏公司将公共记分牌从数据中心迁移到 AWS，应用部署在应用程序负载均衡器后的 EC2 Windows Server 实例上，包含静态文件和动态服务器端代码，需提供高可用性的存储解决方案，选择两项满足要求的步骤。</p>
+<p>A. <u>将静态文件存储在Amazon S3上。使用Amazon CloudFront在边缘缓存对象</u>。<br>B. 将静态文件存储在Amazon S3上。使用Amazon ElastiCache在边缘缓存对象。<br>C. 将服务器端代码存储在Amazon Elastic File System（Amazon EFS）上。在每个EC2实例上挂载EFS卷以共享文件。<br>D. <u>将服务器端代码存储在Amazon FSx for Windows File Server上。挂载FSx for Windows File Server卷到每个EC2实例上以共享文件</u>。<br>E. 将服务器端代码存储在通用型SSD（gp2）Amazon Elastic Block Store（Amazon EBS）卷上。将该EBS卷挂载到每个EC2实例上以共享文件。</p>
+<ul>
+<li><p><strong>EFS</strong> 是 <strong>Linux</strong> 兼容的共享文件系统（NFS），不支持 Windows。</p>
+</li>
+<li><p><strong>FSx for Windows File Server</strong> 是完全托管的 Windows 原生共享文件系统，支持 SMB 协议，专为 Windows 环境设计。</p>
+</li>
+</ul>
+<p><br>358 一家社交媒体公司的应用部署在 ALB 后的 EC2 实例上，ALB 是 CloudFront 分发的源站；应用在 S3 存储超 10 亿张图像，每秒处理数千张，需动态调整图像大小并向客户端提供适配格式，要求以最少运营开销实现该需求。</p>
+<p>A. 在 EC2 实例上安装外部图像管理库，用其处理图像。</p>
+<p>B. 创建 CloudFront 源请求策略，通过该策略自动调整图像大小，并依据请求的 User-Agent 头提供适配格式。</p>
+<p>C. 将 <u>Lambda@Edge 函数与外部图像管理库配合使用，关联到提供图像服务的 CloudFront 行为。</u></p>
+<p>D. 创建 CloudFront 响应头策略，通过该策略自动调整图像大小，并依据请求的 User-Agent 头提供适配格式。</p>
+<p><br>359 医院需要将患者记录（PHI）存储在 Amazon S3 存储桶中。<br>合规团队要求：</p>
+<ol>
+<li>所有受保护的健康信息（PHI）在<strong>传输中和静态时</strong>都经过加密。</li>
+<li>合规团队必须<strong>管理静态数据的加密密钥</strong>（即密钥控制权在团队手中，而非完全由 AWS 托管）。</li>
+</ol>
+<p>A. 在 ACM 中创建公共 SSL&#x2F;TLS 证书，将该证书与 S3 关联，为每个 S3 存储桶配置默认加密使用 SSE-KMS，指派合规团队管理 KMS 密钥。<br>B. 在 S3 存储桶策略上使用 <code>aws:SecureTransport</code> 条件仅允许 HTTPS（TLS）连接，为每个存储桶配置默认加密使用 SSE-S3，指派合规团队管理 SSE-S3 密钥。<br>C. <u>在 S3 存储桶策略上使用 <code>aws:SecureTransport</code> 条件仅允许 HTTPS（TLS）连接，为每个存储桶配置默认加密使用 SSE-KMS，指派合规团队管理 KMS 密钥。</u><br>D. 在 S3 存储桶策略上使用 <code>aws:SecureTransport</code> 条件仅允许 HTTPS（TLS）连接，使用 Amazon Macie 保护 S3 中敏感数据，指派合规团队管理 Macie。</p>
+<ol>
+<li><strong>传输中加密</strong> → 必须强制使用 HTTPS（TLS）访问 S3。</li>
+<li><strong>静态加密</strong> → 必须对 S3 中存储的数据进行服务器端加密。</li>
+<li><strong>管理静态数据加密密钥</strong> → 合规团队需拥有密钥管理控制权，这意味着使用 <strong>AWS KMS 客户托管密钥（CMK）</strong>，而非 AWS 托管密钥（SSE-S3 使用 AWS 托管密钥，用户无法管理）。</li>
+</ol>
+<ul>
+<li>Macie 是敏感数据发现和分类服务，<strong>不是加密服务</strong>，无法满足静态加密要求。</li>
+</ul>
+<p><br>360 公司使用 <strong>Amazon API Gateway</strong> 在同一 VPC 中运行一个<strong>私有网关</strong>，包含两个 REST API：</p>
+<ul>
+<li><strong>BuyStock</strong> RESTful Web 服务调用 <strong>CheckFunds</strong> RESTful Web 服务。<br>但 VPC 流日志显示，BuyStock 调用 CheckFunds 是<strong>通过互联网而非 VPC</strong>。<br>要求：</li>
+<li>实施解决方案使这些 API <strong>通过 VPC 进行通信</strong>（即流量不离开 AWS 内部网络）。</li>
+<li><strong>对代码的改动最少</strong>。</li>
+</ul>
+<p>A. 在 HTTP 头中添加 X-API-Key 头以进行授权。<br>B. <u>使用接口端点。</u><br>C. 使用网关终端节点。<br>D. 在两个 REST API 之间添加一个 Amazon SQS 队列。</p>
+<ul>
+<li><strong>API Gateway 私有 API 支持 VPC 接口端点（Interface VPC Endpoint）</strong>，可通过私有 DNS 名称在 VPC 内部直接访问 API，无需经过互联网。</li>
+<li>只需为 API Gateway 创建接口端点，然后 BuyStock 服务调用 CheckFunds 时使用该端点的私有 DNS，流量即通过 AWS 内部网络。</li>
+</ul>
+<p><br>361 公司托管了一个多人游戏应用程序，要求：</p>
+<ol>
+<li>能够以 <strong>亚毫秒级延迟</strong> 读取数据（对频繁访问的数据要求极高读取性能）。</li>
+<li>对<strong>历史数据</strong>执行<strong>一次性查询</strong>（分析或批量查询，对延迟要求不高）。</li>
+<li>以<strong>最少的运营开销</strong>满足要求。</li>
+</ol>
+<p>A. 对于频繁访问的数据使用 Amazon RDS，运行定期自定义脚本将数据导出到 S3。<br>B. 将数据直接存储在 S3 中，实施 S3 生命周期策略，将较旧数据移至 S3 Glacier Deep Archive，使用 Amazon Athena 对 S3 数据运行一次性查询。<br>C. <u>对频繁访问的数据使用带有 DynamoDB 加速器（DAX）的 Amazon DynamoDB，通过 DynamoDB 表导出功能将数据导出到 S3，使用 Amazon Athena 对 S3 数据运行一次性查询。</u><br>D. 对于频繁访问的数据使用 Amazon DynamoDB，开启流功能到 Kinesis Data Streams，使用 Kinesis Data Firehose 从 Kinesis 读取数据并存储在 S3 中。</p>
+<ul>
+<li>RDS 是关系数据库，读取延迟通常在毫秒级，很难达到<strong>亚毫秒级</strong>，尤其在高并发游戏场景。</li>
+</ul>
+<p>S3 是对象存储，读取延迟较高（几十到几百毫秒），无法满足 <strong>亚毫秒级延迟</strong></p>
+<ul>
+<li><p><strong>Amazon DynamoDB</strong> 是 NoSQL 数据库，本身提供毫秒级延迟（个位数毫秒）。</p>
+</li>
+<li><p><strong>DynamoDB Accelerator（DAX）</strong> 是完全托管的内存缓存，可提供 <strong>亚毫秒级（微秒级）</strong> 读取延迟，适合高频访问的游戏数据。</p>
+</li>
+<li><p><strong>DynamoDB 表导出到 S3</strong> 是托管功能，可将数据自动导出到 S3，无需自定义脚本，运营开销低。</p>
+</li>
+<li><p><strong>Amazon Athena</strong> 可对 S3 中的历史数据运行一次性 SQL 查询，无需管理基础设施。</p>
+</li>
+<li><p>同样使用 DynamoDB 满足高性能读取，但未提及 DAX，无法保证亚毫秒级延迟。</p>
+</li>
+<li><p>通过 Kinesis 流和 Firehose 将数据实时传输到 S3 可用于历史分析，但架构复杂，且仍需额外配置查询工具（如 Athena）。</p>
+</li>
+</ul>
+<p><br>362 公司支付处理系统要求：</p>
+<ul>
+<li><strong>特定支付 ID 的消息按照发送时的顺序被接收</strong>（即保证同一支付 ID 的消息有序处理）。</li>
+<li>否则支付可能被错误处理。<br>问解决方案架构师应采取哪些措施来满足要求（选两项）。</li>
+</ul>
+<p>A. 将消息写入 Amazon DynamoDB 表，使用支付 ID 作为分区键。<br>B. <u>将消息写入 Amazon Kinesis 数据流，使用支付 ID 作为分区键</u>。<br>C. 将消息写入 Amazon ElastiCache for Memcached 集群，使用支付 ID 作为键。<br>D. 将消息写入 Amazon SQS 标准队列，设置消息属性以使用支付 ID。<br>E. <u>将消息写入 Amazon SQS FIFO 队列，将消息组设置为使用支付 ID</u>。</p>
+<ul>
+<li><p><strong>Kinesis Data Streams</strong> 中，数据记录通过分区键（Partition Key）分配到特定分片（Shard）。</p>
+</li>
+<li><p><strong>同一分区键的记录保证按顺序写入同一分片，并可按顺序读取</strong>，因此相同支付 ID 的消息会保持顺序。</p>
+</li>
+<li><p><strong>SQS 标准队列提供尽力而为的顺序，不保证严格的消息顺序</strong>，可能因分布式处理导致消息乱序。</p>
+</li>
+</ul>
+<p><br>363 一家公司构建游戏系统，需要向<strong>三个独立服务（排行榜、匹配、认证）</strong> 发送<strong>独特事件</strong>，同时要求<strong>保证事件的顺序</strong>。<br>要求设计一个 AWS 事件驱动系统来满足<strong>顺序保证</strong>与<strong>多目标分发</strong>。</p>
+<p>A. 亚马逊 EventBridge 事件总线<br>B. <u>亚马逊简单通知服务（Amazon SNS）FIFO 主题</u><br>C. 亚马逊简单通知服务（Amazon SNS）标准主题<br>D. 亚马逊简单队列服务（Amazon SQS）FIFO 队列</p>
+<p>SQS 单个 FIFO 队列可保证顺序，但无法直接将一条消息同时分发给多个消费者队列（除非每个消费者轮询同一队列，但这不符合“独立服务独立处理”的需求）。</p>
+<p><br>364 医院在架构中使用 <strong>Amazon SQS</strong> 和 <strong>Amazon SNS</strong>，用于收集患者症状数据。<br>要求：</p>
+<ol>
+<li>数据在<strong>静态（at rest）</strong> 和<strong>传输（in transit）</strong> 中必须加密。</li>
+<li>只有医院授权人员才能访问数据。</li>
+</ol>
+<p>要选<strong>两个正确步骤</strong>来满足要求。</p>
+<p><strong>A.</strong> 开启 SQS 组件的服务器端加密。更新默认密钥策略，将密钥使用权限限制在一组授权主体范围内。</p>
+<p><strong>B.</strong> <u>使用 AWS KMS 客户密钥在 SNS 组件上开启服务器端加密托管密钥。应用密钥策略以将密钥使用限制为一组授权主体。</u></p>
+<p><strong>C.</strong> 开启 SNS 组件的加密功能。更新默认密钥策略，将密钥使用权限限制在一组授权主体范围内。在主题策略中设置条件，只允许通过 TLS 进行加密连接。</p>
+<p><strong>D.</strong> <u>使用 AWS KMS 客户管理的密钥为 SQS 组件开启服务器端加密。应用密钥策略以将密钥使用限制在一组授权主体范围内。在队列策略中设置条件，仅允许通过 TLS 进行加密连接。</u></p>
+<p><strong>E.</strong> 使用 AWS KMS 的客户托管密钥为 SQS 组件开启服务器端加密。应用 IAM 策略以将密钥使用限制在一组授权主体范围内。在队列策略中设置条件，只允许通过 TLS 进行加密连接。</p>
+<ul>
+<li><strong>静态加密</strong>：SQS 和 SNS 都需开启服务器端加密（SSE），最好使用 AWS KMS 客户托管密钥（CMK）。</li>
+<li><strong>传输加密</strong>：必须强制使用 TLS（HTTPS）来发布消息到 SNS 或 SQS，以及订阅&#x2F;消费时使用 HTTPS。这可在 SNS 主题策略或 SQS 队列策略中通过 <code>aws:SecureTransport</code> 条件实现。</li>
+<li><strong>访问控制</strong>：<ul>
+<li>限制谁可以使用 KMS 密钥进行加解密 → 通过 <strong>KMS 密钥策略</strong> 来限制授权 IAM 主体（用户&#x2F;角色）。</li>
+<li>限制谁可以访问 SQS 队列或 SNS 主题 → 通过 IAM 策略或 SQS 队列策略 &#x2F; SNS 主题策略控制。</li>
+</ul>
+</li>
+</ul>
+<p><br>365 公司有一个由 Amazon RDS 支持的 Web 应用程序。<br>事件：<strong>数据库管理员意外编辑数据库表导致数据丢失</strong>。<br>恢复要求：<strong>能将数据库恢复到过去 30 天内任何更改发生前 5 分钟的状态</strong>。</p>
+<p>A. 只读副本<br>B. 手动快照<br>C. <u>自动备份</u><br>D. 多可用区部署</p>
+<ul>
+<li>RDS 的自动备份包括两部分：<ol>
+<li>每日自动全量快照。</li>
+<li><strong>事务日志备份（持续进行）</strong>。</li>
+</ol>
+</li>
+<li>启用自动备份后，RDS 会保留事务日志，从而允许执行<strong>时间点恢复（PITR）</strong>，可以恢复到保留期（最多 35 天）内的任意时间点，精确到几秒钟。</li>
+</ul>
+<p>手动快照没有自动连续的事务日志备份，只能恢复到快照创建的时间点，无法做到“过去 30 天内任意时间点前 5 分钟”。</p>
+<p><br>366 公司架构：</p>
+<ul>
+<li><strong>Amazon API Gateway</strong> → <strong>AWS Lambda</strong> → <strong>Amazon DynamoDB</strong></li>
+<li>用户认证使用 <strong>Amazon Cognito 用户池</strong>（已识别用户身份）。</li>
+<li>需求：<strong>只有拥有订阅的用户才能访问付费内容</strong>（即根据用户是否订阅来控制访问权限）。</li>
+<li>限制条件：<strong>以最小的运营开销</strong>满足要求。</li>
+</ul>
+<p>A. 在 API Gateway API 上启用 API 缓存和节流。<br>B. 在 API Gateway API 上设置 AWS WAF。创建一条规则来筛选拥有订阅的用户。<br>C. 对 DynamoDB 表中的高级内容应用细粒度的 IAM 权限。<br>D. <u>实施 API 使用计划和 API 密钥，以限制未订阅用户的访问</u></p>
+<ul>
+<li><strong>API Gateway 使用计划（Usage Plans）</strong> 和 <strong>API 密钥（API Keys）</strong> 通常用于对 API 访问进行计量、限流和授权。</li>
+<li>可以为 <strong>已订阅用户</strong> 和 <strong>未订阅用户</strong> 分配不同的 API 密钥，并将这些密钥关联到不同的使用计划。</li>
+<li>在使用计划中，可以限制某些 API 方法（如访问付费内容的接口）仅允许特定 API 密钥访问。</li>
+<li>优势：<ol>
+<li><strong>原生集成</strong>：API Gateway 原生支持，无需修改 Lambda 函数逻辑（或只需很少改动）。</li>
+<li><strong>最小运营开销</strong>：管理员只需在用户订阅状态变更时分配或撤销 API 密钥即可。</li>
+<li><strong>无需额外安全组件</strong>：复用现有 Cognito 认证，API 密钥作为第二层授权。</li>
+</ol>
+</li>
+<li>需要注意的是：API 密钥通常标识客户端或项目，而非最终用户。但在此场景中，可以将 API 密钥按订阅状态分类，已订阅用户获得一个密钥，未订阅用户获得另一个（或无密钥），从而实现访问控制。</li>
+</ul>
+<p><br>367 一家公司的全球 UDP 应用程序托管在美国、亚洲、欧洲的本地数据中心，必须满足合规性要求（应用程序在本地托管）。<br>当前使用 <strong>Amazon Route 53 基于延迟的路由</strong> 为全球用户路由请求。<br><strong>需求</strong>：提高应用程序的性能和可用性。</p>
+<p>A. <u>在三个 AWS 区域中配置三个网络负载均衡器（NLB）以连接本地端点。使用 AWS Global Accelerator 创建一个加速器，并将这些 NLB 注册为其端点。通过使用指向加速器 DNS 的 CNAME 提供对应用程序的访问。</u></p>
+<p>B. 在三个 AWS 区域中配置三个应用程序负载均衡器（ALB）以连接本地端点。使用 AWS Global Accelerator 创建一个加速器，并将这些 ALB 注册为其端点。通过使用指向加速器 DNS 的 CNAME 来提供对应用程序的访问。</p>
+<p>C. 在三个 AWS 区域中配置三个网络负载均衡器（NLB）以连接本地端点。在 Route 53 中，创建一个指向这三个 NLB 的基于延迟的记录，并将其用作 Amazon CloudFront 分发的源站。通过使用指向 CloudFront DNS 的 CNAME 来提供对应用程序的访问。</p>
+<p>D. 在三个 AWS 区域中配置三个应用程序负载均衡器（ALB）以连接本地端点。在 Route 53 中，创建一个基于延迟的记录指向这三个 ALB，并将其用作 Amazon CloudFront 分发的源站。通过使用指向 CloudFront DNS 的 CNAME 来提供对应用程序的访问。</p>
+<ul>
+<li>NLB 支持 UDP，可以连接本地端点（例如通过 IP 目标组指向本地服务器）。</li>
+<li>Global Accelerator 加速器将 NLB 作为端点，提供 Anycast IP，流量通过 AWS 骨干网优化路由至最近的 NLB，再转发到本地。</li>
+<li>ALB 不支持 UDP，因此无法用于基于 UDP 的应用程序。</li>
+<li>但 CloudFront 主要用于 HTTP(S) 加速和缓存，不支持通用 UDP 流量。</li>
+</ul>
+<p><br>368 一位解决方案架构师希望 <strong>所有新用户的 IAM 用户密码</strong> 满足以下要求：</p>
+<ol>
+<li>有特定的密码复杂度要求。</li>
+<li>有强制密码轮换周期。</li>
+</ol>
+<p>问：应采取什么措施来实现这一目标？</p>
+<p><u>A. 为整个 AWS 账户设置总体密码策略。</u><br>B. 为 AWS 账户中的每个 IAM 用户设置密码策略。<br>C. 使用第三方供应商软件来设置密码要求。<br>D. 将 Amazon CloudWatch 规则附加到 Create_newuser 事件，以按相应要求设置密码。</p>
+<ul>
+<li>设置后，所有<strong>新创建</strong>的 IAM 用户在设置密码时就会强制满足该策略，并且现有用户下次更改密码时也会遵循。</li>
+</ul>
+<p><br>369 一家公司将一个应用程序迁移到 Amazon EC2 Linux 实例上。<br>其中<strong>一个 EC2 实例</strong>上按计划运行多个<strong>时长 1 小时的任务</strong>。</p>
+<ul>
+<li>任务由不同团队编写，使用<strong>不同的编程语言</strong>。</li>
+<li>公司担心<strong>单个实例</strong>上运行这些任务的<strong>性能和可扩展性问题</strong>。</li>
+</ul>
+<p>解决方案架构师需要实施解决方案以解决这些问题，并满足 <strong>最小的运营开销</strong>。</p>
+<p>A. <u>使用 AWS Batch 将任务作为作业运行。通过 Amazon EventBridge（Amazon CloudWatch Events）来调度这些作业。</u></p>
+<p>B. 将 EC2 实例转换为容器。使用 AWS App Runner 按需创建容器，以作业形式运行任务。</p>
+<p>C. 将任务复制到 AWS Lambda 函数中。使用 Amazon EventBridge（Amazon CloudWatch Events）来调度 Lambda 函数。</p>
+<p>D. 为运行这些任务的 EC2 实例创建一个亚马逊机器镜像（AMI）。使用该 AMI 创建一个自动扩展组，以运行该实例的多个副本。</p>
+<ul>
+<li><p>AWS Batch 是专门运行批量计算作业的托管服务，可以处理长时间运行的任务（支持长达数小时甚至数天）。</p>
+</li>
+<li><p>AWS App Runner 主要用于 Web 应用&#x2F;API 的托管容器服务，并不适合计划性批处理作业（它主要面向 HTTP 服务持续运行，而非按计划触发的一次性作业）。</p>
+</li>
+<li><p>Lambda 最大执行时间<strong>15 分钟</strong>（现已支持某些区域最长 15 分钟，但题目任务长达 1 小时）。</p>
+</li>
+</ul>
+<p><br>370 一家公司在 VPC 中运行一个公共三层 Web 应用程序：</p>
+<ul>
+<li>EC2 实例部署在多个可用区。</li>
+<li>在<strong>私有子网</strong>中运行的 EC2 实例需要<strong>通过互联网与外部许可证服务器通信</strong>。</li>
+<li>需要的是一个<strong>能最大限度减少运维工作的托管解决方案</strong>。</li>
+</ul>
+<p>A. 在公有子网中配置一个 NAT 实例。用指向该 NAT 实例的默认路由修改每个私有子网的路由表。</p>
+<p>B. 在私有子网中配置一个 NAT 实例。用指向该 NAT 实例的默认路由修改每个私有子网的路由表。</p>
+<p>C. <u>在公有子网中配置一个 <strong>NAT 网关</strong>。用指向 NAT 网关的默认路由修改每个私有子网的路由表。</u></p>
+<p>D. 在私有子网中配置一个 NAT 网关。用指向该 NAT 网关的默认路由修改每个私有子网的路由表。</p>
+<ul>
+<li><p>NAT 网关<strong>不能</strong>部署在私有子网，必须部署在公有子网（AWS 规定</p>
+</li>
+<li><p>配置路由表后，私有子网实例可通过 NAT 网关访问互联网。</p>
+</li>
+<li><p>NAT 实例不是托管服务，需要手动管理，不符合“最大限度减少运维工作”。</p>
+</li>
+</ul>
+<p><br>371 一家公司需要创建一个 <strong>Amazon EKS 集群</strong>，用于托管数字媒体流应用程序。<br>该集群将使用<strong>托管节点组</strong>，节点由 <strong>Amazon EBS 卷</strong> 提供存储支持。<br>公司要求：使用 <strong>AWS KMS 客户托管密钥（CMK）</strong> 对所有静态数据进行加密。<br>目标：<strong>以最小的运营开销</strong> 满足要求。<br>需选择 <strong>两项</strong> 正确的操作组合。</p>
+<p>A. 使用一个 Kubernetes 插件，该插件利用客户管理的密钥来执行数据加密。<br>B. 创建 EKS 集群后，找到 EBS 卷。使用客户管理的密钥启用加密。<br><u>C. 在将要创建 EKS 集群的 AWS 区域中，默认启用 EBS 加密。选择客户管理的密钥作为默认密钥。</u><br><u>D. 创建 EKS 集群。创建一个 IAM 角色，该角色具有授予对客户托管密钥的权限的策略。将该角色与 EKS 集群相关联。</u><br>E. 将客户管理的密钥作为 Kubernetes 密钥存储在 EKS 集群中。使用客户管理的密钥对 EBS 卷进行加密。</p>
+<ul>
+<li><p>这是 <strong>AWS 区域级 EBS 加密设置</strong>，启用后该区域所有新 EBS 卷都会自动使用指定 CMK 加密。</p>
+</li>
+<li><p>EKS 节点组创建时自动应用，无需额外配置节点组或启动模板</p>
+</li>
+<li><p>要使节点组实例能使用 CMK 加密&#x2F;解密 EBS 卷，<strong>节点实例的 IAM 角色</strong> 必须有相应 KMS 权限。</p>
+</li>
+<li><p>创建 EKS 集群时，托管节点组配置可以指定 IAM 角色（节点实例角色），该角色需要包含访问 CMK 的权限。</p>
+</li>
+<li><p><strong>C</strong>：在区域级别启用 EBS 默认加密，指定 CMK 作为默认密钥 → 确保新建卷自动加密。</p>
+</li>
+<li><p><strong>D</strong>：确保 EKS 节点组的 IAM 角色有访问 CMK 的权限 → 节点能正常加解密卷。</p>
+</li>
+</ul>
+<p><br>372 一家公司希望将 Oracle 数据库迁移到 AWS。<br>数据库目前有一个单一的表，存储了<strong>数百万张高分辨率 GIS 图像</strong>，通过<strong>地理编码</strong>标识。<br>灾害发生时，<strong>每隔几分钟就会有上万张图像更新</strong>（高写入负载）。<br>每个地理编码对应一张图像（一行数据）。<br>要求：</p>
+<ul>
+<li>高可用</li>
+<li>可扩展（尤其是高写入期间）</li>
+<li>最具成本效益</li>
+</ul>
+<p>A. 将图像和地理编码存储在数据库表中。使用运行在 Amazon RDS 多可用区数据库实例上的 Oracle。</p>
+<p>B. <u>将图像存储在 Amazon S3 存储桶中。使用 Amazon DynamoDB，将地理编码作为键和图像 S3 对象指针。</u></p>
+<p>C. 将图像和地理编码存储在 Amazon DynamoDB 表中。在高负载时段配置 DynamoDB 加速器（DAX）。</p>
+<p>D. 将图像存储在 Amazon S3 存储桶中。将地理编码和图像的 S3 URL 存储在数据库表中。使用在 Amazon RDS 多可用区数据库实例上运行的 Oracle。</p>
+<ul>
+<li>图像存在 DynamoDB 中作为属性值 → DynamoDB 每项最大 400 KB，高分辨率图像很大，可能超过限制，即使分块存储也会使成本极高（DynamoDB 存储费比 S3 贵很多）。</li>
+<li>DAX 是读缓存，对高写入场景无帮助。</li>
+<li>元数据存在 Oracle RDS 中 → 同样有高并发写入扩展性问题，Oracle RDS 对“几分钟上万次更新”难以自动扩展，可能成为瓶颈且成本高。</li>
+</ul>
+<p><br>373 一个应用程序从汽车物联网传感器收集数据，通过 <strong>Amazon Kinesis Data Firehose</strong> 流式传输，存储在 <strong>Amazon S3</strong> 中。<br>数据特点：</p>
+<ul>
+<li>每年生成数万亿个 S3 对象。</li>
+<li><strong>每天早上</strong>，使用<strong>过去 30 天的数据</strong>重新训练一套机器学习模型。</li>
+<li><strong>每年四次</strong>，使用<strong>过去 12 个月的数据</strong>进行分析和训练其他机器学习模型。</li>
+<li>数据必须能够以<strong>最小延迟获取</strong>，保存期限长达 <strong>1 年</strong>。</li>
+<li><strong>1 年之后</strong>，数据必须留存以作<strong>归档之用</strong>。</li>
+</ul>
+<p>要求：选择 <strong>最具成本效益的存储解决方案</strong>。</p>
+<p>A. 使用 S3 智能分层存储类别。创建 S3 生命周期策略，将对象在 1 年后转换到 S3 Glacier 深度归档。</p>
+<p>B. 使用 S3 Intelligent-Tiering 存储类别。将 S3 Intelligent-Tiering 配置为在 1 年后自动将对象移动到 S3 Glacier Deep Archive。</p>
+<p>C. 使用 S3 标准 - 不常访问（S3 Standard-IA）存储类别。创建一个 S3 生命周期策略，将对象在 1 年后转换到 S3 Glacier 深度归档。</p>
+<p>D. <u>使用 S3 标准存储类别。创建一个 S3 生命周期策略，将对象转换为 S3 标准不频繁访问存储类别（S3 Standard-IA），30 天后再过渡到 S3 Glacier 深度归档存储。</u></p>
+<ul>
+<li>前 30 天用 S3 Standard（适合频繁访问）。</li>
+<li>30 天后转 Standard-IA（适合不频繁访问且需要低延迟）。</li>
+<li>1 年后（第 365 天）转 Glacier Deep Archive（归档）。</li>
+</ul>
+<p><br>374 一家公司在 <strong>us-east-1</strong> 区域的三个独立 VPC 中运行多个业务应用程序。<br>要求：</p>
+<ol>
+<li>这些应用程序必须能够在 <strong>VPC 之间进行通信</strong>。</li>
+<li>每天必须持续将数百 GB 数据发送到 <strong>本地数据中心</strong>的一个对<strong>延迟敏感</strong>的应用程序。</li>
+<li>需要设计一个<strong>成本效益最大化</strong>的网络连接解决方案。</li>
+</ol>
+<p>A. 从数据中心配置三个 AWS 站点到站点 VPN 连接。通过为每个 VPC 配置一个 VPN 连接来建立连接。</p>
+<p>B. 在每个 VPC 中部署第三方虚拟网络设备。在数据中心和每个虚拟设备之间建立 IPsec VPN 隧道。</p>
+<p>C. 从数据中心到美国东部 1 区的 Direct Connect 网关建立三条 AWS Direct Connect 连接。通过将每个 VPC 配置为使用其中一条 Direct Connect 连接来建立连接。</p>
+<p>D. <u>从数据中心到 AWS 建立一个 AWS Direct Connect 连接。创建一个中转网关，并将每个 VPC 连接到中转网关。建立 Direct Connect 连接和中转网关之间的连通性。</u></p>
+<ul>
+<li><p><strong>Site-to-Site VPN</strong>：</p>
+<ul>
+<li><strong>通过互联网加密隧道</strong>。</li>
+<li>延迟和抖动较大，不适合对延迟敏感的应用。</li>
+<li>数据传输数百 GB 时，互联网带宽成本可能较高，且性能可能不稳定。</li>
+</ul>
+</li>
+<li><p><strong>AWS Direct Connect</strong>：</p>
+<ul>
+<li>专用网络连接，低延迟、高带宽、更稳定。</li>
+<li>适合大量数据传输和延迟敏感应用。</li>
+<li>但 Direct Connect 物理端口成本固定，建立多个连接会增加成本。</li>
+</ul>
+</li>
+<li><p><strong>Transit Gateway</strong>：</p>
+<ul>
+<li>用于集中管理 VPC 间、VPC 与本地网络间的路由。</li>
+<li>可简化网络架构，避免全互联的复杂性和成本。</li>
+</ul>
+</li>
+<li><p>一个 Direct Connect 连接满足数据中心与 AWS 的低延迟、高带宽需求，成本远低于三条。</p>
+</li>
+<li><p>Transit Gateway 集中连接所有 VPC，实现 VPC 间通信（通过 Transit Gateway 路由）。</p>
+</li>
+<li><p>Direct Connect 通过 Direct Connect Gateway 或虚拟接口（VIF）连接到 Transit Gateway，从而使数据中心可以通过一个连接访问所有 VPC，且 VPC 间通信也通过 Transit Gateway。</p>
+</li>
+</ul>
+<p><br>375 一家电子商务公司在构建分布式订单处理应用程序，涉及：</p>
+<ul>
+<li>多个无服务器函数和 AWS 服务完成订单处理任务。</li>
+<li>任务工作流中需要<strong>人工审批</strong>。</li>
+<li>解决方案必须能够：<ol>
+<li>将多个 Lambda 函数组合成<strong>响应迅速的无服务器应用程序</strong>。</li>
+<li><strong>协调在 Amazon EC2 实例、容器或本地服务器上运行的数据和服务</strong>。</li>
+</ol>
+</li>
+<li>要求以<strong>最少的运营开销</strong>满足需求。</li>
+</ul>
+<p>A. <u>使用 AWS Step Functions 构建应用程序</u>。</p>
+<p>B. 在 AWS Glue 作业中集成所有应用程序组件。</p>
+<p>C. 使用亚马逊简单队列服务（Amazon SQS）来构建该应用程序。</p>
+<p>D. 使用 AWS Lambda 函数和 Amazon EventBridge 事件来构建应用程序。</p>
+<p><br>376 一家公司已启动 <strong>Amazon RDS for MySQL</strong> 数据库实例。<br>连接情况：</p>
+<ul>
+<li>大多数连接来自<strong>无服务器应用程序</strong>（如 Lambda 函数）。</li>
+<li>数据库访问流量在<strong>随机时间间隔变化显著</strong>。</li>
+<li>在需求高峰期，用户遇到<strong>数据库连接被拒绝</strong>的错误。</li>
+<li>要求以<strong>最少的运营开销</strong>解决问题。</li>
+</ul>
+<p>A. <u>在 RDS Proxy 中创建一个代理。配置用户的应用程序，使其通过 RDS Proxy 使用数据库实例。</u></p>
+<p>B. 在用户的应用程序和数据库实例之间部署 Amazon ElastiCache for Memcached。</p>
+<p>C. 将数据库实例迁移到具有更高 I&#x2F;O 容量的不同实例类型。配置用户的应用程序以使用新的数据库实例。</p>
+<p>D. 为数据库实例配置多可用区。配置用户的应用程序以在数据库实例之间切换。</p>
+<ul>
+<li><strong>RDS Proxy</strong> 是 AWS 托管数据库代理服务，专为无服务器和突发连接场景设计。</li>
+<li>功能：<ol>
+<li>连接池：复用数据库连接，避免大量短期连接冲击数据库。</li>
+<li>减少数据库负载：代理层处理连接建立&#x2F;断开，数据库实例只维护少量长期连接。</li>
+<li>故障转移快速：减少应用在故障转移时的连接错误。</li>
+</ol>
+</li>
+</ul>
+<p><br>377 一家公司部署了新的审计系统，用于集中管理 EC2 实例的以下信息：</p>
+<ul>
+<li>操作系统版本</li>
+<li>补丁程序</li>
+<li>已安装软件</li>
+</ul>
+<p>要求：确保通过 <strong>EC2 Auto Scaling 组</strong> 配置的所有实例，在<strong>启动和终止后能立即</strong>成功向审计系统发送报告。</p>
+<p>A. 使用定时的 AWS Lambda 函数，并在所有 EC2 实例上远程运行脚本，将数据发送到审计系统。</p>
+<p>B. <u>使用 EC2 Auto Scaling 生命周期挂钩运行自定义脚本，在实例启动和终止时向审计系统发送数据。</u></p>
+<p>C. 使用 EC2 自动扩展启动配置，通过用户数据运行自定义脚本，以便在实例启动和终止时向审计系统发送数据。</p>
+<p>D. 在实例操作系统上运行自定义脚本来将数据发送到审计系统。配置该脚本，使其在实例启动和终止时由 EC2 Auto Scaling 组调用。</p>
+<p><br>378 一家公司正在开发一款<strong>实时多人游戏</strong>，使用 <strong>UDP</strong> 进行客户端与服务器的通信。</p>
+<ul>
+<li>游戏服务器在自动扩展组中。</li>
+<li>预计白天出现需求高峰 → 服务器平台需要自动扩展。</li>
+<li>需要存储<strong>玩家分数和其他非关系型数据</strong>。</li>
+<li>数据库要求：<strong>无需干预即可扩展</strong>（即完全托管、自动扩展）。</li>
+</ul>
+<p>问：解决方案架构师应推荐哪种方案？</p>
+<p>A. 使用 Amazon Route 53 进行流量分配，并使用 Amazon Aurora Serverless 进行数据存储。</p>
+<p>B. <u>使用网络负载均衡器进行流量分配，并使用 Amazon DynamoDB 按需模式进行数据存储。</u></p>
+<p>C. 使用网络负载均衡器进行流量分配，并使用 Amazon Aurora 全球数据库进行数据存储。</p>
+<p>D. 使用应用程序负载均衡器进行流量分配，并使用 Amazon DynamoDB 全局表进行数据存储。</p>
+<p><strong>负载均衡器</strong>：</p>
+<ul>
+<li><strong>网络负载均衡器（NLB）</strong>：支持 TCP&#x2F;UDP，适用于游戏等非 HTTP 流量，可与自动扩展组集成。</li>
+<li><strong>应用程序负载均衡器（ALB）</strong>：仅支持 HTTP&#x2F;HTTPS&#x2F;gRPC，<strong>不支持 UDP</strong>。</li>
+<li><strong>Route 53</strong>：DNS 负载均衡，支持基于延迟&#x2F;地理位置&#x2F;加权等路由，但通常用于 HTTP(S) 或 TCP，对于实时游戏 UDP 流量，直接使用 NLB 更常见。</li>
+</ul>
+<p><strong>数据库</strong>：</p>
+<ul>
+<li><strong>Amazon DynamoDB</strong>：NoSQL，完全托管，自动扩展，有<strong>按需模式（On-Demand）</strong> 自动适应流量，无需预置容量，完美符合“无需干预即可扩展”。</li>
+<li><strong>Amazon Aurora Serverless</strong>：是关系型数据库（SQL），适用于不定负载的 SQL 工作负载，但数据模型是非关系型，用 Aurora 不合适。</li>
+<li><strong>Amazon Aurora 全球数据库</strong>：是关系型跨区域复制方案，同样不适合非关系型数据存储。</li>
+</ul>
+<p><br>379 一家公司的前端应用程序使用以下架构：</p>
+<ul>
+<li>前端 ↔ <strong>Amazon API Gateway</strong> ↔ <strong>AWS Lambda 函数</strong>（处理请求） ↔ <strong>Amazon RDS 数据库</strong>。</li>
+<li>Lambda 函数在收到请求时：<ol>
+<li><strong>加载许多库</strong>（初始化时间可能较长）。</li>
+<li>连接到 RDS 数据库，处理数据，返回结果。</li>
+</ol>
+</li>
+<li>目标：<ol>
+<li>对所有用户<strong>尽可能降低响应延迟</strong>。</li>
+<li>对<strong>运营进行最少改动</strong>。</li>
+</ol>
+</li>
+</ul>
+<p>A. 在前端应用程序和数据库之间建立连接，通过绕过 API 来加快查询速度。</p>
+<p>B. <u>为处理请求的 Lambda 函数配置预置并发</u>。</p>
+<p>C. 在 Amazon S3 中缓存查询结果，以便更快地检索类似数据集。</p>
+<p>D. 增大数据库规模，以增加 Lambda 可同时建立的连接数。</p>
+<ul>
+<li><strong>预置并发（Provisioned Concurrency）</strong> 是 Lambda 的功能，预先初始化一定数量的函数实例，使其处于<strong>就绪状态</strong>，避免冷启动。</li>
+<li>初始化好的实例已经加载了库和可能建立了数据库连接（如果连接池在初始化时建立）。</li>
+</ul>
+<p><br>380 一家公司正在将本地工作负载迁移到 AWS，已在使用多个 <strong>Amazon EC2 实例</strong>和 <strong>Amazon RDS 数据库实例</strong>。<br>需求：</p>
+<ul>
+<li>在<strong>非工作时间自动启动和停止 EC2 实例及数据库实例</strong>（即定时启停）。</li>
+<li>解决方案必须<strong>最大限度地降低成本和基础设施维护工作</strong>。</li>
+</ul>
+<p>A. 使用弹性调整大小来扩展 EC2 实例。在非工作时间将数据库实例缩容至零。</p>
+<p>B. 探索 AWS Marketplace，寻找能按计划自动启动和停止 EC2 实例及数据库实例的合作伙伴解决方案。</p>
+<p>C. 启动另一个 EC2 实例。配置 crontab 计划以运行 shell 脚本，这些脚本将按计划启动和停止现有的 EC2 实例和数据库实例。</p>
+<p>D. <u>创建一个 AWS Lambda 函数，用于启动和停止 EC2 实例及数据库实例。配置 Amazon EventBridge，使其按计划调用该 Lambda 函数</u></p>
+<ul>
+<li>“弹性调整大小”可能指 EC2 Auto Scaling 或修改实例类型，但 RDS 无法“缩容至零”</li>
+<li>RDS 实例可以通过 <code>StopDBInstance</code> API 停止（部分引擎支持），停止期间只收取存储费用，大幅节省计算费用。</li>
+<li>EC2 实例停止后只收 EBS 存储费，不收实例费。</li>
+<li>Lambda + EventBridge 是 AWS 推荐的成本优化和自动化模式，符合“基础设施即代码”和最小维护原则。</li>
+</ul>
+<p><br>381 公司托管一个三层 Web 应用程序，包含 <strong>PostgreSQL 数据库</strong>，存储文档的元数据。</p>
+<ul>
+<li>文档存储在 <strong>Amazon S3</strong>。</li>
+<li>文档通常只写入一次，但会频繁更新（推测元数据也会相应更新）。</li>
+<li>每月需要搜索元数据中的关键术语生成报告，此过程使用<strong>关系查询</strong>，目前耗时几小时。</li>
+<li>要求：<ol>
+<li>报告生成过程<strong>不得阻止文档修改或新文档添加</strong>（即不影响主数据库的写入操作）。</li>
+<li>加快报告生成过程。</li>
+<li>对<strong>应用程序代码改动最小</strong>。</li>
+</ol>
+</li>
+</ul>
+<p>A. 新建一个包含读取副本的 Amazon DocumentDB（兼容 MongoDB）集群。扩展该读取副本以生成报告。</p>
+<p>B. <u>新建一个包含 Aurora 只读副本的 Amazon Aurora PostgreSQL 数据库集群。向该 Aurora 只读副本发送查询来生成报告。</u></p>
+<p>C. 新建一个 Amazon RDS for PostgreSQL 多可用区数据库实例。配置报表模块以查询 RDS 的备用节点，确保报表模块不会对主节点造成影响。</p>
+<p>D. 新建一个 Amazon DynamoDB 表来存储文档。使用固定的写入容量以支持新文档条目。自动扩展读取容量以支持报告生成。</p>
+<p><br>382 一家公司在 AWS 上拥有三层应用程序，用于从用户设备收集传感器数据。<br>架构流量路径：</p>
+<ul>
+<li>用户设备 → <strong>网络负载均衡器（NLB）</strong> → <strong>Web 层 EC2 实例</strong> → <strong>应用层 EC2 实例</strong> → <strong>数据库</strong>。</li>
+</ul>
+<p>需求：</p>
+<ul>
+<li>提高 <strong>传输中数据（in-transit data）</strong> 的安全性。</li>
+<li>问解决方案架构师应采取什么措施。</li>
+</ul>
+<p>A. <u>配置 TLS 监听器。在 NLB 上部署服务器证书。</u></p>
+<p>B. 配置 AWS Shield Advanced。在网络负载均衡器（NLB）上启用 AWS WAF。</p>
+<p>C. 将负载均衡器更改为应用程序负载均衡器（ALB）。在 ALB 上启用 AWS WAF。</p>
+<p>D. 使用 AWS 密钥管理服务（AWS KMS）对 EC2 实例上的 Amazon 弹性块存储（Amazon EBS）卷进行加密。</p>
+<ul>
+<li>NLB 支持 <strong>TLS 监听器</strong>（需要在 NLB 上配置 TLS 证书）。</li>
+<li>这样用户设备到 NLB 的流量会被 TLS 加密</li>
+<li>AWS Shield Advanced 提供 DDoS 防护。</li>
+<li>AWS WAF 提供 Web 应用防火墙（防护 SQL 注入、XSS 等），但 <strong>NLB 不支持 WAF</strong>（WAF 只能与 ALB、CloudFront、API Gateway 集成）。</li>
+<li>这两者主要是防护攻击，不是直接加密传输数据。</li>
+<li>EBS 加密保护的是 <strong>静态数据（at-rest）</strong>，不是传输中数据。</li>
+</ul>
+<p><br>383 一家公司计划将一款<strong>商用现成（COTS）应用程序</strong>从本地迁移到 AWS。</p>
+<ul>
+<li>软件许可模式：<strong>基于插槽和内核（socket and core-based）</strong> 的许可。</li>
+<li>具有可预测的容量和 uptime 要求。</li>
+<li>公司希望<strong>使用今年早些时候已购买的现有许可证</strong>（即自带许可证到 AWS，许可证绑定到特定物理硬件特性）。</li>
+<li>问：哪种 <strong>Amazon EC2 定价选项最具成本效益</strong>？</li>
+</ul>
+<p>A<u>. 专用预留主机（Dedicated Reserved Hosts）</u><br>B. 专用按需主机（Dedicated On-Demand Hosts）<br>C. 专用预留实例（Dedicated Reserved Instances）<br>D. 专用按需实例（Dedicated On-Demand Instances）</p>
+<ul>
+<li><strong>专用主机（Dedicated Host）</strong>：物理服务器专供客户使用，可见 socket&#x2F;core 信息，适合<strong>基于物理硬件特征的许可证绑定</strong>。</li>
+<li><strong>专用实例（Dedicated Instance）</strong>：实例运行在专用于客户的硬件上，但客户不控制底层物理主机，且可能在不同时间迁移到不同主机（不利于固定 socket&#x2F;core 的许可证）。</li>
+<li><strong>按需（On-Demand）</strong>：无预付，按小时计费，成本较高。</li>
+<li><strong>预留（Reserved）</strong>：预付 1 年或 3 年，大幅降低成本。</li>
+</ul>
+<p><br>384 一家公司在多个可用区的 <strong>Amazon EC2 Linux 实例</strong> 上运行应用程序。<br>存储层要求：</p>
+<ol>
+<li><strong>高可用</strong>（多可用区冗余）。</li>
+<li><strong>符合 POSIX 标准</strong>（即需要文件系统接口，支持文件&#x2F;目录操作）。</li>
+<li><strong>最高级别的数据持久性</strong>（即 99.999999999% 耐久性）。</li>
+<li><strong>能够在各个 EC2 实例之间共享</strong>（多实例并发访问同一文件系统）。</li>
+<li>数据在<strong>最初 30 天频繁访问</strong>，之后访问频率降低。</li>
+<li><strong>最具成本效益</strong>的方案。</li>
+</ol>
+<p>A. 使用 Amazon S3 标准存储类别。创建 S3 生命周期策略，将不常访问的数据移至 S3 Glacier。</p>
+<p>B. 使用 Amazon S3 标准存储类别。创建一个 S3 生命周期策略，将不常访问的数据移至 S3 标准 - 不常访问（S3 Standard-IA）。</p>
+<p>C. <u>使用亚马逊弹性文件系统（Amazon EFS）标准存储类别。创建一个生命周期管理策略以将不常访问的数据迁移到 EFS 标准 - 不常访问（EFS Standard-IA）</u>。</p>
+<p>D. 使用亚马逊弹性文件系统（Amazon EFS）单区域存储类别。创建生命周期管理策略，将不常访问的数据移至 EFS 单区域 - 不常访问（EFS One Zone-IA）。</p>
+<p>S3是对象存储，<strong>不原生支持 POSIX 文件系统接口</strong>，不能直接挂载为共享文件系统给多个 EC2 实例同时读写</p>
+<p>满足 <strong>POSIX、共享、高可用、自动成本优化</strong> 的唯一 AWS 原生服务是 <strong>Amazon EFS</strong>，且需使用<strong>标准（多可用区）存储类</strong>，并启用生命周期策略将不常访问的数据移至 <strong>EFS Standard-IA</strong>。</p>
+<p><br>385 解决方案架构师正在设计新的 VPC，包含：</p>
+<ul>
+<li>两个公有子网 → 用于负载均衡器。</li>
+<li>两个私有子网 → 用于 Web 服务器。</li>
+<li>两个私有子网 → 用于 MySQL 数据库。</li>
+</ul>
+<p>已知：</p>
+<ul>
+<li>Web 服务器仅使用 <strong>HTTPS</strong>（意味着从负载均衡器到 Web 服务器的流量是 HTTP 还是 HTTPS？题目没说，但通常负载均衡器到 Web 服务器可以是 HTTP 或 HTTPS，安全组应根据实际端口配置）。</li>
+<li>已为负载均衡器创建安全组，允许来自 <code>0.0.0.0/0</code> 的 <strong>443</strong> 端口访问（即允许公网 HTTPS 流量到负载均衡器）。</li>
+<li>公司政策：<strong>每个资源仅拥有完成其任务所必需的最少访问权限</strong>（即最小权限原则）。</li>
+</ul>
+<p>问：解决方案架构师应采用哪种<strong>额外的配置策略</strong>来满足这些要求？</p>
+<p>A. 为 Web 服务器创建一个安全组，并允许来自 0.0.0.0&#x2F;0 的 443 端口访问。为 MySQL 服务器创建一个安全组，并允许来自 Web 服务器安全组的 3306 端口访问。</p>
+<p>B. 为 Web 服务器创建网络 ACL，并允许来自 0.0.0.0&#x2F;0 的 443 端口的流量。为 MySQL 服务器创建网络 ACL，并允许来自 Web 服务器安全组的 3306 端口的流量。</p>
+<p>C. <u>为 Web 服务器创建一个安全组，并允许来自负载均衡器的 443 端口的流量。为 MySQL 服务器创建一个安全组，并允许来自 Web 服务器安全组的 3306 端口</u>。</p>
+<p>D. 为 Web 服务器创建网络 ACL，并允许来自负载均衡器的 443 端口的流量。为 MySQL 服务器创建网络 ACL，并允许来自 Web 服务器安全组的 3306 端口的流量。</p>
+<h3 id="1-安全组-vs-网络-ACL"><a href="#1-安全组-vs-网络-ACL" class="headerlink" title="1. 安全组 vs 网络 ACL"></a>1. 安全组 vs 网络 ACL</h3><ul>
+<li><strong>安全组（Security Group）</strong>：作用于实例级别，是有状态防火墙，通常用于精细的实例访问控制（允许&#x2F;拒绝基于源安全组或 CIDR）。</li>
+<li><strong>网络 ACL（Network ACL）</strong>：作用于子网级别，是无状态防火墙，通常用于子网级别的粗粒度流量控制（如阻止特定 IP 范围）。</li>
+<li>最小权限最佳实践：优先使用<strong>安全组</strong>实现实例级别的精细控制，且允许基于<strong>安全组 ID</strong> 作为源，而不是开放给整个 CIDR（如 <code>0.0.0.0/0</code>）。</li>
+</ul>
+<h3 id="2-流量路径与最小权限"><a href="#2-流量路径与最小权限" class="headerlink" title="2. 流量路径与最小权限"></a>2. 流量路径与最小权限</h3><ul>
+<li><strong>公网用户</strong> → <strong>负载均衡器（443）</strong> → <strong>Web 服务器（私有子网）</strong> → <strong>MySQL 服务器（私有子网）</strong>。</li>
+<li>负载均衡器已允许 <code>0.0.0.0/0:443</code>（公网 HTTPS）。</li>
+<li>Web 服务器安全组应只允许来自<strong>负载均衡器安全组</strong>的流量（如果负载均衡器与 Web 服务器之间用 HTTPS，则是 443；如果用 HTTP，则是 80），而不是 <code>0.0.0.0/0</code>（否则公网可直接访问 Web 服务器，违反最小权限）。</li>
+<li>MySQL 安全组应只允许来自 <strong>Web 服务器安全组</strong> 的 3306 端口。</li>
+</ul>
+<p>AWS 推荐的安全最佳实践是：</p>
+<ol>
+<li>负载均衡器面向公网开放 443。</li>
+<li>Web 服务器安全组仅允许来自负载均衡器安全组的流量（端口 443 或 80，根据实际协议）。</li>
+<li>数据库安全组仅允许来自 Web 服务器安全组的 3306 端口。</li>
+</ol>
+<p><br>386 一家电子商务公司运行多层应用程序：</p>
+<ul>
+<li>前端、后端层运行在 <strong>Amazon EC2</strong>。</li>
+<li>数据库为 <strong>Amazon RDS for MySQL</strong>。</li>
+<li>后端频繁调用数据库以返回<strong>相同的数据集</strong>，导致性能下降。</li>
+</ul>
+<p>要求：提升后端性能。</p>
+<p>A. 实施 Amazon SNS 来存储数据库调用。<br><u>B. 实施 Amazon ElasticCache 以缓存大型数据集。</u><br>C. 部署一个 RDS for MySQL 只读副本以缓存数据库调用。<br>D. 实施 Amazon Kinesis Data Firehose 以将调用流式传输到数据库。</p>
+<p>对于“频繁调用数据库返回相同数据集”的性能问题，最直接有效的解决方案是使用<strong>内存缓存</strong>（如 ElastiCache）。</p>
+<ul>
+<li><strong>只读副本</strong>：可以分散读负载，但<strong>不缓存查询结果</strong>，仍需执行相同查询，只是查询转移到副本，依然有数据库负载。</li>
+</ul>
+<p><br>387 一名新员工担任<strong>部署工程师</strong>，将使用 <strong>AWS CloudFormation 模板</strong> 创建多个 AWS 资源。<br>一位解决方案架构师希望该工程师在<strong>遵循最小权限原则</strong>的同时开展工作。<br>问：应采取哪些行动组合来实现这一目标？<strong>（选两项）</strong></p>
+<p>A. 让部署工程师使用 AWS 账户根用户凭证来执行 AWS CloudFormation 堆栈操作。</p>
+<p>B. 为部署工程师创建一个新的 IAM 用户，并将该 IAM 用户添加到已附加 PowerUsers IAM 策略的组中。</p>
+<p>C. 为部署工程师创建一个新的 IAM 用户，并将该 IAM 用户添加到已附加 AdministratorAccess IAM 策略的组中。</p>
+<p>D. <u>为部署工程师创建一个新的 IAM 用户，并将该 IAM 用户添加到具有允许权限的 IAM 策略的用户组中，仅允许 AWS CloudFormation 操作。</u></p>
+<p>E. <u>为部署工程师创建一个 IAM 角色，以明确定义特定于 AWS CloudFormation 堆栈的权限，并使用该 IAM 角色启动堆栈。</u></p>
+<ol>
+<li><strong>使用 IAM 角色而不是长期凭证</strong>（E）。</li>
+<li><strong>权限策略应精确限定</strong>，仅允许执行 CloudFormation 操作及创建模板中指定的资源类型（D 描述的仅允许 CloudFormation 操作可能不够，但如果策略设计得当，可以包含所需资源权限，则 D 也是一种最小权限的实现方式；但更常见是 E + 自定义策略）。</li>
+</ol>
+<p>常见考题中，正确答案为 <strong>D 和 E</strong>：</p>
+<ul>
+<li><strong>D</strong> 代表“仅允许 CloudFormation 操作”的策略方向（最小权限策略）。</li>
+<li><strong>E</strong> 代表使用 IAM 角色来执行，且权限针对特定堆栈定制。</li>
+</ul>
+<p><br>388 公司在 VPC 中部署两层 Web 应用程序：</p>
+<ul>
+<li><strong>Web 层</strong>：EC2 自动扩展组，位于跨多个可用区的<strong>公有子网</strong>。</li>
+<li><strong>数据库层</strong>：Amazon RDS for MySQL，位于<strong>私有子网</strong>。</li>
+<li>Web 层需要访问数据库。</li>
+</ul>
+<p>问题：Web 应用程序报告<strong>无法连接到数据库</strong>，但数据库确认处于运行状态。<br>已知：<strong>网络 ACL、安全组、路由表</strong> 均处于<strong>默认状态</strong>。</p>
+<p>问：解决方案架构师应建议采取什么措施来修复应用程序？</p>
+<p>A. 向私有子网的网络 ACL 添加一条明确规则，以允许来自 Web 层 EC2 实例的流量。</p>
+<p>B. 在 VPC 路由表中添加一条路由，以允许 Web 层的 EC2 实例和数据库层之间的通信。</p>
+<p>C. 将 Web 层的 EC2 实例和数据库层的 RDS 实例部署到两个独立的 VPC 中，并配置 VPC 对等连接。</p>
+<p>D. <u>向数据库层的 RDS 实例的安全组添加一条入站规则，以允许来自 Web 层安全组的流量。</u></p>
+<p>数据库安全组需要明确允许来自 Web 层安全组（或 Web 层 IP 范围）的 3306 端口访问。</p>
+<h3 id="1-默认状态的含义"><a href="#1-默认状态的含义" class="headerlink" title="1. 默认状态的含义"></a>1. 默认状态的含义</h3><ul>
+<li><strong>默认网络 ACL</strong>：允许所有入站和出站流量（因此不是网络 ACL 的问题）。</li>
+<li><strong>默认安全组</strong>：仅允许来自<strong>同一安全组内</strong>的流量，拒绝其他所有流量（这是关键）。</li>
+<li><strong>默认路由表</strong>：公有子网有指向互联网网关的路由，私有子网有指向 VPC 本地（<code>10.0.0.0/16</code>）的路由，Web 层与数据库层在同一个 VPC 内，路由默认是通的。</li>
+</ul>
+<h3 id="2-问题推断"><a href="#2-问题推断" class="headerlink" title="2. 问题推断"></a>2. 问题推断</h3><p>Web 层和数据库层很可能处于<strong>不同的安全组</strong>（因为它们是不同层）。<br>默认安全组只允许来自同一安全组的流量，所以<strong>数据库安全组没有允许来自 Web 层安全组的流量</strong>，导致连接被拒绝。</p>
+<p><br>389 一家公司将其在线广告业务的大型数据库存储在<strong>单个可用区</strong>的 <strong>Amazon RDS for MySQL</strong> 数据库实例中。<br>需求：</p>
+<ul>
+<li>希望<strong>业务报告查询能够运行</strong>。</li>
+<li>同时<strong>不影响对生产数据库实例的写入操作</strong>。</li>
+</ul>
+<p>问：哪种解决方案能满足这些要求？</p>
+<p>A. <u>部署 RDS 只读副本以处理业务报告查询。</u><br>B. 通过将数据库实例置于弹性负载均衡器之后，对其进行水平扩展。<br>C. 将数据库实例升级到更大的实例类型，以处理写入操作和查询。<br>D. 在多个可用区部署数据库实例，以处理业务报告查询。</p>
+<p><br>390 一家公司托管三层电子商务应用程序在 EC2 实例上，架构为：</p>
+<ul>
+<li>实例在 <strong>应用程序负载均衡器（ALB）</strong> 后的<strong>自动扩展组</strong>中运行。</li>
+<li>数据存储在 <strong>Amazon RDS for MariaDB</strong> 多可用区数据库实例。</li>
+<li>需求：优化交易过程中的<strong>客户会话管理</strong>，应用程序必须<strong>持久化存储会话数据</strong>。<br>问：哪些解决方案能满足要求？<strong>（选两项）</strong></li>
+</ul>
+<p>A. 在应用程序负载均衡器（ALB）上开启粘性会话功能（会话亲和性）。</p>
+<p>B. <u>使用 Amazon DynamoDB 表存储客户会话信息</u>。</p>
+<p>C. 部署 Amazon Cognito 用户池来管理用户会话信息。</p>
+<p>D. <u>部署一个 Amazon ElastiCache for Redis 集群来存储客户会话信息</u>。</p>
+<p>E. 在应用程序中使用 AWS Systems Manager Application Manager 来管理用户会话信息。</p>
+<ul>
+<li><strong>B. DynamoDB</strong>（持久化 NoSQL）</li>
+<li><strong>D. ElastiCache for Redis</strong>（内存+持久化选项）</li>
+</ul>
+<h3 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h3><ul>
+<li><strong>会话管理优化</strong>：在自动扩展组的多实例环境下，需要确保用户会话在多个实例间<strong>可共享或持久化</strong>，避免因实例故障或负载均衡转发到不同实例导致会话丢失。</li>
+<li><strong>持久化存储会话数据</strong>：会话数据必须在实例重启、扩展、故障时仍不丢失。</li>
+<li>常见的解决方案：<ol>
+<li><strong>外部集中式会话存储</strong>（如数据库、缓存、NoSQL），使任何实例都能访问同一份会话数据。</li>
+<li><strong>负载均衡器粘性会话</strong>（会话亲和性）可让同一用户请求总是转发到同一实例，但这<strong>不持久化存储</strong>会话数据（实例故障时会丢失会话），所以必须结合持久化存储方案</li>
+</ol>
+</li>
+</ul>
+<p><br>391 一家公司为其三层<strong>无状态 Web 应用程序</strong>制定备份策略：</p>
+<ul>
+<li><strong>Web 层</strong>：运行在 <strong>Amazon EC2 实例</strong> 上，位于<strong>自动扩展组</strong>中，具有动态扩展策略（实例数量可变化）。</li>
+<li><strong>数据库层</strong>：运行在 <strong>Amazon RDS for PostgreSQL</strong> 上。</li>
+<li>Web 应用<strong>不需要在 EC2 实例上使用临时本地存储</strong>（即数据不保存在实例本地，可能是无状态设计）。</li>
+<li><strong>恢复点目标（RPO）为 2 小时</strong>。</li>
+<li>备份策略必须在该环境中实现<strong>可扩展性最大化</strong>和<strong>资源利用率优化</strong>。</li>
+</ul>
+<p>问：哪种解决方案能满足这些要求？</p>
+<p>A. 每 2 小时对 EC2 实例和数据库的 Amazon Elastic Block Store（Amazon EBS）卷进行快照，以满足恢复点目标（RPO）。</p>
+<p>B. 配置快照生命周期策略以创建 Amazon Elastic Block Store（EBS）快照。在 Amazon RDS 中启用自动备份以满足恢复点目标（RPO）。</p>
+<p>C. <u>保留 Web 层和应用层的最新亚马逊机器镜像（AMI）。启用自动备份功能，用于启用 Amazon RDS 的自动备份，并使用时间点恢复来满足恢复点目标（RPO）</u>。</p>
+<p>D. 每 2 小时为 EC2 实例的 Amazon Elastic Block Store（EBS）卷拍摄快照。在 Amazon RDS 中启用自动备份，并使用时间点恢复来满足恢复点目标（RPO）。</p>
+<p>无状态 Web 层备份 → 使用 <strong>AMI</strong> 即可。<br>有状态数据库备份 → 使用 <strong>RDS 自动备份 + PITR</strong></p>
+<h3 id="1-备份需求"><a href="#1-备份需求" class="headerlink" title="1.备份需求"></a>1.备份需求</h3><ul>
+<li><strong>EC2 层（Web&#x2F;应用层）</strong>：<ul>
+<li>无状态应用 → 实例本身不存储持久化数据，重要配置和代码应通过启动模板&#x2F;用户数据或外部存储管理。</li>
+<li>备份重点：确保能快速启动相同配置的新实例（通过 <strong>AMI</strong>），而不是频繁备份 EBS 卷（因为数据不变，且 EBS 快照成本高、管理复杂）。</li>
+<li>动态扩展组 → 使用 <strong>最新 AMI</strong> 即可，AMI 已包含操作系统、软件、配置，无需频繁 EBS 快照。</li>
+</ul>
+</li>
+<li><strong>数据库层（RDS PostgreSQL）</strong>：<ul>
+<li>有状态，需要定期备份且满足 RPO 2 小时。</li>
+<li>RDS 自动备份（每日快照 + 事务日志）支持<strong>时间点恢复（PITR）</strong>，可将数据库恢复到保留期（最多35天）内任意时间点，精度到几秒钟，满足 2 小时 RPO。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-可扩展性与资源利用率优化"><a href="#2-可扩展性与资源利用率优化" class="headerlink" title="2. 可扩展性与资源利用率优化"></a>2. 可扩展性与资源利用率优化</h3><ul>
+<li>最大化可扩展性：自动扩展组能根据负载自动增减实例，备份策略不应阻碍扩展。</li>
+<li>资源利用率优化：避免不必要的备份操作（如频繁 EBS 快照）造成额外存储成本和 I&#x2F;O 影响。</li>
+</ul>
+<p><br>392 一家公司希望在 AWS 上部署一个新的<strong>公共 Web 应用程序</strong>，架构：</p>
+<ul>
+<li><strong>Web 服务器层</strong>：使用 Amazon EC2 实例。</li>
+<li><strong>数据库层</strong>：使用 Amazon RDS for MySQL 数据库实例。</li>
+<li>应用程序必须<strong>安全</strong>且可供<strong>拥有动态 IP 地址的全球客户</strong>访问。</li>
+</ul>
+<p>问：解决方案架构师应如何配置<strong>安全组</strong>以满足这些要求？</p>
+<p>A. <u>为 Web 服务器配置安全组，允许来自 <code>0.0.0.0/0</code> 的 443 端口入站流量。为数据库实例配置安全组，允许来自 Web 服务器安全组的 3306 端口入站流量</u>。</p>
+<p>B. 为 Web 服务器配置安全组，允许来自客户 IP 地址的 443 端口入站流量。为数据库实例配置安全组，允许来自 Web 服务器安全组的 3306 端口入站流量。</p>
+<p>C. 为 Web 服务器配置安全组，允许来自客户 IP 地址的 443 端口入站流量。为数据库实例配置安全组，允许来自客户 IP 地址的 3306 端口入站流量。</p>
+<p>D. 为 Web 服务器配置安全组，允许来自 <code>0.0.0.0/0</code> 的 443 端口入站流量。为数据库实例配置安全组，允许来自 <code>0.0.0.0/0</code> 的 3306 端口入站流量。</p>
+<ol>
+<li>Web 服务器面向公网 HTTPS（443）开放。</li>
+<li>数据库仅允许来自 Web 服务器安全组的内部连接（3306）</li>
+</ol>
+<p><br>393 一家支付处理公司记录与客户的所有<strong>语音通信</strong>，音频文件存储在 <strong>Amazon S3</strong> 存储桶中。<br>需求：</p>
+<ol>
+<li>从音频文件中<strong>提取文本</strong>（语音转文字）。</li>
+<li>从文本中<strong>移除任何属于客户的个人身份信息（PII）</strong>。</li>
+</ol>
+<p>问：解决方案架构师应如何做才能满足这些要求？</p>
+<p>A. 使用 Amazon Kinesis Video Streams 处理音频文件。使用 AWS Lambda 函数扫描已知的 PII 模式。</p>
+<p>B. 当音频文件上传至 S3 存储桶时，调用 AWS Lambda 函数以启动 Amazon Textract 任务来分析通话录音。</p>
+<p>C. <u>配置一个启用了个人身份信息（PII）脱敏功能的 Amazon Transcribe 转录任务。当音频文件上传到 S3 存储桶时，调用 AWS Lambda 函数启动转录作业。将输出存储在单独的 S3 存储桶中</u>。</p>
+<p>D. 创建一个 Amazon Connect 联系流，用于接收开启了转录功能的音频文件。嵌入一个 AWS Lambda 函数以扫描已知的 PII 模式。当音频文件上传到 S3 存储桶时，使用 Amazon EventBridge 启动该联系流。</p>
+<p><br>394 一家公司运行多层电子商务 Web 应用程序：</p>
+<ul>
+<li>应用在 <strong>Amazon EC2</strong> 实例上运行。</li>
+<li>数据库为 <strong>Amazon RDS for MySQL 多可用区</strong>。</li>
+<li>数据库实例最新一代，存储为 <strong>通用型 SSD（gp3）EBS 卷</strong>，容量 <strong>2000 GB</strong>。</li>
+<li>问题：需求高峰期<strong>数据库性能下降</strong>。</li>
+<li>分析发现：当<strong>读写 IOPS 超过 20,000</strong> 时性能下降。</li>
+</ul>
+<p>问：解决方案架构师应采取什么措施提高应用程序性能？</p>
+<p>A. 将该卷替换为磁性卷。<br>B. 增加 gp3 卷的 IOPS 数量。<br>C. <u>将卷替换为预配置 IOPS SSD（io2）卷。</u><br>D. 用两个 1000 GB 的 gp3 卷替换 2000 GB 的 gp3 卷。</p>
+<h3 id="1-问题诊断"><a href="#1-问题诊断" class="headerlink" title="1. 问题诊断"></a>1. 问题诊断</h3><ul>
+<li><strong>gp3</strong> 卷性能：<ul>
+<li>基准性能：<strong>3000 IOPS + 125 MB&#x2F;s 吞吐量</strong>。</li>
+<li>可额外<strong>独立配置 IOPS</strong>（最高 16000 IOPS）和吞吐量（最高 1000 MB&#x2F;s）。</li>
+<li>最大 <strong>IOPS 限制</strong>：16000（若超过此值需要更高性能卷）。</li>
+</ul>
+</li>
+<li>题目中 <strong>读写 IOPS 超过 20,000 时性能下降</strong> → 说明当前 <strong>gp3 卷的 IOPS 上限（16000）可能不够</strong>（因为读写合计超过 20k，可能单方向或混合超过 gp3 上限），需要<strong>更高 IOPS 能力的存储类型</strong>。</li>
+</ul>
+<p><br>395 在上周的生产部署期间，某个 IAM 用户对公司账户中的 AWS 资源进行了多项配置更改。<br>一位解决方案架构师发现<strong>有几条安全组规则的配置不符合预期</strong>。<br>该架构师希望确认<strong>是哪个 IAM 用户</strong>进行了这些更改。</p>
+<p>问：解决方案架构师应使用哪种服务来查找所需信息？</p>
+<p>A. 亚马逊 GuardDuty<br>B. 亚马逊 Inspector<br>C. <u>AWS CloudTrail</u><br>D. AWS Config</p>
+<p><strong>AWS CloudTrail</strong>：记录 AWS 账户中的 <strong>API 调用和事件</strong>，包括谁（IAM 用户&#x2F;角色）、何时、从哪里、做了什么操作。</p>
+<p><br>396 一家公司在 AWS 上实施<strong>自管理的 DNS 服务</strong>，包含：</p>
+<ul>
+<li>不同 AWS 区域的 <strong>Amazon EC2 实例</strong>。</li>
+<li><strong>AWS Global Accelerator</strong> 中标准加速器的端点（用于将流量路由到最近的 EC2 实例）。</li>
+</ul>
+<p>要求：<strong>保护该解决方案免受 DDoS 攻击</strong>。</p>
+<p>问：解决方案架构师应采取什么措施来满足这一要求？</p>
+<p>A. <u>订阅 AWS Shield Advanced。将加速器添加为要保护的资源。</u><br>B. 订阅 AWS Shield Advanced。将 EC2 实例添加为要保护的资源。<br>C. 创建包含基于速率规则的 AWS WAF Web ACL。将该 Web ACL 与加速器关联。<br>D. 创建一个包含基于速率规则的 AWS WAF Web ACL。将该 Web ACL 与 EC2 实例相关联。</p>
+<ul>
+<li>Shield Advanced 可保护 <strong>Global Accelerator</strong>（标准加速器）。</li>
+<li>这是防御针对加速器 IP 的 DDoS 攻击的最直接方法。</li>
+</ul>
+<h3 id="1-服务保护对象"><a href="#1-服务保护对象" class="headerlink" title="1. 服务保护对象"></a>1. 服务保护对象</h3><ul>
+<li><strong>AWS Shield Standard</strong>：免费，自动为所有 AWS 客户提供针对基础设施层（L3&#x2F;L4）DDoS 保护，已默认启用。</li>
+<li><strong>AWS Shield Advanced</strong>：付费，提供更高级 DDoS 保护、费用保障、与 AWS WAF 集成、24&#x2F;7 DDoS 响应团队支持。<ul>
+<li>Shield Advanced 可保护的资源包括：<strong>Elastic IP、CloudFront、Route 53、Global Accelerator、ALB、EC2 实例</strong>等。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-架构分析"><a href="#2-架构分析" class="headerlink" title="2. 架构分析"></a>2. 架构分析</h3><ul>
+<li>流量路径：用户 → <strong>AWS Global Accelerator</strong>（入口） → 不同区域的 <strong>EC2 实例</strong>（DNS 服务）。</li>
+<li>保护重点：<ol>
+<li><strong>Global Accelerator</strong> 作为流量入口，是 DDoS 攻击的主要目标（L3&#x2F;L4 攻击可能针对加速器的 Anycast IP）。</li>
+<li>EC2 实例也需要保护，但 Shield Advanced 可直接保护加速器，从而保护后端资源。</li>
+</ol>
+</li>
+<li><strong>AWS WAF</strong> 主要用于防护 Web 应用层（L7）攻击（如 SQL 注入、跨站脚本等），并可通过基于速率的规则缓解部分 L7 DDoS，但<strong>WAF 不能防护网络&#x2F;传输层 DDoS</strong>（L3&#x2F;L4）。<ul>
+<li>此外，WAF 只能关联到 <strong>CloudFront、ALB、API Gateway</strong>，<strong>不能直接关联到 Global Accelerator 或 EC2 实例</strong>（除非通过 ALB&#x2F;CloudFront 前置）。</li>
+</ul>
+</li>
+</ul>
+<p><br>397 一家电子商务公司需要运行一个<strong>每日定时任务</strong>，对销售记录进行汇总和筛选以用于分析。</p>
+<ul>
+<li>销售记录存储在 <strong>Amazon S3</strong> 存储桶中。</li>
+<li>每个对象最大 <strong>10GB</strong>。</li>
+<li>任务<strong>最多可能需要一小时</strong>完成。</li>
+<li>CPU 和内存使用率<strong>恒定且预先可知</strong>。</li>
+<li>要求：<strong>最大限度地减少运行这项工作所需的运维工作量</strong>。</li>
+</ul>
+<p>A. 创建一个具有 Amazon EventBridge 通知的 AWS Lambda 函数。将 EventBridge 事件安排为每天运行一次。</p>
+<p>B. 创建一个 AWS Lambda 函数。创建一个 Amazon API Gateway HTTP API，并将该 API 与该函数集成。创建一个 Amazon EventBridge 定时事件，用于调用该 API 并触发该函数。</p>
+<p>C<u>. 创建一个采用 AWS Fargate 启动类型的 Amazon Elastic Container Service（Amazon ECS）集群。创建一个 Amazon EventBridge 计划事件，该事件在集群上启动 ECS 任务以运行作业。</u></p>
+<p>D. 创建一个采用 Amazon EC2 启动类型的 Amazon Elastic Container Service（Amazon ECS）集群，以及一个至少包含一台 EC2 实例的自动扩展组。创建一个 Amazon EventBridge 计划事件，以在该集群上启动 ECS 任务来运行作业。</p>
+<p><br>398 公司需要将 <strong>600 TB</strong> 数据从本地网络附加存储（NAS）传输到 AWS 云。<br>要求：</p>
+<ol>
+<li>数据传输必须在 <strong>两周内</strong> 完成。</li>
+<li>数据敏感，传输中必须<strong>加密</strong>。</li>
+<li>公司互联网连接仅 <strong>100 Mbps</strong> 上传速度。</li>
+<li>需要 <strong>最具成本效益</strong> 的方式。</li>
+</ol>
+<p>A. 使用 Amazon S3 多部分上传功能通过 HTTPS 传输文件。</p>
+<p>B. 在本地 NAS 与最近的 AWS 区域之间创建 VPN 连接。通过 VPN 连接传输数据。</p>
+<p>C. <u>使用 AWS Snow 系列控制台订购多个 AWS Snowball Edge 存储优化型设备。使用这些设备来将数据传输到 Amazon S3。</u></p>
+<p>D. 在公司所在地与最近的 AWS 区域之间建立 10 Gbps 的 AWS Direct Connect 连接。通过 VPN 连接将数据传输到该区域，以将数据存储在 Amazon S3 中。</p>
+<p><br>399 一家金融公司在 AWS 上托管 Web 应用程序，使用 <strong>Amazon API Gateway 区域 API 端点</strong> 让用户检索股票价格。</p>
+<ul>
+<li>安全团队注意到 <strong>API 请求数量增加</strong>，担心 <strong>HTTP 洪水攻击</strong> 可能导致应用程序下线。</li>
+<li>需求：设计解决方案以<strong>保护应用程序免受此类攻击</strong>，且<strong>运营开销最小</strong>。</li>
+</ul>
+<p>A. 在 API Gateway 区域 API 端点前创建一个 Amazon CloudFront 分发，最大 TTL 为 24 小时。</p>
+<p>B. <u>创建带有基于速率规则的区域性 AWS WAF Web ACL。将该 Web ACL 与 API Gateway 阶段相关联。</u></p>
+<p>C. 使用 Amazon CloudWatch 指标监控计数指标，并在达到预定义速率时向安全团队发出警报。</p>
+<p>D. 在 API Gateway 区域 API 端点前创建一个带有 Lambda@Edge 的 Amazon CloudFront 分发。创建一个 AWS Lambda 函数，以阻止来自超过预定义速率的 IP 地址的请求。</p>
+<ul>
+<li>AWS WAF 基于速率的规则是专门防御 HTTP 洪水攻击的托管功能，无需编码，配置后自动生效。</li>
+<li>与 API Gateway 无缝集成，运营开销最小。</li>
+<li>相比 Lambda@Edge 自定义方案，WAF 更标准、更易于维护</li>
+</ul>
+<p><br>400 一家气象初创公司拥有定制 Web 应用程序，在线销售天气数据：</p>
+<ul>
+<li>使用 <strong>Amazon DynamoDB</strong> 存储数据。</li>
+<li>希望构建一项新服务：每当记录到<strong>新的天气事件</strong>时，向<strong>四个内部团队的经理发送警报</strong>。</li>
+<li>要求：<ol>
+<li><strong>不影响当前应用程序的性能</strong>。</li>
+<li><strong>将运营开销降至最低</strong>。</li>
+</ol>
+</li>
+</ul>
+<p>A. 使用 DynamoDB 事务将新的事件数据写入表中。配置事务以通知内部团队。</p>
+<p>B. 让当前应用程序向四个 Amazon SNS 主题发布消息。让每个团队订阅一个主题。</p>
+<p>C. <u>在表上启用 Amazon DynamoDB Streams。使用触发器写入单个 Amazon Simple Notification Service（SNS）主题，团队可以订阅该主题</u>。</p>
+<p>D. 为每条记录添加一个自定义属性，用于标记新项。编写一个定时任务，每分钟扫描一次表中的新项，并通知 Amazon Simple Queue Service（SQS）队列，各团队可以订阅该队列。</p>
+<h3 id="1-需求核心"><a href="#1-需求核心" class="headerlink" title="1. 需求核心"></a>1. 需求核心</h3><ul>
+<li><strong>新服务</strong>：监听 DynamoDB 中新插入的记录（新天气事件），实时触发通知。</li>
+<li><strong>不影响当前应用性能</strong>：不能通过修改写入逻辑（如事务、同步发布消息）增加写入延迟或失败风险。</li>
+<li><strong>运营开销最小</strong>：使用完全托管服务，减少自定义代码、定时任务和服务器管理。</li>
+</ul>
+<h3 id="2-技术方案对比"><a href="#2-技术方案对比" class="headerlink" title="2. 技术方案对比"></a>2. 技术方案对比</h3><ul>
+<li><strong>DynamoDB Streams</strong>：捕获表的变更（插入、更新、删除），并以有序流提供，可触发 AWS Lambda 等处理程序，实现<strong>异步、解耦</strong>的处理。</li>
+<li><strong>当前应用直接发布到 SNS</strong>：修改现有应用代码，增加发布消息的逻辑，可能影响性能（增加延迟和复杂度）且耦合。</li>
+<li><strong>事务</strong>：DynamoDB 事务用于数据一致性，不适合作为通知机制，且会增加写入复杂性和延迟。</li>
+<li><strong>定时扫描表</strong>：引入延迟（非实时），增加读取负载（扫描），运营开销大（需管理定时任务）。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/29/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T300/" rel="prev" title="AWS架构师T300">
+                  <i class="fa fa-angle-left"></i> AWS架构师T300
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/12/29/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T500/" rel="next" title="AWS架构师T500">
+                  AWS架构师T500 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CodeShine</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

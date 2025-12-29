@@ -27,7 +27,7 @@
 <meta property="og:description" content="AWS架构师T1001 收集气候数据 数据量：每个站点每天 500 GB。站点分布：多个大洲。要求：尽快聚合到一个 S3 存储桶，并最大限度降低运营复杂性。站点条件：高速互联网连接   使用S3 传输加速，分片上传到目标S3存储桶   2 公司想要分析日志，数据已经在 Amazon S3 中，JSON 格式。要求查询是简单的、按需运行。对现有架构改动最小。最少的运营开销。 Amazon Athen">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-11T03:34:22.573Z">
-<meta property="article:modified_time" content="2025-12-28T15:01:53.922Z">
+<meta property="article:modified_time" content="2025-12-28T15:04:50.331Z">
 <meta property="article:author" content="CodeShine">
 <meta name="twitter:card" content="summary">
 
@@ -117,7 +117,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -181,7 +181,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-28 23:01:53" itemprop="dateModified" datetime="2025-12-28T23:01:53+08:00">2025-12-28</time>
+      <time title="修改时间：2025-12-28 23:04:50" itemprop="dateModified" datetime="2025-12-28T23:04:50+08:00">2025-12-28</time>
     </span>
 
   
@@ -799,7 +799,7 @@
 <li><strong>拒绝 (Deny)</strong>：对于<strong>任何不是 <code>us-east-1</code> 的区域</strong>，拒绝所有 EC2 操作</li>
 </ul>
 <p><strong>最终权限</strong>：用户只能在美国东部（弗吉尼亚北部）区域（<code>us-east-1</code>）执行 EC2 操作，并且只有在从指定 IP 段（如 <code>10.100.100.254</code>）发起请求时，才能终止该区域内的实例。</p>
-<p><br>97 一家公司计划将大型 Microsoft SharePoint 部署从本地迁移到 AWS，该部署需要基于 Microsoft Windows 的共享文件存储。存储解决方案必须满足两个核心要求：<strong>高可用性</strong> 和 <strong>与 Active Directory 集成以实现访问控制</strong>。</p>
+<p><br>97 一 家公司计划将大型 Microsoft SharePoint 部署从本地迁移到 AWS，该部署需要基于 Microsoft Windows 的共享文件存储。存储解决方案必须满足两个核心要求：<strong>高可用性</strong> 和 <strong>与 Active Directory 集成以实现访问控制</strong>。</p>
 <p>在AWS上创建适用于Windows文件服务器的Amazon FSx文件系统，并设置用于身份验证的Active Directory域。</p>
 <h3 id="AWS-存储服务对比"><a href="#AWS-存储服务对比" class="headerlink" title="AWS 存储服务对比"></a>AWS 存储服务对比</h3><ul>
 <li><strong>Amazon EFS</strong>：<ul>
@@ -822,7 +822,7 @@
 <li><strong>Amazon FSx for Windows File Server</strong>：<ul>
 <li><strong>协议</strong>：原生提供基于 SMB 协议的全托管 Windows 文件共享。</li>
 <li><strong>高可用性</strong>：在创建时即可选择<strong>多可用区部署</strong>，自动在多个可用区同步数据，提供故障转移能力。</li>
-<li><strong>Active Directory 集成</strong>：原生支持与 AWS Managed Microsoft AD 或本地 AD（通过 AD Connector 或 VPN&#x2F;Direct Connect）集成，实现无缝的域用户认证和权限管理。</li>
+<li>*<em>Active Directory 集成</em>S*：原生支持与 AWS Managed Microsoft AD 或本地 AD（通过 AD Connector 或 VPN&#x2F;Direct Connect）集成，实现无缝的域用户认证和权限管理。</li>
 <li><strong>结论</strong>：专为 Windows 工作负载和 SharePoint 等应用设计。</li>
 </ul>
 </li>
@@ -869,6 +869,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/12/29/AWS%E6%9E%B6%E6%9E%84%E5%B8%88T200/" rel="next" title="AWS架构师T200">
+                  AWS架构师T200 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
