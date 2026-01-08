@@ -27,7 +27,7 @@
 <meta property="og:description" content="AWS架构师T900801 金融公司处理高度敏感数据。  数据存储在 Amazon S3 存储桶。 需要确保数据在传输过程中和静态时都被加密。 必须在 AWS 云之外管理加密密钥（即密钥不能由 AWS 管理）。  选项：A. 使用 AWS KMS 客户管理密钥（CMK）通过 SSE 加密 S3 数据。B. 使用 AWS KMS AWS 托管密钥 通过 SSE 加密 S3 数据。C. 使用默认的 S">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-29T02:13:29.126Z">
-<meta property="article:modified_time" content="2025-12-29T02:20:33.895Z">
+<meta property="article:modified_time" content="2026-01-08T14:06:42.241Z">
 <meta property="article:author" content="CodeShine">
 <meta name="twitter:card" content="summary">
 
@@ -173,9 +173,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-12-29 10:13:29 / 修改时间：10:20:33" itemprop="dateCreated datePublished" datetime="2025-12-29T10:13:29+08:00">2025-12-29</time>
+      <time title="创建时间：2025-12-29 10:13:29" itemprop="dateCreated datePublished" datetime="2025-12-29T10:13:29+08:00">2025-12-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-01-08 22:06:42" itemprop="dateModified" datetime="2026-01-08T22:06:42+08:00">2026-01-08</time>
     </span>
 
   
@@ -1063,7 +1069,6 @@
 <li><strong>计算节省计划</strong>：覆盖 EC2、Fargate、Lambda 使用量（按 vCPU&#x2F;内存&#x2F;计算时长计费的部分），更灵活且适用混合计算负载。</li>
 </ul>
 <p>由于应用包含 <strong>EC2 和 Lambda</strong>，且 Lambda 数量会增加，选择 <strong>计算节省计划（C&#x2F;D）</strong> 比仅 EC2 节省计划（A&#x2F;B）更能降低整体成本。</p>
-<hr>
 <p><strong>VPC 连接与成本</strong></p>
 <ul>
 <li>Lambda 连接 VPC 时，会创建 <strong>ENI（弹性网络接口）</strong>，可能产生少量 VPC 数据流转发费（很低），且会增加 Lambda 冷启动延迟，但为了访问私有子网 EC2 是必须的。</li>
@@ -1121,7 +1126,6 @@
 <li>从 <strong>SQL Server</strong> 迁移到 <strong>Aurora PostgreSQL</strong>（不同数据库引擎）。</li>
 <li>尽量减少应用程序代码更改 → 意味着最好能让应用程序的 <strong>SQL Server 语法 T-SQL 查询</strong> 在 PostgreSQL 上直接运行，而不需要重写。</li>
 </ul>
-<hr>
 <p><strong>Babelfish for Aurora PostgreSQL</strong></p>
 <ul>
 <li>Babelfish 是 Aurora PostgreSQL 的功能，允许数据库理解 <strong>SQL Server 的 T-SQL 语法和通信协议</strong>，从而让为 SQL Server 编写的应用程序几乎无需修改即可连接到 Aurora PostgreSQL。</li>
