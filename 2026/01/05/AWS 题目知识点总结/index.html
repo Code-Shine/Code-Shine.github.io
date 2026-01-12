@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="AWS 题目知识点总结一、存储服务（S3 &amp; 相关） S3 传输加速（Upload Acceleration） S3 存储类别： S3 Standard 标准 - 频繁访问的数据 S3 Standard-IA 标准-不常访问 - 不常访问但需快速读取(毫秒级) S3 Glacier - 长期归档，偶尔访问， 标准检索（Standard Retrieval） 需要 3–5 小时  加急检索（">
+    <meta name="description" content="AWS 题目知识点总结一、存储服务（S3 &amp; 相关） S3 传输加速（Upload Acceleration） S3 存储类别： S3 Standard 标准 - 频繁访问的数据 S3 Standard-IA 标准-不常访问 - 不常访问但需快速读取(毫秒级) - 成本高于Glacier 加急检索 S3 Glacier - 长期归档，偶尔访问 S3 Glacier Flexible Ret">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AWS知识点">
 <meta property="og:url" content="http://example.com/2026/01/05/AWS%20%E9%A2%98%E7%9B%AE%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="CodeShine&#39;s Blog">
-<meta property="og:description" content="AWS 题目知识点总结一、存储服务（S3 &amp; 相关） S3 传输加速（Upload Acceleration） S3 存储类别： S3 Standard 标准 - 频繁访问的数据 S3 Standard-IA 标准-不常访问 - 不常访问但需快速读取(毫秒级) S3 Glacier - 长期归档，偶尔访问， 标准检索（Standard Retrieval） 需要 3–5 小时  加急检索（">
+<meta property="og:description" content="AWS 题目知识点总结一、存储服务（S3 &amp; 相关） S3 传输加速（Upload Acceleration） S3 存储类别： S3 Standard 标准 - 频繁访问的数据 S3 Standard-IA 标准-不常访问 - 不常访问但需快速读取(毫秒级) - 成本高于Glacier 加急检索 S3 Glacier - 长期归档，偶尔访问 S3 Glacier Flexible Ret">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-01-04T23:10:18.105Z">
-<meta property="article:modified_time" content="2026-01-06T00:33:23.608Z">
+<meta property="article:modified_time" content="2026-01-12T01:40:45.774Z">
 <meta property="article:author" content="CodeShine">
 <meta name="twitter:card" content="summary">
 
@@ -181,7 +181,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-06 08:33:23" itemprop="dateModified" datetime="2026-01-06T08:33:23+08:00">2026-01-06</time>
+      <time title="修改时间：2026-01-12 09:40:45" itemprop="dateModified" datetime="2026-01-12T09:40:45+08:00">2026-01-12</time>
     </span>
 
   
@@ -197,10 +197,13 @@
 <li>S3 传输加速（Upload Acceleration）</li>
 <li>S3 存储类别：<ul>
 <li>S3 Standard 标准 - 频繁访问的数据</li>
-<li>S3 Standard-IA 标准-不常访问 - 不常访问但需快速读取(毫秒级)</li>
-<li>S3 Glacier - 长期归档，偶尔访问，<ul>
+<li>S3 Standard-IA 标准-不常访问 - 不常访问但需快速读取(毫秒级) - 成本高于Glacier 加急检索</li>
+<li>S3 Glacier - 长期归档，偶尔访问</li>
+<li><strong>S3 Glacier Flexible Retrieval</strong> 是 AWS 的归档存储服务，专为<strong>很少访问但需要长期保留的数据</strong>设计。<ul>
 <li><strong>标准检索（Standard Retrieval）</strong> 需要 3–5 小时 </li>
 <li><strong>加急检索（Expedited Retrieval）</strong> 通常在 1–5 分钟内可取回</li>
+<li><strong>Bulk (批量)</strong> 5-12 小时</li>
+<li>即时检索<strong>Instant Retrieval</strong> 毫秒级</li>
 </ul>
 </li>
 <li>S3 Glacier Deep Archive - 极少访问的长期归档 - 检索时间至少 12 小时</li>
@@ -226,10 +229,18 @@
 </li>
 <li>S3 静态网站托管（Static Website Hosting）- 无服务器</li>
 <li>S3 与 CloudFront 集成</li>
-<li>S3 跨区域复制（Cross-Region Replication）</li>
-<li>S3 Storage Lens 是 AWS 提供的<strong>免费&#x2F;付费</strong>的存储分析工具</li>
-<li><strong>S3 预签名 URL</strong> 允许客户端直接上传文件到 S3，无需经过应用服务器</li>
-<li>S3 Storage Lens 是专门为 S3 存储分析和成本优化设计的工具，可以直接报告<strong>分块上传计数</strong></li>
+<li>S3复制<ul>
+<li>跨区域复制（Cross-Region Replication）<strong>跨区域复制（CRR）</strong> 在原桶开启 CRR 的话，已有数据不会自动复制，必须额外操作 ， 创建新桶就可以</li>
+<li>S3 存储桶支持同区域复制，自动处理新对象复制</li>
+<li>S3 支持 S3 存储桶之间配置双向复制。</li>
+</ul>
+</li>
+<li><strong>S3 预签名 URL</strong> 允许客户端直接上传文件到 S3，无需经过应用,可以授予对特定对象的临时访问权限。</li>
+<li>S3 Storage Lens 是专门为 S3 存储分析和成本优化设计的工具，可以直接报告<strong>分块上传计数</strong>，检查桶配置（如版本控制、加密、生命周期策略等）-识别跨区域所有未启用版本控制的 S3 存储桶</li>
+<li><strong>S3 多区域访问点（MRAP）<strong>提供</strong>单一全局端点</strong>，可将请求自动路由到<strong>延迟最低</strong>的 S3 存储桶（基于 AWS 内部网络测量）。流量通过 <strong>AWS 骨干网</strong> 传输，避免公共互联网拥堵。</li>
+<li><strong>S3 访问点</strong> 可以为同一存储桶的不同前缀定义不同的策略，限制特定 IAM 用户&#x2F;角色只能通过该访问点访问指定前缀。</li>
+<li>S3 存储桶策略可以指定 <code>&quot;Principal&quot;: &#123;&quot;AWS&quot;: &quot;lambda-function-arn&quot;&#125;</code> 来允许特定 Lambda 函数访问</li>
+<li>S3 存储桶密钥（Bucket Keys）功能可以在使用 SSE-KMS 加密的同时，大幅减少 KMS API 调用次数（从每次对象操作减少到每小时每存储桶一次），从而显著降低加密相关成本</li>
 <li>EBS 存储类型<ul>
 <li>固态硬盘（SSD）<ul>
 <li>通用型gp3 和 gp2 </li>
@@ -248,6 +259,15 @@
 <h2 id="二、数据库服务"><a href="#二、数据库服务" class="headerlink" title="二、数据库服务"></a>二、<strong>数据库服务</strong></h2><ul>
 <li>Amazon Aurora（多可用区、只读副本、<strong>自动扩展</strong>）- <strong>为云重写的数据库</strong><ul>
 <li>Aurora Serverless v2 是 AWS 提供的支持自动扩缩容的托管关系数据库服务</li>
+<li>Babelfish 是 Aurora PostgreSQL 的功能，允许数据库理解 <strong>SQL Server 的 T-SQL 语法和通信协议</strong>，从而让为 SQL Server 编写的应用程序几乎无需修改即可连接到 Aurora PostgreSQL。减少代码更改</li>
+<li><strong>Aurora 全局数据库 + 托管故障转移</strong>。- 满足 RPO ≤ 5 分钟、RTO ≤ 20 分钟、配置改动少、运营效率最高</li>
+<li>端点类型<ul>
+<li><strong>集群端点</strong>：指向主实例（读写）。</li>
+<li><strong>读取器端点</strong>：自动在所有副本之间负载均衡（无法指定特定几个副本）。</li>
+<li><strong>自定义端点</strong>：用户自定义的端点，可指向<strong>指定的一个或多个副本</strong>（支持按实例规格、角色等条件选择实例）。</li>
+<li><strong>实例端点</strong>：指向单个特定实例（需应用管理多个端点，不自动负载均衡）</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>Amazon RDS（MySQL、PostgreSQL、SQL Server）<ul>
@@ -255,7 +275,7 @@
 <li>多可用区部署 RDS -  Multi-AZ 切换对应用程序透明</li>
 <li>存储类型：gp2 vs. io1&#x2F;io2（更高的写入性能）</li>
 <li>RDS 实例停止时，只收存储费，不收计算费</li>
-<li>RDS Proxy（连接池管理）<ul>
+<li>RDS Proxy（连接池管理）- 也支持Aurora<ul>
 <li>用于数据库连接池和管理，可复用连接，防止数据库被大量并发连接压垮</li>
 <li>故障转移时保持应用程序连接，自动将流量路由到新实例，显著减少中断时间</li>
 </ul>
@@ -268,6 +288,7 @@
 </ul>
 </li>
 <li>对于<strong>固定时间运行</strong>的 RDS 实例，使用 <strong>AWS Instance Scheduler</strong> 配置启动&#x2F;停止计划是最佳实践</li>
+<li>RDS自动备份最多可以设置35天保留，超过则需要Backup</li>
 </ul>
 </li>
 <li>Amazon DynamoDB<ul>
@@ -276,12 +297,16 @@
 <li>AWS Backup 备份</li>
 <li>TTL（生存时间）- TTL过期，DynamoDB 服务会自动在后台扫描并删除过期项</li>
 <li>DAX（DynamoDB Accelerator）- <strong>为 DynamoDB 专门设计的完全托管的内存缓存服务</strong>，可解决读操作密集的问题</li>
+<li>只读副本和DAX都可以缓解读性能问题，但是只读副本成本更低</li>
+<li>DynamoDB 默认提供<strong>最终一致性读取</strong> - 意味着读取操作可能不反映最近完成的写入操作的结果，通常会在一秒内达成一致</li>
+<li><strong>强一致性读取</strong>（Strongly Consistent Reads）返回反映所有先前写入操作结果的读取结果，但可能延迟稍高且成本更高。</li>
 </ul>
 </li>
 <li>Amazon Redshift（数据仓库）- 专门为<strong>大规模数据分析</strong>设计 - 存储 PB 级数据</li>
 <li>Amazon EMR（Elastic MapReduce） 是亚马逊 AWS 提供的<strong>云原生大数据处理平台</strong>，用于快速、经济高效地处理海量数据，用于数据清洗等 – <strong>类似自建 Hadoop</strong><ul>
 <li><strong>临时集群</strong>：按需启动和终止，适合每天 6 小时的运行模式。</li>
 <li>在按需实例上运行主节点（大脑）和核心节点（存储数据），在竞价型实例上运行任务节点（只负责计算）</li>
+<li>EMR 运行时角色（Runtime Role）允许每个 Spark 作业使用独立的 IAM 角色，实现工作负载级别的细粒度权限控制，并且作业无需访问 EC2 实例的 IMDSv2 来获取凭证，从而满足权限隔离和禁止访问 IMDSv2 的双重要求。</li>
 </ul>
 </li>
 <li>Amazon Athena（直接查询 S3 数据）</li>
@@ -291,9 +316,10 @@
 <li>ElastiCache for Redis 集群模式的高可用方案就是<strong>多可用区集群部署</strong>，每个分片跨 AZ</li>
 <li>Redis Cluster（集群模式）- 数据分片到多个分片（Shard），每个分片是一个复制组（主节点 + 副本）</li>
 <li>Redis（非集群模式）- 通过<strong>多可用区复制组</strong>实现高可用，包含一个主节点（在一个 AZ）和最多 5 个只读副本（可在不同 AZ）。</li>
+<li>Memcached- 简单键值对 且不支持快照</li>
 </ul>
 </li>
-<li>AWS Schema Conversion Tool：专门用于<strong>异构数据库迁移</strong></li>
+<li>AWS Schema Conversion Tool（SCT）：专门用于<strong>异构数据库转换</strong></li>
 <li>AWS DMS 数据库迁移服务</li>
 <li>AWS Neptune 是专门为图数据设计的数据库，Neptune Streams 提供原生的变更捕获，无需额外搭建流处理管道，减少了运营复杂性和开销。</li>
 <li>AWS QLDB 是账本数据库，专注于不可变、可验证的交易日志</li>
@@ -309,6 +335,12 @@
 </ul>
 </li>
 <li><p>EC2 Auto Scaling</p>
+<ul>
+<li><p>横向扩展（Scale-out&#x2F;Horizontal Scaling）是指<strong>增加实例数量</strong>来应对负载增加</p>
+</li>
+<li><p>配置 ASG 横向扩展 + 启动模板。按需求自动启动新实例，用完后自动缩减 - 应对突发流量</p>
+</li>
+</ul>
 </li>
 <li><p>EC2 实例</p>
 <ul>
@@ -319,6 +351,14 @@
 <li>区域性预留实例（Regional RIs） 可在同一 AWS 区域内的不同可用区之间灵活应用，但<strong>仍然绑定特定的实例系列</strong></li>
 <li>标准预留实例（Standard RIs） 绑定到<strong>特定可用区、实例系列、大小、操作系统</strong>，灵活性最差</li>
 </ul>
+</li>
+<li><p><strong>Amazon ECS Anywhere</strong> - <strong>单一容器解决方案</strong> 跨本地与云 - 可以在本地服务器上加入 ECS 集群作为外部实例。</p>
+</li>
+<li><p><strong><strong>Fargate</strong></strong>：按 vCPU 和内存使用量收费（按需价格）。</p>
+</li>
+<li><p>Fargate Spot：利用 AWS 多余容量，价格比普通 Fargate 低，但可能被中断</p>
+</li>
+<li><p>ECR 是 AWS 容器镜像托管服务，与 ECS 无缝集成，提供原生 CVE漏洞 扫描，只需配置推送时扫描即可自动执行，改动最小</p>
 </li>
 <li><p>AWS Lambda（无服务器计算）- 15 分钟限制</p>
 <ul>
@@ -354,6 +394,7 @@
 <li>标准队列(无严格顺序) vs. FIFO 队列(成本高于标准)</li>
 <li>可见性超时（Visibility Timeout）</li>
 <li>死信队列（DLQ）- 用于接收和处理<strong>无法正常消费的消息</strong>的中间队列</li>
+<li>SQS 支持基于资源的策略（队列策略），允许其他 AWS 账户或 IAM 用户访问该队列</li>
 </ul>
 </li>
 <li>Amazon Kinesis<ul>
@@ -364,7 +405,7 @@
 </li>
 <li>Amazon EventBridge（事件驱动调度）</li>
 <li>Amazon MQ（托管消息队列，支持 RabbitMQ&#x2F;ActiveMQ）</li>
-<li>AppFlow 是专门为 <strong>SaaS ↔ AWS 数据流</strong> 设计的托管服务，内置对 Salesforce 的连接器</li>
+<li><strong>Amazon AppFlow</strong> 是一项完全托管的 <strong>SaaS 集成服务</strong>，用于在 AWS 服务和 SaaS 应用程序（如 Salesforce、Slack、Zendesk 等）之间<strong>安全地传输数据</strong></li>
 </ul>
 <hr>
 <h2 id="五、网络与连接"><a href="#五、网络与连接" class="headerlink" title="五、网络与连接"></a>五、<strong>网络与连接</strong></h2><ul>
@@ -381,7 +422,7 @@
 <li>创建网关端点时，需<strong>关联到 VPC 和路由表</strong>，并<strong>自动在指定路由表中添加路由</strong>（目标前缀列表 → 端点）</li>
 </ul>
 </li>
-<li>接口终端节点（AWS PrivateLink）- 允许其他VPC能够通过<strong>接口VPC终端节点</strong>以私有方式连接到你的服务<ul>
+<li>接口终端节点（使用AWS PrivateLink）- 允许其他VPC能够通过<strong>接口VPC终端节点</strong>以私有方式连接到你的服务<ul>
 <li>EKS 控制平面的私有端点实际上是通过 <strong>接口 VPC 端点（Interface VPC Endpoint）</strong> 实现的</li>
 </ul>
 </li>
@@ -389,26 +430,45 @@
 <li>接口端点**（VPC Endpoint）**：通过ENI访问服务（AWS服务）</li>
 </ul>
 </li>
+<li><strong>AWS PrivateLink</strong> 是一项服务，允许您<strong>安全、私密地将 VPC 中的服务暴露给其他 VPC 或本地网络</strong>，或者<strong>通过私有网络访问 AWS 或其他 SaaS 提供商托管的服务</strong>。– 只打通特定的服务，而VPN是连接网络</li>
 <li>VPC 对等连接（VPC Peering）<ul>
 <li>VPC之间的私有网络，不经过互联网</li>
 <li>支持跨账户 跨区域</li>
 <li>同一区域、同一账户的 VPC 对等流量不收费</li>
 </ul>
 </li>
-<li>AWS Direct Connect（专线连接）</li>
+<li><strong>AWS VPC Lattice</strong> 是一项完全托管的服务，用于在 AWS 中<strong>安全地连接、监控和管理服务间的通信</strong><ul>
+<li>VPC Lattice 抽象了底层网络连接（跨账户、跨 VPC），自动处理服务发现，支持 HTTPS 监听器，并将服务注册到服务网络，团队只需将资源关联到服务网络即可通信，管理开销最小。</li>
+<li>在于HTTPS 应用层，Transit Gateway 在IP层</li>
+</ul>
+</li>
+<li>AWS Direct Connect（专线连接）- 本地数据中心到VPC<ul>
+<li>Direct Connect 网关 -  想要连接多个区域的VPC</li>
+</ul>
+</li>
 <li>VPN 连接（站点到站点）<ul>
 <li>Site-to-Site VPN：本地网络与VPC之间的IPsec VPN</li>
 <li>Client VPN：远程用户到VPC的SSL VPN</li>
-<li>Transit Gateway VPN：通过中转网关的VPN连接集中连接所有 VPC，实现 VPC 间通信</li>
+<li><strong>Transit Gateway</strong> VPN：通过中转网关的VPN连接集中连接所有 VPC，实现 VPC 间通信</li>
 </ul>
 </li>
+<li><strong>公共 VIF（A）</strong>：直接访问 S3，无需 VPC，无需 NAT 网关或接口端点费用，只需 Direct Connect 端口费和少量数据传输费</li>
 <li>Gateway Load Balancer（GWLB） 专用于第三方网络虚拟设备（防火墙、IDS&#x2F;IPS）的流量引导</li>
 <li>负载均衡器：<ul>
-<li>ALB（应用层）HTTP&#x2F;HTTPS - 来实现负载均衡、Internet 公开和粘性会话</li>
-<li>NLB（网络层）TCP&#x2F;UDP</li>
-<li>CLB（传统负载均衡器）</li>
+<li>ALB（应用层）HTTP&#x2F;HTTPS - 来实现负载均衡、Internet 公开和粘性会话<ul>
+<li>支持两种负载均衡算法：<ul>
+<li><strong>轮询（Round Robin）</strong>：按顺序分发请求，不考虑实例当前负载。</li>
+<li><strong>最少未完成请求（Least outstanding requests）</strong>：将新请求发送给当前未完成请求数最少的实例，能动态避免过载实例。</li>
 </ul>
 </li>
+</ul>
+</li>
+<li>NLB（网络层）TCP&#x2F;UDP</li>
+<li>CLB（传统负载均衡器）</li>
+<li>网关负载均衡器（GWLB）：主要用于将流量转发到第三方虚拟设备（如防火墙、IDS）不适合常规 Web&#x2F;应用流量负载均衡。</li>
+</ul>
+</li>
+<li>EFA 是一种AWS专用的网络接口，专为高性能计算（HPC）和机器学习（ML）工作负载设计，提供超低延迟和可扩展的节点间通信。</li>
 </ul>
 <hr>
 <h2 id="六、安全与身份管理"><a href="#六、安全与身份管理" class="headerlink" title="六、安全与身份管理"></a>六、<strong>安全与身份管理</strong></h2><ul>
@@ -421,12 +481,18 @@
 </ul>
 </li>
 <li>IAM 策略（Policy）<ul>
-<li>身份策略：为 <strong>IAM 用户</strong> 或 <strong>用户组</strong> 分配长期权限</li>
-<li>资源策略：为 <strong>资源</strong>（如 S3 存储桶）定义精细的访问控制列表</li>
+<li><strong>基于身份的策略（Identity-based policies）</strong>：附加到IAM身份（用户、组、角色）的策略，定义这些身份可以做什么。</li>
+<li><strong>基于资源的策略（Resource-based policies）</strong>：附加到AWS资源（如S3存储桶、Lambda函数）的策略，定义谁可以访问该资源。</li>
 </ul>
 </li>
 <li>条件键：<code>aws:PrincipalOrgID</code>、<code>aws:SourceIP</code>、<code>ec2:Region</code></li>
 <li>Lambda 访问 AWS 资源（如 S3），可以创建一个允许读写S3的 iam role 并更新到Lambda 函数</li>
+<li><strong>AdministratorAccess</strong>：AWS托管策略，提供完全管理权限（Amazon官方提供）。</li>
+<li><strong>SystemAdministrator</strong>：如果存在，可能是自定义策略</li>
+<li>IAM Identity Center 实现以本地Active Directory 通过<strong>AWS Directory Service</strong> 实现SSO</li>
+<li>AWS IAM 访问分析器（IAM Access Analyzer）审查公司的所有资源和账户。<strong>审查授予 IAM 用户的所有权限</strong></li>
+<li>IAM Identity Center 的权限集（Permission Sets）是专门为多账户或多团队场景设计的权限管理方案，可以精细化控制对 RDS 和 S3 的访问，并分配给不同团队组，实现最小权限</li>
+<li>IAM Roles Anywhere 允许本地虚拟机通过证书认证获取临时 AWS 凭证，从而安全地访问 S3 存储桶，无需长期密钥，且与 IAM Identity Center 集成可实现集中权限管理</li>
 </ul>
 </li>
 <li><p>AWS Secrets Manager（密钥管理 + 自动轮换）</p>
@@ -439,7 +505,10 @@
 <li>AWS 自有密钥</li>
 <li>多区域密钥（Multi-Region Key）</li>
 <li>对于导入的密钥材料，KMS不支持自动轮换。轮换需要手动操作</li>
-<li>SSE-KMS（服务器端加密）</li>
+<li><strong>服务器端加密（SSE-S3、SSE-KMS、SSE-C）</strong>：数据在传输过程中是明文（TLS 加密传输），到达 S3 后才加密。</li>
+<li>SSE-C 用户自己管理密</li>
+<li>SSE-S3（B）密钥由S3管理</li>
+<li>SSE-KMS AWS KMS 密钥 –支持密钥轮换 CloudTrail 会记录日志</li>
 </ul>
 </li>
 <li><p>AWS Certificate Manager（ACM）</p>
@@ -459,12 +528,15 @@
 <li><p>AWS WAF（Web 应用防火墙）</p>
 <ul>
 <li>防止SQL注入，XSS 防护，也可以支持阻止特定国家的流量（地理匹配条件）</li>
-<li>WAF 仅支持 ALB、CloudFront 分发、API Gateway</li>
+<li>WAF 仅支持 ALB、CloudFront 、API Gateway</li>
 <li>不支持NLB</li>
 <li>ALB 后的应用层 DDoS，AWS 推荐使用 <strong>AWS WAF</strong> 的速率限制规则。</li>
+<li>支持基于 IP 地址、地理位置、规则等条件阻止请求</li>
 </ul>
 </li>
 <li><p>AWS Network Firewall - 托管的网络防火墙服务，可部署在 VPC 中，通过<strong>规则组</strong>控制流量。</p>
+</li>
+<li><p>AWS Security Hub 监控所有账户中安全控制措施的当前状态。- 可以集成 GuardDuty 和 Inspector</p>
 </li>
 <li><p>Amazon Inspector（漏洞扫描）</p>
 </li>
@@ -476,6 +548,7 @@
 <ul>
 <li>可记录资源配置历史</li>
 <li>可记录资源配置标签并评估是否符合规则</li>
+<li>持续监控资源配置变化和历史合规状态，当安全组规则违规时会触发通知</li>
 <li>支持 <strong>AWS Organizations 资源类型</strong>（<code>AWS::Organizations::Organization</code>、<code>AWS::Organizations::OrganizationalUnit</code> 等），可以通过 Config 规则监控 OU 变更</li>
 <li>提供预定义的托管规则 <code>ebs-encryption-by-default</code> 或自定义规则，可自动检查 EBS 卷是否加密</li>
 </ul>
@@ -485,8 +558,16 @@
 <li><p>AWS Control Tower（多账户治理）</p>
 <ul>
 <li>设置和管理安全、合规的多账户AWS环境的<strong>最佳实践服务</strong></li>
+<li>Control Tower 自动启用 CloudTrail 组织跟踪，并可集成 Security Hub 进行 FSBP 合规检查，是满足审计与安全合规需求的一站式托管解决方案</li>
 <li>Control Tower 在后台利用 **AWS Organizations 的服务控制策略（SCP）**来实现这些防护</li>
 <li>SCP是一种策略，可以<strong>集中控制</strong>组织内所有账户对AWS服务和资源的访问权限</li>
+<li>SCP 在 Organizations 中可附加到<strong>根 OU、OU 或直接附加到账户</strong></li>
+<li>SCP 不支持资源标签条件，只能基于资源类型、区域等</li>
+<li><strong>Control Tower</strong> 控制类型：<ul>
+<li><strong>主动控制（Proactive Controls）</strong>：在资源创建之前进行策略检查（如 CloudFormation 预检），防止部署不合规资源。</li>
+<li><strong>检测控制（Detective Controls）</strong>：在资源创建后评估合规性，不合规则发出警报或修复</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>Amazon Cognito（用户身份管理）- <strong>管”用户是谁”（认证）</strong></p>
@@ -494,7 +575,8 @@
 <li>主要用于移动&#x2F;Web 应用的用户身份管理</li>
 <li>不是为企业目录集成 AWS 多账户访问</li>
 <li><strong>用户池 (User Pool)</strong>：<strong>身份验证</strong> - 你是谁？（用户名&#x2F;密码、社交登录、短信验证等）</li>
-<li><strong>身份池 (Identity Pool)</strong>：<strong>授权访问</strong> - 你能做什么？（获取AWS凭证访问AWS资源）</li>
+<li><strong>身份池 (Identity Pool)</strong>：<strong>授权访问</strong> - 你能做什么？（提供AWS凭证访问AWS资源）</li>
+<li>Amazon Cognito 更适合面向互联网的用户身份联合（如移动端、Web 应用），不太适合企业内部员工直接访问 AWS 管理资源，且配置较复杂，不如 IAM Identity Center 直接集成 AD 来得简洁。</li>
 </ul>
 </li>
 <li><p>AWS Organizations 集中管理多个账户</p>
@@ -506,9 +588,24 @@
 </ul>
 </li>
 <li>Run Command（批量命令执行）</li>
-<li><strong>AWS Systems Manager Parameter Store</strong> 存储安全参数</li>
+<li><strong>AWS Systems Manager Parameter Store</strong> 存储安全参数<ul>
 <li>对于<strong>不需要轮换的应用程序机密信息</strong>，<strong>Parameter Store</strong> 是<strong>更具成本效益</strong>的选择。</li>
 <li>对于<strong>需要自动轮换的数据库凭证、API 密钥等</strong>，应使用 Secrets Manager</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>AmazonSSMManagedInstanceCore</strong> 是一个 AWS 托管的 IAM 策略，它授予 EC2 实例与 AWS Systems Manager 服务通信所需的最小权限集合,包括SSH远程连接，补丁管理</p>
+</li>
+<li><p>AWS 为每个区域提供了<strong>根证书</strong>（CA 证书），客户端需配置信任该证书以建立 SSL 连接</p>
+<ul>
+<li>启用传输加密不需要重新创建或恢复实例，只需配置客户端使用 SSL 连接</li>
+</ul>
+</li>
+<li><p>为了共享加密 AMI</p>
+<ul>
+<li>将目标账户 ID 添加到 AMI 启动权限（D）。</li>
+<li>在 KMS 密钥策略中允许目标账户使用该密钥（或在密钥策略中添加组织级条件允许组织内所有账户）</li>
 </ul>
 </li>
 </ul>
@@ -517,6 +614,7 @@
 <li>Amazon CloudFront（CDN）<ul>
 <li>为 <strong>HTTP&#x2F;HTTPS</strong> 流量优化</li>
 <li>源站配置（S3、ALB、自定义）</li>
+<li>CloudFront 仅支持使用在 <strong>us-east-1（弗吉尼亚北部）区域</strong> 的 ACM 证书</li>
 </ul>
 </li>
 <li>AWS Global Accelerator（全局加速DNS）<ul>
@@ -527,6 +625,8 @@
 <li>完全托管的 API 管理服务，仅支持 HTTP&#x2F;HTTPS 协议</li>
 <li>处理高并发 API 请求</li>
 <li>API Gateway 的<strong>边缘优化端点</strong>使用 <strong>Amazon CloudFront 全球边缘网络</strong></li>
+<li>API Gateway 有 <strong>REST API</strong> 和 <strong>HTTP API</strong> 两种，HTTP API 成本低于 REST API（功能较少，但适用于简单代理、Lambda 集成）</li>
+<li>API Gateway 资源策略是专门用于控制谁可以访问 API 的机制，支持基于 IP 的条件限制。</li>
 </ul>
 </li>
 <li>Route 53（DNS 管理）<ul>
@@ -535,6 +635,8 @@
 <li>延迟路由（Latency Routing）- 将用户 DNS 查询解析到延迟最低的区域端点</li>
 <li>故障转移路由（Failover Routing）- 故障转移策略用于<strong>主-备</strong>场景，不适合负载均衡 10 个实例</li>
 <li>地理位置路由 - 根据用户的地理位置返回特定的记录</li>
+<li><strong>公共托管区域</strong>：管理公共互联网可解析的域名</li>
+<li><strong>私有托管区域</strong>：管理仅在公司 VPC 内可解析的内部域名</li>
 </ul>
 </li>
 </ul>
@@ -543,7 +645,7 @@
 <li>AWS Snowball （大规模数据传输）<ul>
 <li>Snowone 8-14TB - 也支持DataSync</li>
 <li>Snowball Egde 42-210TB</li>
-<li>Snowmobile 100PB级</li>
+<li>Snowmobile 100PB级 - 需要卡车</li>
 </ul>
 </li>
 <li>AWS DataSync（本地与云间同步）- 在线迁移,适合持续变化的数据，且支持加密、验证。</li>
@@ -568,7 +670,13 @@
 <li>便于跨可用区的 EC2&#x2F;ECS 容器挂载同一文件系统。</li>
 </ul>
 </li>
-<li>AWS Transfer Family（托管 SFTP&#x2F;FTPS&#x2F;FTP 服务）协议上传文件到 AWS（如 Amazon S3、EFS）不支持EBS</li>
+<li>AWS Transfer Family（托管 SFTP&#x2F;FTPS&#x2F;FTP 服务）协议上传文件到 AWS（如 Amazon S3、EFS）不支持EBS<ul>
+<li>Transfer Family 托管工作流可在文件上传完成后自动触发 Lambda</li>
+</ul>
+</li>
+<li><strong>Application Discovery Service</strong> 来收集本地服务器配置、性能和使用数据，用于迁移规划</li>
+<li>AWS Outposts 是将 AWS 基础设施、服务、API 扩展到客户本地数据中心的解决方案，可以运行 EKS 控制平面和工作节点，数据保留在本地。</li>
+<li><strong>AWS MGN</strong> 是 AWS 推荐的<strong>直接迁移（lift-and-shift）服务</strong>，可自动将物理机、虚拟机或云虚拟机迁移到 AWS</li>
 </ul>
 <hr>
 <h2 id="九、AI-ML-与智能服务"><a href="#九、AI-ML-与智能服务" class="headerlink" title="九、AI&#x2F;ML 与智能服务"></a>九、<strong>AI&#x2F;ML 与智能服务</strong></h2><ul>
@@ -576,7 +684,7 @@
 <li>Amazon Rekognition（图像与视频分析）内置了<strong>内容安全审查</strong>功能</li>
 <li>Amazon Textract（文档文本提取）</li>
 <li>Amazon Comprehend Medical（医疗文本分析）</li>
-<li>Amazon Comprehend（自然语言处理）</li>
+<li>Amazon Comprehend（自然语言处理）- 提供预训练的实体识别功能（包括检测食品、材料等）文本情感分析设计</li>
 <li>Amazon SES（电子邮件服务）</li>
 <li>Amazon Transcribe（语音转文本，多说话人识别）</li>
 <li>Amazon Translate 将任何语言的文本翻译成英语</li>
@@ -590,22 +698,32 @@
 <li>Amazon CloudWatch（监控与仪表板）主要监控资源性能指标（如 CPU、内存），不能直接监控成本异常</li>
 <li>监控成本：  AWS 计费和成本管理控制台中创建一个 AWS 成本异常检测监控器</li>
 <li>AWS Cost Explorer（成本分析）</li>
-<li>AWS Backup（统一备份管理）- 可配置跨区域复制备份，完全托管，自动化执行</li>
+<li>AWS Backup（统一备份管理）- 可配置跨区域复制备份，完全托管，自动化执行,支持 EFS 备份</li>
 <li>AWS Organizations（多账户管理）</li>
 <li>AWS SSO（单点登录）</li>
-<li>AWS Budgets（预算与告警）</li>
+<li>AWS Budgets（预算与告警）<ul>
+<li>支持设置节省计划预算，可配置“覆盖率”阈值并触发警报（如电子邮件、SNS）</li>
+</ul>
+</li>
 <li>Amazon QuickSight（BI 可视化）</li>
 <li>AWS CloudFormation - 用<strong>模板文件</strong>描述你的AWS资源（EC2、S3、RDS等）可一键部署</li>
 <li>AWS 服务目录（Service Catalog） 允许组织集中管理和部署预先批准的 AWS 产品（包括 CloudFormation 模板、AMI、Marketplace 产品等），并让最终用户（客户）通过自助服务门户按需部署，同时保持治理和合规</li>
 <li>计算节省计划（Compute Savings Plans） 提供最大的灵活性，可以自动应用于任何 EC2 实例类型、系列、区域（包括 Fargate、Lambda），只要使用量在承诺范围内即可享受折扣，适合需要频繁更换实例类型的场景</li>
-<li>Trusted Advisor 提供成本、安全、性能等建议</li>
+<li>Trusted Advisor 提供成本、安全、性能等建议 - 闲置资源识别等</li>
+<li>Compute Optimizer 成本优化- 调整实例类型，优化卷配置等，比Trusted Advisor更具体</li>
+<li>成本分配标签是 AWS 推荐的跟踪成本责任的方法。- 将每个资源标记上所属应用程序的名称。</li>
+<li>AWS 预算是设置预算和警报的标准服务。</li>
+<li><strong>AWS Cost Explorer</strong> 或成本和使用情况报告，配合标签筛选，生成定期报告。</li>
 </ul>
 <hr>
 <h2 id="十一、无服务器与微服务架构"><a href="#十一、无服务器与微服务架构" class="headerlink" title="十一、无服务器与微服务架构"></a>十一、<strong>无服务器与微服务架构</strong></h2><ul>
 <li>API Gateway（REST&#x2F;WebSocket API）</li>
 <li>Lambda + SQS + SNS 解耦架构</li>
 <li>DynamoDB 作为无服务器数据库</li>
-<li>EventBridge 定时触发</li>
+<li>EventBridge 定时触发<ul>
+<li>EventBridge 专为事件路由和过滤设计，支持复杂事件模式匹配</li>
+</ul>
+</li>
 <li>AWS Glue <ul>
 <li><strong>无服务器 ETL 服务</strong>，专为数据转换设计,简化数据准备</li>
 <li>让你<strong>轻松构建数据湖、数据仓库、ETL管道</strong>，无需管理服务器</li>
@@ -615,17 +733,32 @@
 <li>X-Ray 用于分布式跟踪、分析应用程序请求流（微服务层面），不是用于发现底层 AWS 资源清单和绘制静态架构图 X-Ray 是 AWS 的分布式追踪服务，专门用于跟踪微服务架构中的请求流，帮助识别延迟和错误。</li>
 <li><strong>AWS 上的工作负载发现功能</strong> 生成工作负载的架构图</li>
 <li>在 组织管理账户的 <strong>AWS 账单控制台 中</strong>启用 <strong>成本分配标签（Cost Allocation Tags）</strong>，特别是 <strong>用户定义标签</strong>，以便在成本报告中包含这些标签。</li>
+<li>Amazon MSK 是一项<strong>全托管的服务</strong>，让您可以在AWS上轻松地构建、运行和维护使用 <strong>Apache Kafka</strong> 处理流式数据的应用程序。</li>
 </ul>
 <hr>
 <h2 id="十二、高可用与灾难恢复"><a href="#十二、高可用与灾难恢复" class="headerlink" title="十二、高可用与灾难恢复"></a>十二、<strong>高可用与灾难恢复</strong></h2><ul>
-<li>多可用区部署（Multi-AZ）</li>
-<li>跨区域复制（Cross-Region）</li>
-<li>RPO&#x2F;RTO 设计 - RPO&#x2F;RTO 均为 24 小时的灾难恢复场景，使用 <strong>RDS 自动快照跨区域复制</strong> 是最简单、成本最低的方案</li>
-<li>自动故障转移（如 Aurora、RDS Multi-AZ）</li>
-<li>容量预留（Capacity Reservations）</li>
-<li><strong>Aurora 全局数据库 + 多区域应用部署 + Route 53 故障转移</strong> 是 AWS 推荐的高容错全球扩展方案。</li>
-<li>AWS 中分散部署组件运行 EC2 实例是构建<strong>高可用、可扩展、容错</strong>架构的关键策略 - 物理隔离</li>
-<li>预测扩展 vs 计划扩展：Auto Scaling 组策略详解</li>
+<li><p>多可用区部署（Multi-AZ）</p>
+</li>
+<li><p>跨区域复制（Cross-Region）</p>
+</li>
+<li><p>RPO&#x2F;RTO 设计 - RPO&#x2F;RTO 均为 24 小时的灾难恢复场景，使用 <strong>RDS 自动快照跨区域复制</strong> 是最简单、成本最低的方案</p>
+</li>
+<li><p>自动故障转移（如 Aurora、RDS Multi-AZ）</p>
+</li>
+<li><p>容量预留（Capacity Reservations）</p>
+</li>
+<li><p><strong>Aurora 全局数据库 + 多区域应用部署 + Route 53 故障转移</strong> 是 AWS 推荐的高容错全球扩展方案。</p>
+</li>
+<li><p>AWS 中分散部署组件运行 EC2 实例是构建<strong>高可用、可扩展、容错</strong>架构的关键策略 - 物理隔离</p>
+</li>
+<li><p>预测扩展 vs 计划扩展：Auto Scaling 组策略详解</p>
+</li>
+<li><p><strong>AWS Outposts</strong> 是将 AWS 基础设施（计算、存储、数据库等）部署到本地数据中心的解决方案，可运行 Amazon EMR 等 AWS 托管服务，实现本地数据处理，同时享受 AWS 的管理和扩展性。</p>
+</li>
+<li><p>AWS 提供了 <strong>集群置放组（Cluster Placement Group）<strong>将实例集中放置在单个可用区的一个低延迟分组内，使实例之间通过</strong>高速、低延迟网络</strong>连接。支持HPC工作负载</p>
+</li>
+<li><p><strong>AWS App2Container</strong>A2C 用于将现有应用程序<strong>容器化</strong>（迁移到容器）</p>
+</li>
 </ul>
 
     </div>
