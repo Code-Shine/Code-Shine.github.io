@@ -175,7 +175,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-12 09:40:45" itemprop="dateModified" datetime="2026-01-12T09:40:45+08:00">2026-01-12</time>
+      <time title="修改时间：2026-01-14 22:27:17" itemprop="dateModified" datetime="2026-01-14T22:27:17+08:00">2026-01-14</time>
     </span>
 
   
@@ -465,6 +465,42 @@
 </li>
 <li>EFA 是一种AWS专用的网络接口，专为高性能计算（HPC）和机器学习（ML）工作负载设计，提供超低延迟和可扩展的节点间通信。</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th align="left">易混淆概念</th>
+<th align="left">关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">安全组 vs NACL</td>
+<td align="left">安全组只能允许，NACL 可拒绝</td>
+</tr>
+<tr>
+<td align="left">NAT 网关 vs IGW</td>
+<td align="left">NAT 只出站，IGW 双向</td>
+</tr>
+<tr>
+<td align="left">网关端点 vs 接口端点</td>
+<td align="left">网关只支持 S3&#x2F;DynamoDB，接口支持更多服务   只有接口端点才支持关联安全组，网关端点仅作用于路由表</td>
+</tr>
+<tr>
+<td align="left">VPC 对等 vs PrivateLink</td>
+<td align="left">网络互联 vs 服务暴露</td>
+</tr>
+<tr>
+<td align="left">ALB vs NLB vs GWLB</td>
+<td align="left">应用层 vs 传输层 vs 安全设备引导</td>
+</tr>
+<tr>
+<td align="left">Direct Connect vs VPN</td>
+<td align="left">物理专线 vs 虚拟隧道</td>
+</tr>
+<tr>
+<td align="left">Transit Gateway vs VPC Lattice</td>
+<td align="left">网络枢纽 vs 服务网格</td>
+</tr>
+</tbody></table>
 <hr>
 <h2 id="六、安全与身份管理"><a href="#六、安全与身份管理" class="headerlink" title="六、安全与身份管理"></a>六、<strong>安全与身份管理</strong></h2><ul>
 <li><p>IAM（身份与访问管理）</p>
@@ -604,6 +640,42 @@
 </ul>
 </li>
 </ul>
+<table>
+<thead>
+<tr>
+<th align="left">易混淆概念</th>
+<th align="left">关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>IAM 策略类型</strong></td>
+<td align="left"><strong>身份策略</strong>（附加到用户&#x2F;组&#x2F;角色） vs <strong>资源策略</strong>（附加到S3、Lambda等资源）</td>
+</tr>
+<tr>
+<td align="left"><strong>SCP 与 IAM 策略</strong></td>
+<td align="left">SCP 是 Organizations 中用于限制账户级别的权限（如禁止创建 IAM 用户），IAM 策略是细粒度权限控制（如允许访问 S3）</td>
+</tr>
+<tr>
+<td align="left"><strong>Parameter Store vs Secrets Manager</strong></td>
+<td align="left">Parameter Store 适用于<strong>静态&#x2F;不轮换</strong>的配置，成本低；Secrets Manager 支持<strong>自动轮换</strong>，适用于数据库密码等敏感信息</td>
+</tr>
+<tr>
+<td align="left"><strong>Cognito vs IAM Identity Center</strong></td>
+<td align="left">Cognito 适用于面向互联网的<strong>用户身份认证</strong>（如移动端&#x2F;Web 应用）；IAM Identity Center 适用于企业<strong>员工访问 AWS 资源</strong>，支持 AD 集成</td>
+</tr>
+<tr>
+<td align="left"><strong>SSE-KMS vs SSE-S3 vs SSE-C</strong></td>
+<td align="left">SSE-KMS：使用 KMS 密钥，支持轮换与审计；SSE-S3：密钥由 S3 管理；SSE-C：用户自己管理密钥</td>
+</tr>
+<tr>
+<td align="left"><strong>主动控制 vs 检测控制</strong>（Control Tower）</td>
+<td align="left">主动控制：在资源创建前检查；检测控制：在资源创建后评估合规性</td>
+</tr>
+<tr>
+<td align="left"><strong>KMS 密钥轮换</strong></td>
+<td align="left">AWS 管理的 CMK 支持自动轮换；<strong>导入的密钥材料不支持自动轮换</strong></td>
+</tr>
+</tbody></table>
 <hr>
 <h2 id="七、内容分发与加速"><a href="#七、内容分发与加速" class="headerlink" title="七、内容分发与加速"></a>七、<strong>内容分发与加速</strong></h2><ul>
 <li>Amazon CloudFront（CDN）<ul>
@@ -675,18 +747,72 @@
 </ul>
 <hr>
 <h2 id="九、AI-ML-与智能服务"><a href="#九、AI-ML-与智能服务" class="headerlink" title="九、AI&#x2F;ML 与智能服务"></a>九、<strong>AI&#x2F;ML 与智能服务</strong></h2><ul>
-<li>Amazon Pinpoint（营销与通信）-支持电子邮件、SMS、推送通知等。配置用于发送营销确认短信</li>
-<li>Amazon Rekognition（图像与视频分析）内置了<strong>内容安全审查</strong>功能</li>
-<li>Amazon Textract（文档文本提取）</li>
-<li>Amazon Comprehend Medical（医疗文本分析）</li>
-<li>Amazon Comprehend（自然语言处理）- 提供预训练的实体识别功能（包括检测食品、材料等）文本情感分析设计</li>
-<li>Amazon SES（电子邮件服务）</li>
-<li>Amazon Transcribe（语音转文本，多说话人识别）</li>
-<li>Amazon Translate 将任何语言的文本翻译成英语</li>
-<li>Amazon SageMaker（机器学习平台）构建和训练模型</li>
-<li>Amazon Forecast 是 AWS 完全托管的<strong>时间序列预测</strong>服务，无需 ML 经验，适合基于历史数据做资源需求预测。</li>
-<li>Amazon Polly（文本转语音）</li>
-<li>Amazon Lex 是用于构建对话机器人的服务</li>
+<li><p>Amazon Pinpoint（营销与通信）-支持电子邮件、SMS、推送通知等。配置用于发送营销确认短信</p>
+</li>
+<li><p>Amazon Rekognition（图像与视频分析）内置了<strong>内容安全审查</strong>功能</p>
+</li>
+<li><p>Amazon Textract（文档文本提取）</p>
+</li>
+<li><p>Amazon Comprehend Medical（医疗文本分析）</p>
+</li>
+<li><p>Amazon Comprehend（自然语言处理）- 提供预训练的实体识别功能（包括检测食品、材料等）文本情感分析设计</p>
+</li>
+<li><p>Amazon SES（电子邮件服务）</p>
+</li>
+<li><p>Amazon Transcribe（语音转文本，多说话人识别）</p>
+</li>
+<li><p>Amazon Translate 将任何语言的文本翻译成英语</p>
+</li>
+<li><p>Amazon SageMaker（机器学习平台）构建和训练模型</p>
+</li>
+<li><p>Amazon Forecast 是 AWS 完全托管的<strong>时间序列预测</strong>服务，无需 ML 经验，适合基于历史数据做资源需求预测。</p>
+</li>
+<li><p>Amazon Polly（文本转语音）</p>
+</li>
+<li><p>Amazon Lex 是用于构建对话机器人的服务</p>
+</li>
+<li></li>
+<li><table>
+<thead>
+<tr>
+<th align="left">易混淆概念</th>
+<th align="left">关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Amazon Comprehend vs Comprehend Medical</strong></td>
+<td align="left"><strong>Comprehend</strong>：通用自然语言处理（情感分析、实体识别）；<strong>Comprehend Medical</strong>：专门处理医疗文本（药品名、诊断代码、医学术语）</td>
+</tr>
+<tr>
+<td align="left"><strong>Amazon Rekognition vs Amazon Textract</strong></td>
+<td align="left"><strong>Rekognition</strong>：图像和视频分析（人脸、对象、场景识别）；<strong>Textract</strong>：文档文本和表格提取（OCR增强）</td>
+</tr>
+<tr>
+<td align="left"><strong>Amazon Transcribe vs Amazon Polly</strong></td>
+<td align="left"><strong>Transcribe</strong>：语音转文本（支持多说话人）；<strong>Polly</strong>：文本转语音（语音合成）</td>
+</tr>
+<tr>
+<td align="left"><strong>Amazon Translate vs Amazon Comprehend</strong></td>
+<td align="left"><strong>Translate</strong>：语言翻译（文本跨语言转换）；<strong>Comprehend</strong>：语言理解（情感、实体、语法分析）</td>
+</tr>
+<tr>
+<td align="left"><strong>Amazon SageMaker vs Amazon Forecast</strong></td>
+<td align="left"><strong>SageMaker</strong>：完整的ML平台（构建、训练、部署模型）；<strong>Forecast</strong>：托管的时间序列预测服务（无需ML专业知识）</td>
+</tr>
+<tr>
+<td align="left"><strong>Amazon Lex vs Amazon Connect</strong></td>
+<td align="left"><strong>Lex</strong>：构建对话机器人（聊天机器人引擎）；<strong>Connect</strong>：云联络中心服务（集成Lex、Polly等）</td>
+</tr>
+<tr>
+<td align="left"><strong>Amazon Pinpoint vs Amazon SES</strong></td>
+<td align="left"><strong>Pinpoint</strong>：营销与用户互动平台（多渠道推送、用户分析）；<strong>SES</strong>：电子邮件发送服务（纯邮件传输）</td>
+</tr>
+<tr>
+<td align="left"><strong>Amazon Rekognition 内容审查 vs 自定义标签</strong></td>
+<td align="left"><strong>内容审查</strong>：内置的敏感内容检测（暴力、成人内容）；<strong>自定义标签</strong>：训练自定义模型识别特定对象</td>
+</tr>
+</tbody></table>
+</li>
 </ul>
 <hr>
 <h2 id="十、监控、日志与成本管理"><a href="#十、监控、日志与成本管理" class="headerlink" title="十、监控、日志与成本管理"></a>十、<strong>监控、日志与成本管理</strong></h2><ul>
@@ -710,25 +836,217 @@
 <li>AWS 预算是设置预算和警报的标准服务。</li>
 <li><strong>AWS Cost Explorer</strong> 或成本和使用情况报告，配合标签筛选，生成定期报告。</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th align="left">易混淆概念</th>
+<th align="left">关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>CloudWatch vs CloudTrail</strong></td>
+<td align="left"><strong>CloudWatch</strong>：监控资源性能指标（CPU、内存、请求数）；<strong>CloudTrail</strong>：记录API调用和账户活动日志（谁在什么时候做了什么）</td>
+</tr>
+<tr>
+<td align="left"><strong>Cost Explorer vs AWS Budgets</strong></td>
+<td align="left"><strong>Cost Explorer</strong>：成本分析和可视化工具；<strong>Budgets</strong>：设置预算阈值并触发警报</td>
+</tr>
+<tr>
+<td align="left"><strong>AWS Backup vs 服务原生备份</strong></td>
+<td align="left"><strong>AWS Backup</strong>：统一备份管理服务，支持跨服务备份；<strong>服务原生备份</strong>：如RDS快照、EBS快照，通常需要单独管理</td>
+</tr>
+<tr>
+<td align="left"><strong>Trusted Advisor vs Compute Optimizer</strong></td>
+<td align="left"><strong>Trusted Advisor</strong>：提供成本、安全、性能、容错等多维度建议；<strong>Compute Optimizer</strong>：专门优化EC2实例类型和EBS卷配置</td>
+</tr>
+<tr>
+<td align="left"><strong>CloudWatch Logs vs CloudTrail Logs</strong></td>
+<td align="left"><strong>CloudWatch Logs</strong>：收集应用程序和系统日志；<strong>CloudTrail Logs</strong>：记录管理事件和数据事件（S3对象级别）</td>
+</tr>
+<tr>
+<td align="left"><strong>Cost Allocation Tags vs Resource Tags</strong></td>
+<td align="left"><strong>成本分配标签</strong>：用于在成本报告中跟踪和分配成本；<strong>资源标签</strong>：用于资源管理和组织，不一定用于成本分配</td>
+</tr>
+<tr>
+<td align="left"><strong>Service Catalog vs Marketplace</strong></td>
+<td align="left"><strong>Service Catalog</strong>：企业内部预批准的AWS产品目录；<strong>Marketplace</strong>：AWS和第三方提供的公开产品市场</td>
+</tr>
+<tr>
+<td align="left"><strong>AWS Organizations vs Control Tower</strong></td>
+<td align="left"><strong>Organizations</strong>：多账户管理基础服务；<strong>Control Tower</strong>：基于Organizations的最佳实践治理框架</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="⚠️-常见错误点"><a href="#⚠️-常见错误点" class="headerlink" title="⚠️ 常见错误点"></a>⚠️ <strong>常见错误点</strong></h3><ol>
+<li><p><strong>CloudWatch不能直接监控成本</strong></p>
+<ul>
+<li>CloudWatch监控的是<strong>资源性能指标</strong>，不是成本数据。监控成本异常应使用<strong>AWS成本异常检测</strong>或<strong>Budgets</strong>。</li>
+</ul>
+</li>
+<li><p><strong>CloudTrail默认不记录数据事件</strong></p>
+<ul>
+<li>CloudTrail默认只记录<strong>管理事件</strong>，要记录S3对象级别操作等数据事件需要<strong>额外启用</strong>。</li>
+</ul>
+</li>
+<li><p><strong>Trusted Advisor不提供具体优化建议</strong></p>
+<ul>
+<li>Trusted Advisor提供的是<strong>通用性建议</strong>（如“您有闲置的EC2实例”），不提供具体的实例类型调整建议（那是Compute Optimizer的功能）。</li>
+</ul>
+</li>
+<li><p><strong>成本分配标签不会自动应用于历史资源</strong></p>
+<ul>
+<li>启用成本分配标签后，<strong>只对启用后的新成本生效</strong>，不会追溯历史成本。</li>
+</ul>
+</li>
+<li><p><strong>AWS Backup不支持所有AWS服务</strong></p>
+<ul>
+<li>AWS Backup支持主流服务（EC2、EBS、RDS、EFS等），但<strong>不支持所有服务</strong>，如某些边缘服务或新服务可能需要等待支持。</li>
+</ul>
+</li>
+<li><p><strong>Compute Optimizer只针对EC2和EBS</strong></p>
+<ul>
+<li>目前主要优化<strong>EC2实例类型、EBS卷和Lambda函数内存</strong>，不涉及其他资源类型。</li>
+</ul>
+</li>
+<li><p><strong>CloudWatch Logs Insights不是免费</strong></p>
+<ul>
+<li>查询CloudWatch Logs Insights会产生<strong>额外费用</strong>（按扫描数据量计费）。</li>
+</ul>
+</li>
+<li><p><strong>Service Catalog不是部署工具</strong></p>
+<ul>
+<li>Service Catalog是<strong>治理和合规工具</strong>，用于控制用户可以部署什么，不是CI&#x2F;CD或自动化部署工具。</li>
+</ul>
+</li>
+<li><p><strong>Organizations SCP不影响服务控制台可见性</strong></p>
+<ul>
+<li>SCP可以禁止某个服务的使用，但<strong>不会从控制台隐藏该服务</strong>，用户仍然可以看到但无法操作。</li>
+</ul>
+</li>
+<li><p><strong>Budgets警报有延迟</strong></p>
+<ul>
+<li>Budgets警报通常有<strong>数小时延迟</strong>，不适合实时成本监控。</li>
+</ul>
+</li>
+</ol>
 <hr>
 <h2 id="十一、无服务器与微服务架构"><a href="#十一、无服务器与微服务架构" class="headerlink" title="十一、无服务器与微服务架构"></a>十一、<strong>无服务器与微服务架构</strong></h2><ul>
-<li>API Gateway（REST&#x2F;WebSocket API）</li>
-<li>Lambda + SQS + SNS 解耦架构</li>
-<li>DynamoDB 作为无服务器数据库</li>
-<li>EventBridge 定时触发<ul>
+<li><p>API Gateway（REST&#x2F;WebSocket API）</p>
+</li>
+<li><p>Lambda + SQS + SNS 解耦架构</p>
+</li>
+<li><p>DynamoDB 作为无服务器数据库</p>
+</li>
+<li><p>EventBridge 定时触发</p>
+<ul>
 <li>EventBridge 专为事件路由和过滤设计，支持复杂事件模式匹配</li>
 </ul>
 </li>
-<li>AWS Glue <ul>
+<li><p>AWS Glue </p>
+<ul>
 <li><strong>无服务器 ETL 服务</strong>，专为数据转换设计,简化数据准备</li>
 <li>让你<strong>轻松构建数据湖、数据仓库、ETL管道</strong>，无需管理服务器</li>
 </ul>
 </li>
-<li>AWS Step Functions（状态机、人工审批）</li>
-<li>X-Ray 用于分布式跟踪、分析应用程序请求流（微服务层面），不是用于发现底层 AWS 资源清单和绘制静态架构图 X-Ray 是 AWS 的分布式追踪服务，专门用于跟踪微服务架构中的请求流，帮助识别延迟和错误。</li>
-<li><strong>AWS 上的工作负载发现功能</strong> 生成工作负载的架构图</li>
-<li>在 组织管理账户的 <strong>AWS 账单控制台 中</strong>启用 <strong>成本分配标签（Cost Allocation Tags）</strong>，特别是 <strong>用户定义标签</strong>，以便在成本报告中包含这些标签。</li>
-<li>Amazon MSK 是一项<strong>全托管的服务</strong>，让您可以在AWS上轻松地构建、运行和维护使用 <strong>Apache Kafka</strong> 处理流式数据的应用程序。</li>
+<li><p>AWS Step Functions（状态机、人工审批）</p>
+</li>
+<li><p>X-Ray 用于分布式跟踪、分析应用程序请求流（微服务层面），不是用于发现底层 AWS 资源清单和绘制静态架构图 X-Ray 是 AWS 的分布式追踪服务，专门用于跟踪微服务架构中的请求流，帮助识别延迟和错误。</p>
+</li>
+<li><p><strong>AWS 上的工作负载发现功能</strong> 生成工作负载的架构图</p>
+</li>
+<li><p>在 组织管理账户的 <strong>AWS 账单控制台 中</strong>启用 <strong>成本分配标签（Cost Allocation Tags）</strong>，特别是 <strong>用户定义标签</strong>，以便在成本报告中包含这些标签。</p>
+</li>
+<li><p>Amazon MSK 是一项<strong>全托管的服务</strong>，让您可以在AWS上轻松地构建、运行和维护使用 <strong>Apache Kafka</strong> 处理流式数据的应用程序。</p>
+</li>
+<li></li>
+<li><table>
+<thead>
+<tr>
+<th align="left">易混淆概念</th>
+<th align="left">关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>SQS 标准队列 vs FIFO 队列</strong></td>
+<td align="left"><strong>标准队列</strong>：高吞吐量，消息可能乱序；<strong>FIFO队列</strong>：严格顺序，Exactly-Once处理</td>
+</tr>
+<tr>
+<td align="left"><strong>EventBridge vs CloudWatch Events</strong></td>
+<td align="left"><strong>EventBridge</strong>：下一代事件总线，支持第三方SaaS集成；<strong>CloudWatch Events</strong>：主要处理AWS服务事件</td>
+</tr>
+<tr>
+<td align="left"><strong>Step Functions vs Simple Workflow (SWF)</strong></td>
+<td align="left"><strong>Step Functions</strong>：基于状态机的可视化工作流；<strong>SWF</strong>：旧版工作流服务（已逐步淘汰）</td>
+</tr>
+<tr>
+<td align="left"><strong>AWS Glue vs AWS Glue DataBrew</strong></td>
+<td align="left"><strong>Glue</strong>：完整ETL服务（数据目录、ETL作业）；<strong>DataBrew</strong>：可视化数据准备工具，无需编写代码</td>
+</tr>
+<tr>
+<td align="left"><strong>Lambda 预置并发 vs 预留并发</strong></td>
+<td align="left"><strong>预置并发</strong>：预先初始化实例减少冷启动；<strong>预留并发</strong>：限制函数最大并发数</td>
+</tr>
+<tr>
+<td align="left"><strong>SNS vs SQS</strong></td>
+<td align="left"><strong>SNS</strong>：发布&#x2F;订阅模式（一对多）；<strong>SQS</strong>：消息队列（点对点）</td>
+</tr>
+<tr>
+<td align="left"><strong>API Gateway REST API vs HTTP API</strong></td>
+<td align="left"><strong>REST API</strong>：功能完整（缓存、认证、限流）；<strong>HTTP API</strong>：轻量级，低成本</td>
+</tr>
+<tr>
+<td align="left"><strong>AWS X-Ray vs CloudWatch</strong></td>
+<td align="left"><strong>X-Ray</strong>：分布式请求跟踪（微服务链路）；<strong>CloudWatch</strong>：指标监控和日志收集</td>
+</tr>
+<tr>
+<td align="left"><strong>MSK vs Kinesis Data Streams</strong></td>
+<td align="left"><strong>MSK</strong>：托管Apache Kafka，完整Kafka生态；<strong>Kinesis</strong>：AWS原生流服务，更简单集成AWS服务</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="⚠️-常见错误点-1"><a href="#⚠️-常见错误点-1" class="headerlink" title="⚠️ 常见错误点"></a>⚠️ <strong>常见错误点</strong></h3><ol>
+<li><strong>Lambda 15分钟超时限制</strong><ul>
+<li>Lambda函数<strong>最大执行时间为15分钟</strong>，长时间任务应使用Step Functions或ECS&#x2F;Fargate。</li>
+</ul>
+</li>
+<li><strong>SQS FIFO队列吞吐量限制</strong><ul>
+<li>FIFO队列<strong>吞吐量较低</strong>（每秒300条消息），不适合高吞吐量场景。</li>
+</ul>
+</li>
+<li><strong>EventBridge不能处理实时数据流</strong><ul>
+<li>EventBridge用于<strong>事件路由和调度</strong>，不适合实时数据流处理（应使用Kinesis或MSK）。</li>
+</ul>
+</li>
+<li><strong>Glue不是实时ETL服务</strong><ul>
+<li>Glue作业是<strong>批处理</strong>，默认不提供实时处理能力（实时ETL需使用Kinesis Analytics或EMR）。</li>
+</ul>
+</li>
+<li><strong>Lambda不支持持久化存储</strong><ul>
+<li>Lambda函数是<strong>无状态</strong>的，不能依赖本地磁盘持久化数据（应使用S3、DynamoDB等外部存储）。</li>
+</ul>
+</li>
+<li><strong>API Gateway不支持TCP&#x2F;UDP</strong><ul>
+<li>只支持HTTP&#x2F;HTTPS和WebSocket协议，不能用于TCP&#x2F;UDP流量代理。</li>
+</ul>
+</li>
+<li><strong>X-Ray不能监控基础设施指标</strong><ul>
+<li>只能跟踪<strong>应用程序请求链路</strong>，不能监控CPU、内存等基础设施指标。</li>
+</ul>
+</li>
+<li><strong>SNS消息不持久化</strong><ul>
+<li>SNS消息<strong>如果没有订阅者接收就会丢失</strong>，不适合需要持久化的消息传递。</li>
+</ul>
+</li>
+<li><strong>Step Functions状态限制</strong><ul>
+<li>状态机执行<strong>最大持续时间为1年</strong>，单个执行历史事件限制为25000个。</li>
+</ul>
+</li>
+<li><strong>MSK需要自己管理Kafka版本</strong><ul>
+<li>虽然是托管服务，但<strong>Kafka版本升级需要用户自己操作</strong>，不是完全自动化。</li>
+</ul>
+</li>
+</ol>
+</li>
 </ul>
 <hr>
 <h2 id="十二、高可用与灾难恢复"><a href="#十二、高可用与灾难恢复" class="headerlink" title="十二、高可用与灾难恢复"></a>十二、<strong>高可用与灾难恢复</strong></h2><ul>
@@ -755,6 +1073,93 @@
 <li><p><strong>AWS App2Container</strong>A2C 用于将现有应用程序<strong>容器化</strong>（迁移到容器）</p>
 </li>
 </ul>
+<table>
+<thead>
+<tr>
+<th align="left">易混淆概念</th>
+<th align="left">关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>多可用区（Multi-AZ） vs 跨区域（Cross-Region）</strong></td>
+<td align="left"><strong>多可用区</strong>：同一区域内不同数据中心；<strong>跨区域</strong>：不同地理区域，延迟更高但容灾性更强</td>
+</tr>
+<tr>
+<td align="left"><strong>RPO vs RTO</strong></td>
+<td align="left"><strong>RPO（恢复点目标）</strong>：数据丢失可接受的时间窗口；<strong>RTO（恢复时间目标）</strong>：服务恢复所需时间</td>
+</tr>
+<tr>
+<td align="left"><strong>Aurora 全局数据库 vs RDS 跨区域只读副本</strong></td>
+<td align="left"><strong>Aurora 全局数据库</strong>：跨区域读写，自动故障转移；<strong>RDS 跨区域只读副本</strong>：只能读取，需手动提升为主实例</td>
+</tr>
+<tr>
+<td align="left"><strong>自动故障转移 vs 手动故障转移</strong></td>
+<td align="left"><strong>自动</strong>：系统检测并自动切换；<strong>手动</strong>：需人工介入，RTO更长</td>
+</tr>
+<tr>
+<td align="left"><strong>主动-主动 vs 主动-被动</strong></td>
+<td align="left"><strong>主动-主动</strong>：多个站点同时服务；<strong>主动-被动</strong>：主站点服务，备用站点待机</td>
+</tr>
+<tr>
+<td align="left"><strong>集群置放组 vs 分散置放组</strong></td>
+<td align="left"><strong>集群置放组</strong>：实例紧邻（低延迟网络）；<strong>分散置放组</strong>：实例分散（减少同时故障风险）</td>
+</tr>
+<tr>
+<td align="left"><strong>AWS Outposts vs 本地数据中心</strong></td>
+<td align="left"><strong>Outposts</strong>：AWS托管硬件，集成AWS服务；<strong>本地数据中心</strong>：完全客户管理</td>
+</tr>
+<tr>
+<td align="left"><strong>App2Container vs 直接迁移（MGN）</strong></td>
+<td align="left"><strong>App2Container</strong>：容器化改造；<strong>MGN</strong>：直接迁移（保持原架构）</td>
+</tr>
+<tr>
+<td align="left"><strong>容量预留 vs 按需实例</strong></td>
+<td align="left"><strong>容量预留</strong>：保证资源可用性；<strong>按需实例</strong>：无预留保证，可能受容量影响</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="⚠️-常见错误点-2"><a href="#⚠️-常见错误点-2" class="headerlink" title="⚠️ 常见错误点"></a>⚠️ <strong>常见错误点</strong></h3><ol>
+<li><strong>多可用区不是跨区域容灾</strong><ul>
+<li>多可用区只能<strong>抵御单个数据中心故障</strong>，不能应对区域级灾难（如自然灾害、区域服务中断）。</li>
+</ul>
+</li>
+<li><strong>Aurora 全局数据库有写入延迟</strong><ul>
+<li>跨区域写入会有<strong>毫秒级延迟</strong>，不适合对延迟极度敏感的应用。</li>
+</ul>
+</li>
+<li><strong>RDS 跨区域只读副本不是高可用解决方案</strong><ul>
+<li>只读副本<strong>不能自动故障转移</strong>，故障时需要手动提升为主实例，RTO较长。</li>
+</ul>
+</li>
+<li><strong>自动故障转移不等于零中断</strong><ul>
+<li>即使是自动故障转移，通常也有<strong>30秒到2分钟的服务中断</strong>，不是真正的零停机。</li>
+</ul>
+</li>
+<li><strong>集群置放组不适合所有场景</strong><ul>
+<li>虽然提供低延迟，但<strong>增加了同时故障风险</strong>（同一机架故障可能影响所有实例）。</li>
+</ul>
+</li>
+<li><strong>Outposts 不是完全隔离的云环境</strong><ul>
+<li>Outposts 需要<strong>定期连接AWS区域</strong>进行管理和更新，不是完全离线的独立环境。</li>
+</ul>
+</li>
+<li><strong>App2Container 不支持所有应用类型</strong><ul>
+<li>主要支持<strong>Java、.NET、PHP等Web应用</strong>，不支持所有遗留系统或专用软件。</li>
+</ul>
+</li>
+<li><strong>容量预留不会自动应用于Auto Scaling组</strong><ul>
+<li>需要在Auto Scaling配置中<strong>显式指定使用预留容量</strong>，否则可能创建按需实例。</li>
+</ul>
+</li>
+<li><strong>Route 53 故障转移路由不是负载均衡</strong><ul>
+<li>只能用于<strong>主备切换</strong>，不能实现流量分发到多个健康端点。</li>
+</ul>
+</li>
+<li><strong>灾难恢复演练不是自动的</strong><ul>
+<li>需要<strong>定期手动执行故障转移测试</strong>，AWS不会自动进行容灾演练。</li>
+</ul>
+</li>
+</ol>
 
       
     </div>
